@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model has been renamed to 'Renamedpackage' during introspection, because the original name 'package' is reserved.
+model Renamedpackage {
+  package_id                            Int      @id @default(autoincrement())
+  weight                                Float    @db.Float
+  send_date                             DateTime @db.Date
+  type                                  String   @db.VarChar(255)
+  sender_name_location                  String   @db.VarChar(255)
+  sender_phone_number                   String   @db.VarChar(255)
+  sender_id                             Int
+  receiver_name_location                String   @db.VarChar(255)
+  receiver_id                           Int
+  receiver_phone_number                 String?  @db.VarChar(255)
+  post_Renamedpackage_sender_idTopost   post     @relation("Renamedpackage_sender_idTopost", fields: [sender_id], references: [location_id], map: "fk_package_post_1")
+  post_Renamedpackage_receiver_idTopost post     @relation("Renamedpackage_receiver_idTopost", fields: [receiver_id], references: [location_id], map: "fk_package_post_2")
+  status                                status[]
+
+  @@index([sender_id], map: "fk_package_post_1")
+  @@index([receiver_id], map: "fk_package_post_2")
+  @@map("package")
+}
+
+model post {
+  location_id                                     Int              @id @default(autoincrement())
+  LOCATION                                        String           @db.VarChar(255)
+  TYPE                                            String?          @db.VarChar(255)
+  Renamedpackage_Renamedpackage_sender_idTopost   Renamedpackage[] @relation("Renamedpackage_sender_idTopost")
+  Renamedpackage_Renamedpackage_receiver_idTopost Renamedpackage[] @relation("Renamedpackage_receiver_idTopost")
+  status                                          status[]
+  user                                            user[]
+}
+
+model status {
+  id               Int            @id @default(autoincrement())
+  location_id      Int
+  package_id       Int
+  received_date    DateTime       @db.Date
+  transported_date DateTime?      @db.Date
+  success          Boolean?
+  Renamedpackage   Renamedpackage @relation(fields: [package_id], references: [package_id], map: "fk_status_package")
+  post             post           @relation(fields: [location_id], references: [location_id], map: "fk_status_post")
+
+  @@index([package_id], map: "fk_status_package")
+  @@index([location_id], map: "fk_status_post")
+}
+
+model user {
+  user_id     Int    @id @default(autoincrement())
+  username    String @db.VarChar(255)
+  full_name   String @db.VarChar(255)
+  password    String @db.VarChar(255)
+  ROLE        String @db.VarChar(255)
+  location_id Int
+  post        post   @relation(fields: [location_id], references: [location_id], map: "fk_user_post")
+
+  @@index([location_id], map: "fk_user_post")
+}
