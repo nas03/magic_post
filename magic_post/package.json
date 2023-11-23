@@ -1,0 +1,29 @@
+{
+  "name": "magic_post",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "@types/react-scroll": "^1.8.10",
+    "axios": "^1.6.2",
+    "next": "14.0.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-scroll": "^1.8.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5"
+  }
+}
