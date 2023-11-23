@@ -30,8 +30,8 @@ model Renamedpackage {
 
 model post {
   location_id                                     Int              @id @default(autoincrement())
-  LOCATION                                        String           @db.VarChar(255)
-  TYPE                                            String?          @db.VarChar(255)
+  location                                        String           @db.VarChar(255)
+  type                                            String?          @db.VarChar(255)
   Renamedpackage_Renamedpackage_sender_idTopost   Renamedpackage[] @relation("Renamedpackage_sender_idTopost")
   Renamedpackage_Renamedpackage_receiver_idTopost Renamedpackage[] @relation("Renamedpackage_receiver_idTopost")
   status                                          status[]
@@ -57,7 +57,7 @@ model user {
   username    String @db.VarChar(255)
   full_name   String @db.VarChar(255)
   password    String @db.VarChar(255)
-  ROLE        String @db.VarChar(255)
+  role        String @db.VarChar(255)
   location_id Int
   post        post   @relation(fields: [location_id], references: [location_id], map: "fk_user_post")
 

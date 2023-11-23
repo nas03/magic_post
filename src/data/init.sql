@@ -23,15 +23,15 @@ CREATE TABLE package(
 );
 CREATE TABLE post(
     location_id int PRIMARY KEY AUTO_INCREMENT,
-    LOCATION varchar(255) NOT NULL,
-    TYPE varchar(255)
+    location varchar(255) NOT NULL,
+    type varchar(255)
 );
 CREATE TABLE user(
     user_id int PRIMARY KEY AUTO_INCREMENT,
     username varchar(255) NOT NULL,
     full_name varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
-    ROLE varchar(255) NOT NULL,
+    role varchar(255) NOT NULL,
     location_id int NOT NULL
 );
 ALTER TABLE status
