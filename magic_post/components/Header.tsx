@@ -25,7 +25,7 @@ const Header = () => {
                           // smooth={true} 
                           // offset={50} 
                           // duration={500} 
-                    className='hover:text-white cursor-progress'>HOME</div>
+                    className='hover:text-white cursor-pointer'>HOME</div>
                     <div
                           // to="about"
                           // spy={true} 
