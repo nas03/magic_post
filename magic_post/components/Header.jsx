@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation'
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import QRCode from './QRCode';
 import axios from "axios";
+import { Link } from 'react-scroll';
 
 export const InputContext = createContext();
 
-
-//1e818890-8aea-11ee-b22a-0dc7d55af999
 
 const Header = () => {
 
@@ -81,45 +80,42 @@ const Header = () => {
                 )}
               </ModalContent>
             </Modal>
-            <div 
-              // to="home"
-              // spy={true} 
-              // smooth={true} 
-              // offset={50} 
-              // duration={500} 
+            <Link 
+              to="home"
+              spy={true} 
+              smooth={true} 
+              offset={50} 
+              duration={500} 
               className='w-[70px] z-50 cursor-pointer'>
               <img className=' z-50' src='./image/magic-post-high-resolution-logo-transparent.png' />
-            </div>
+            </Link>
             <div className=' text-gray-500 '>
                 <ul className=' max-md:text-sm max-sm:text-xs flex gap-[20%] justify-center items-center py-[3%]'>
-                    <div 
-                          // to='home'
-                          // spy={true} 
-                          // smooth={true} 
-                          // offset={50} 
-                          // duration={500} 
-                    className='hover:text-white cursor-pointer'>HOME</div>
-                    <div
-                          // to="about"
-                          // spy={true} 
-                          // smooth={true} 
-                          // offset={50} 
-                          // duration={500}      
-                    className='hover:text-white cursor-pointer'>ABOUT</div>
-                    <div 
-                          // to='features'
-                          //  spy={true} 
-                          //  smooth={true} 
-                          //  offset={50} 
-                          //  duration={500} 
-                    className='hover:text-white cursor-pointer'>FEATURE</div>
-                    <div 
-                          // to='feedback'
-                          // spy={true} 
-                          // smooth={true} 
-                          // offset={50} 
-                          // duration={500} 
-                    className='hover:text-white cursor-pointer'>FEEDBACK</div>
+                    <Link 
+                          to='home'
+                          spy={true} 
+                          smooth={true} 
+                          offset={50} 
+                          duration={500} 
+                    className='hover:text-white cursor-pointer'>HOME</Link>
+                    <Link
+                          to="about"
+                          spy={true} 
+                          smooth={true} 
+                          duration={500}      
+                    className='hover:text-white cursor-pointer'>ABOUT</Link>
+                    <Link 
+                          to='features'
+                           spy={true} 
+                           smooth={true} 
+                           duration={500} 
+                    className='hover:text-white cursor-pointer'>FEATURE</Link>
+                    <Link 
+                          to='feedback'
+                          spy={true} 
+                          smooth={true} 
+                          duration={500} 
+                    className='hover:text-white cursor-pointer'>FEEDBACK</Link>
                 </ul>
             </div>
             <div onClick={() => router.push('/login')} className=' max-lg:text-sm max-sm:text-xs max-lg:w-[10%] w-[5%] h-[30%] border-2 border-white rounded-xl text-white justify-center items-center flex hover:bg-white hover:text-[#2980B9] font-semibold cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110'>
