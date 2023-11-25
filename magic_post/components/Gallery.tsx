@@ -2,7 +2,7 @@ import React from 'react'
 
 function Gallery() {
   return (
-    <div className='w-[100vw] h-[70vh] flex justify-between items-center'>
+    <div className='w-[100vw] h-[75vh] flex justify-between items-center'>
       <div className=' w-[25%] h-full flex flex-col justify-center items-center'>
           <div className='max-lg:h-[30%] w-[50%] h-[40%] rounded-xl bg-white z-40 flex justify-center items-center translate-y-[30%] translate-x-[5%]'>
             <img src="./image/giveBox.jpg" className=' w-[95%] h-[95%] rounded-xl' alt="" />

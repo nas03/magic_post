@@ -4,6 +4,8 @@ import { MagnifyingGlassIcon, BellAlertIcon, PlusSmallIcon } from '@heroicons/re
 import { MainContent, SideLeftBar, SideRightBar } from './components'
 
 function page() {
+
+
   return (
             <div className=' w-[99vw + 2px] h-[100vh] flex flex-col items-center'>
                 <div className=' w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md'>
