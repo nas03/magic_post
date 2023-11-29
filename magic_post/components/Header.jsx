@@ -5,7 +5,7 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDis
 import QRCode from './QRCode';
 import axios from "axios";
 import { Link } from 'react-scroll';
-import LogIn from './LogIn';
+import LogIn from '../../src/components/LogIn';
 
 export const InputContext = createContext();
 

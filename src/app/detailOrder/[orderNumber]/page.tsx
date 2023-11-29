@@ -11,6 +11,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
+import Link from 'next/link';
 
 function page({ params }: { params: { orderNumber: string }}) {
 
@@ -20,7 +21,9 @@ function page({ params }: { params: { orderNumber: string }}) {
     <div className=' w-[100vw] h-[100vh] flex justify-center items-center bg-white'>
         <div className=' w-full h-full px-[5%] py-[2%]'>
             <div className='w-full h-[10%] flex gap-1 text-gray-500'>
-                <ArrowSmallLeftIcon onClick={() => router.push('/')} className=' hover:-translate-x-3 w-[3%] h-[50%] object-fill cursor-pointer'/>
+                <Link href={'/'} className='w-[3%] h-[50%] hover:-translate-x-3 cursor-pointer object-fill'>
+                    <ArrowSmallLeftIcon className=' w-full h-full'/>
+                </Link>
                 <span className=' text-lg'>Orders</span>
             </div>
             <div className=' w-full h-[15%] justify-between flex-col flex px-[1%]'>

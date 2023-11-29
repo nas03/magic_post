@@ -2,14 +2,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'
 
 function page() {
 
     const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-    const router = useRouter()
 
 	const handleSubmit = async (e:any) => {
 		e.preventDefault();
@@ -66,7 +64,11 @@ function page() {
                         <label className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
                       </div>
                   </div>
-                  <button type="submit" onClick={() => router.push('/adminPage')} className="w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-[#F79132] text-white hover:text-[#F79132] hover:border-2 hover:border-[#F79132] hover:bg-transparent hover:p-2">Login</button>
+                  <div>
+                    <Link href='/adminPage' className=" hover:w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-[#F79132] text-white hover:text-[#F79132] hover:border-2 hover:border-[#F79132] hover:bg-transparent">
+                        Login
+                    </Link>
+                  </div>
                   <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                       Already have an account? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up here</a>
                   </p>

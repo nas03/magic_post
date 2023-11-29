@@ -5,6 +5,8 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDis
 import QRCode from './QRCode';
 import axios from "axios";
 import { Link } from 'react-scroll';
+import LogIn from './LogIn';
+import CustomButton from './CustomButton';
 
 export const InputContext = createContext();
 
@@ -72,9 +74,7 @@ const Header = () => {
                         </InputContext.Provider>
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="primary" onPress={() => router.push(`/detailOrder/${orderNumber}`)}>
-                        Continue
-                      </Button>
+                      <CustomButton orderNumber={orderNumber}/>
                     </ModalFooter>
                   </>
                 )}
@@ -118,9 +118,7 @@ const Header = () => {
                     className='hover:text-white cursor-pointer'>FEEDBACK</Link>
                 </ul>
             </div>
-            <div onClick={() => router.push('/login')} className=' max-lg:text-sm max-sm:text-xs max-lg:w-[10%] w-[5%] h-[30%] border-2 border-white rounded-xl text-white justify-center items-center flex hover:bg-white hover:text-[#2980B9] font-semibold cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110'>
-              <span>Log In</span>
-            </div> 
+           <LogIn/>
         </div>
         <div className=' flex p-[6%] w-[100vw] h-[80%] absolute justify-between items-center bottom-0 '>
             <div className=' text-white w-[30%] gap-[5%] flex-col flex'>
