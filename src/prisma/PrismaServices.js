@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { cache } from 'react';
 
 export const revalidate = 3600;
 

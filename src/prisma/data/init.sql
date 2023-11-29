@@ -31,7 +31,13 @@ CREATE TABLE user(
     username varchar(255) NOT NULL,
     full_name varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
-    role varchar(255) NOT NULL,
+    role enum(
+        'BranchManager',
+        'HubManager',
+        'BranchStaff',
+        'TransactionStaff',
+        'Admin'
+    ) NOT NULL,
     location_id int NOT NULL
 );
 ALTER TABLE status

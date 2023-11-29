@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/About.tsx", "components/index.ts", "components/Header.jsx", "components/Footer.tsx", "app/page.tsx", "app/layout.tsx", "tailwind.config.ts", "components/Intro.tsx", "components/Gallery.tsx", "app/adminPage/components/PieChart.jsx", "components/QRModal.jsx", "components/QRCode.jsx", "src/components/CustomButton.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/About.tsx", "components/index.ts", "components/Header.jsx", "components/Footer.tsx", "app/page.tsx", "app/layout.tsx", "tailwind.config.ts", "components/Intro.tsx", "components/Gallery.tsx", "app/adminPage/components/PieChart.jsx", "components/QRModal.jsx", "components/QRCode.jsx", "src/components/CustomButton.jsx", "src/app/pages/login/page.jsx"],
   "exclude": ["node_modules"]
 }

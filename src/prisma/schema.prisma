@@ -53,13 +53,21 @@ model status {
 }
 
 model user {
-  user_id     Int    @id @default(autoincrement())
-  username    String @db.VarChar(255)
-  full_name   String @db.VarChar(255)
-  password    String @db.VarChar(255)
-  role        String @db.VarChar(255)
+  user_id     Int       @id @default(autoincrement())
+  email       String    @db.VarChar(255)
+  full_name   String    @db.VarChar(255)
+  password    String    @db.VarChar(255)
   location_id Int
-  post        post   @relation(fields: [location_id], references: [location_id], map: "fk_user_post")
+  role        user_role
+  post        post      @relation(fields: [location_id], references: [location_id], map: "fk_user_post")
 
   @@index([location_id], map: "fk_user_post")
+}
+
+enum user_role {
+  BranchManager
+  HubManager
+  BranchStaff
+  TransactionStaff
+  Admin
 }

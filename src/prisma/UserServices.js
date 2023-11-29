@@ -16,6 +16,23 @@ async function getUserById(id) {
 	return data;
 }
 
+const getUserByEmail = async (email) => {
+	try {
+		console.log('email', email);
+		const user = await prisma.user.findMany({
+			where: {
+				email: {
+					equals: email,
+				},
+			},
+		});
+		cleanup();
+		return user;
+	} catch (error) {
+		console.error("Can't get user by email");
+		throw error;
+	}
+};
 const cleanup = async () => {
 	try {
 		await prisma.$disconnect();
@@ -28,6 +45,7 @@ const cleanup = async () => {
 const UserServices = {
 	revalidate,
 	getUserById,
+	getUserByEmail,
 	cleanup,
 };
 

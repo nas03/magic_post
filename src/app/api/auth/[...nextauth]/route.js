@@ -1,8 +1,7 @@
-import User from '@/schemas/User';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-import { connectMongoDB } from '@/util/connect-db';
+import { UserServices } from '../../../../prisma';
 
 export const authOptions = {
 	providers: [
@@ -14,19 +13,15 @@ export const authOptions = {
 				const { email, password } = credentials;
 
 				try {
-					await connectMongoDB();
-					const user = await User.findOne({ email });
-
-					if (user) {
-						const passwordsMatch = await bcrypt.compare(
-							password,
-							user.password
-						);
-						if (passwordsMatch) {
-							return user;
-						}
-					}
-					return null;
+					const user = await UserServices.getUserByEmail(email);
+					const { password } = user[0];
+					const res = {
+						ok: true,
+						status: 200,
+						error: null,
+						url: '/pages/adminPage',
+					};
+					return JSON.stringify(res);
 				} catch (error) {
 					console.log('Error: ', error);
 				}
@@ -36,10 +31,32 @@ export const authOptions = {
 	session: {
 		strategy: 'jwt',
 	},
-	secret: process.env.NEXTAUTH_SECRET,
-	pages: {
-		signIn: '/auth/login',
+	jwt: {
+		maxAge: 60 * 60 * 24 * 30,
 	},
+	callbacks: {
+		async jwt(token, user, account, profile, isNewUser) {
+			if (user) {
+				token.id = user.id;
+			}
+			return token;
+		},
+		async session(session, user) {
+			session.user = user;
+			return session;
+		},
+		async redirect(url, baseUrl) {
+			return baseUrl;
+		},
+		async error(error, req, res) {
+			console.error('NextAuth.js error:', error);
+			res.status(500).json({ error: 'Internal Server Error' });
+		},
+	},
+	pages: {
+		signIn: '/pages/login',
+	},
+	secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
