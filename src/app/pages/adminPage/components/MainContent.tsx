@@ -12,11 +12,11 @@ function MainContent() {
         <div className=' w-full h-[30%] flex flex-col gap-[5%]'>
             <div className=' w-full h-[20%] gap-[1%] flex items-center'>
                 <span className=' text-3xl font-bold'>Hi, Magic Post</span>
-                <img src="./image/goodbye.png" className=' w-[5%] h-full' alt="" />
+                <img src="/image/goodbye.png" className=' w-[5%] h-full' alt="" />
             </div>
             <div className=' h-[55%] w-full flex justify-center'>
                     <div className=' w-[30%] rounded-l-lg bg-[#FBE2DE] flex gap-[5%] justify-center items-center'>
-                        <img src="./image/onGoing.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
+                        <img src="/image/onGoing.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
                         <div className='flex flex-col justify-between py-[5%] h-[80%]'>
                             <span className=' font-semibold text-[#54555E]'>On Going</span>
                             <div className=' flex justify-between items-end gap-[30%] w-[80%]'>
@@ -29,7 +29,7 @@ function MainContent() {
                         </div>
                     </div>
                     <div className=' w-[30%] border-x-2 border-white bg-[#E5D6EB] flex gap-[5%] justify-center items-center'>
-                        <img src="./image/shiped.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
+                        <img src="/image/shiped.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
                         <div className='flex flex-col justify-between py-[5%] h-[80%]'>
                             <span className=' font-semibold text-[#54555E]'>Shiped</span>
                             <div className=' flex justify-between items-end gap-[30%] w-[80%]'>
@@ -42,7 +42,7 @@ function MainContent() {
                         </div>
                     </div>
                     <div className=' w-[30%] rounded-r-lg bg-[#C9E9E4] flex gap-[5%] justify-center items-center'>
-                        <img src="./image/completed.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
+                        <img src="/image/completed.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
                         <div className='flex flex-col justify-between py-[5%] h-[80%]'>
                             <span className=' font-semibold text-[#54555E]'>Completed</span>
                             <div className=' flex justify-between items-end gap-[30%] w-[80%]'>

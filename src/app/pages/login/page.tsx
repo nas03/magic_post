@@ -4,13 +4,14 @@ import axios from 'axios';
 import Link from 'next/link';
 import { SignInOptions, SignInResponse, signIn } from 'next-auth/react';
 import { sign } from 'crypto';
+import { useRouter } from 'next/navigation';
 import { redirect } from 'next/navigation';
 function page() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-
-	const handleSubmit = async (e) => {
+	const router = useRouter();
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		console.log('Submit Form');
 		const formData = new FormData(e.target);
@@ -18,18 +19,18 @@ function page() {
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirm-password');
 
-		// if (password !== confirmPassword) {
-		// 	// TODO: Show Error
-		// 	return;
-		// }
-
-		const signInParams = {
+		const response = await signIn('credentials', {
 			email,
 			password,
-		};
-
-		const response = await signIn('credentials', signInParams);
-		console.log('response', response?.error);
+			redirect: false,
+		});
+		console.log('responses', response);
+		if (response?.ok) {
+			router.push('/pages/adminPage');
+		} else {
+			//TODO: @Babybluess Show error on page
+			const error = response?.error;
+		}
 	};
 
 	return (

@@ -18,7 +18,6 @@ async function getUserById(id) {
 
 const getUserByEmail = async (email) => {
 	try {
-		console.log('email', email);
 		const user = await prisma.user.findMany({
 			where: {
 				email: {
@@ -30,6 +29,24 @@ const getUserByEmail = async (email) => {
 		return user;
 	} catch (error) {
 		console.error("Can't get user by email");
+		throw error;
+	}
+};
+
+const createNewUser = async (email, password, role, locationID) => {
+	try {
+		const newUser = await prisma.user.create({
+			data: {
+				email: email,
+				password: password,
+				role: role,
+				location_id: locationID,
+			},
+		});
+		cleanup();
+		return newUser;
+	} catch (error) {
+		console.error("Can't create new user");
 		throw error;
 	}
 };
@@ -46,6 +63,7 @@ const UserServices = {
 	revalidate,
 	getUserById,
 	getUserByEmail,
+	createNewUser,
 	cleanup,
 };
 

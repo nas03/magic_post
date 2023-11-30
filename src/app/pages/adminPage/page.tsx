@@ -11,7 +11,7 @@ function page() {
                 <div className=' w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md'>
                     <div className=' w-[20%] flex gap-[3%]  items-center'>
                         <div className=' w-[25%]'>
-                            <img src="./image/magic-post-high-resolution-logo-transparent.png" className='w-full h-full object-contain' alt="" />
+                            <img src="/image/magic-post-high-resolution-logo-transparent.png" className='w-full h-full object-contain' alt="" />
                         </div>
                         <div className=' flex flex-col'>
                             <span className=' text-xl font-semibold'>Magic Post</span>

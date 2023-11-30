@@ -3,21 +3,10 @@ import User from '@/schemas/User';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
-
-connectMongoDB();
-
+import { UserServices } from '../../../../prisma';
 export async function POST(request) {
-	const requestBody = await request.json();
-	const { email, password, confirm } = requestBody;
+	const { email, password, role, locationID } = await request.json();
 
-	if (password != confirm) {
-        
-		return Response.json({
-			status: 400,
-			fail: 'Confirm password does not match',
-			message: '',
-		});
-	}
 	if (password.length < 8) {
 		return Response.json({
 			status: 400,
@@ -25,8 +14,7 @@ export async function POST(request) {
 			message: '',
 		});
 	}
-
-	const user = await User.findOne({ email });
+	const user = await UserServices.getUserByEmail(email);
 
 	if (user != undefined) {
 		return Response.json({
@@ -39,11 +27,12 @@ export async function POST(request) {
 	const salt = await bcryptjs.genSalt(10);
 	const hashedPassword = await bcryptjs.hash(password, salt);
 
-	const newUser = new User({
-		email: email,
-		password: hashedPassword,
-	});
-	newUser.save();
+	const newUser = await UserServices.createNewUser(
+		email,
+		hashedPassword,
+		role,
+		locationID
+	);
 
 	return Response.json({
 		message: 'User created successfully',
