@@ -1,19 +1,19 @@
 'use client';
-import { SyntheticEvent, useState } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
-import { SignInOptions, SignInResponse, signIn } from 'next-auth/react';
-import { sign } from 'crypto';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation';
+
 function page() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	
 	const router = useRouter();
+
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		console.log('Submit Form');
+		
 		const formData = new FormData(e.target);
 		const email = formData.get('email');
 		const password = formData.get('password');
@@ -24,9 +24,8 @@ function page() {
 			password,
 			redirect: false,
 		});
-		console.log('responses', response);
 		if (response?.ok) {
-			router.push('/pages/adminPage');
+			router.push('/pages/dashboard/adminPage');
 		} else {
 			//TODO: @Babybluess Show error on page
 			const error = response?.error;

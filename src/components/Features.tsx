@@ -17,9 +17,9 @@ function Features() {
         <div className=' max-md:h-[75%] w-[50%] h-[90%] flex relative justify-center items-center'>
                 <div className='max-md:h-[90%] animate-wiggle w-[60%] h-[100%] bg-white border-2 rounded-xl justify-center items-center flex-col flex px-5'>
                   <div className=' relative w-[100%] h-[70%] mb-[2%] bg-[#E5AD67] rounded-xl justify-center items-center flex'>
-                    <img src="./image/Brown_Aesthetic.png" className=' w-[100%] h-[100%] rounded-xl' alt="" />
+                    <img src="/image/Brown_Aesthetic.png" className=' w-[100%] h-[100%] rounded-xl' alt="" />
                     <div className='max-lg:h-[30%] max-md:h-[25%] w-[40%] h-[50%] rounded-full bg-[#EDCEA8] absolute justify-center items-center flex'>
-                      <img src="./image/freshBox.png" className=' max-lg:h-[60%] w-[80%] h-[80%]' alt="" />
+                      <img src="/image/freshBox.png" className=' max-lg:h-[60%] w-[80%] h-[80%]' alt="" />
                     </div>
                   </div>
                   <div className=' w-[100%] flex justify-between items-center'>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 function CustomButton({orderNumber}) {
   return (
-    <Link href={`/detailOrder/${orderNumber}`}>
+    <Link href={`/pages/detailOrder/${orderNumber}`}>
         <Button color="primary">
             Continue
         </Button>

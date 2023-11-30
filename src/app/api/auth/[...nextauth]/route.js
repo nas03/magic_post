@@ -9,27 +9,19 @@ export const authOptions = {
 		CredentialsProvider({
 			name: 'credentials',
 			credentials: {},
-
-			async authorize(credentials) {
+			authorize: async (credentials) => {
 				try {
 					const { email, password } = credentials;
 					const user = await UserServices.getUserByEmail(email);
 					if (user != null) {
-						const validate = bcrypt.compare(password, user[0].password);
-						if (validate) {
-							return user;
-						}
+						//const validate = await bcrypt.compare(password, user[0].password);
+						//if (validate) {
+						//console.log('user', user[0]);
+						return user[0]
+						//}
+					} else {
+						return null;
 					}
-					return (
-						JSON,
-						stringify({
-							ok: false,
-							status: 200,
-							error:
-								'The email address and/or password you specified are not correct.',
-							url: null,
-						})
-					);
 				} catch (error) {
 					console.log('Error: ', error);
 				}
@@ -39,8 +31,20 @@ export const authOptions = {
 	session: {
 		strategy: 'jwt',
 	},
-	jwt: {
-		maxAge: 60 * 60 * 24 * 30,
+	callbacks: {
+		async jwt({ token, user }) {
+			console.log('jwt token', token);
+			if (user) {
+				token.role = user.role;
+				token.name = user.full_name
+			}
+			return token;
+		},
+		async session({ session, token }) {
+			
+			session.user.role = token.role;
+			return session;
+		},
 	},
 	pages: {
 		signIn: '/pages/login',
