@@ -7,13 +7,13 @@ function page() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-	
+
 	const router = useRouter();
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		console.log('Submit Form');
-		
+
 		const formData = new FormData(e.target);
 		const email = formData.get('email');
 		const password = formData.get('password');
