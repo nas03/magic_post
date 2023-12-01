@@ -3,7 +3,8 @@ import User from '@/schemas/User';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
-import { UserServices } from '../../../../prisma';
+import { UserServices } from '../../../../lib/prisma';
+
 export async function POST(request) {
 	const { email, password, role, locationID } = await request.json();
 
