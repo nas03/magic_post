@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, user_role } from '@prisma/client';
 
 export const revalidate = 3600;
 
 const prisma = new PrismaClient();
 
-async function getUserById(id) {
+async function getUserById(id: number) {
 	const data = await prisma.user.findMany({
 		where: {
 			user_id: {
@@ -33,18 +33,25 @@ const getUserByEmail = async (email) => {
 	}
 };
 
-const createNewUser = async (email, password, role, locationID) => {
+const createNewUser = async (
+	full_name: string,
+	email: string,
+	password: string,
+	role: user_role,
+	location_id: number
+) => {
 	try {
 		const newUser = await prisma.user.create({
 			data: {
+				full_name: full_name,
 				email: email,
 				password: password,
 				role: role,
-				location_id: locationID,
+				location_id: location_id,
 			},
 		});
 		cleanup();
-		return newUser;
+		Promise.resolve(newUser);
 	} catch (error) {
 		console.error("Can't create new user");
 		throw error;

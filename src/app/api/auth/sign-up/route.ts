@@ -1,12 +1,9 @@
-import { connectMongoDB } from '@/util/connect-db';
-import User from '@/schemas/User';
 import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { UserServices } from '../../../../lib/prisma';
 
-export async function POST(request) {
-	const { email, password, role, locationID } = await request.json();
+export async function POST(request: NextRequest) {
+	const { full_name, email, password, role, locationID } = await request.json();
 
 	if (password.length < 8) {
 		return Response.json({
@@ -18,7 +15,7 @@ export async function POST(request) {
 	const user = await UserServices.getUserByEmail(email);
 
 	if (user != undefined) {
-		return Response.json({
+		return NextResponse.json({
 			status: 400,
 			fail: 'User already exists',
 			message: '',
@@ -29,13 +26,14 @@ export async function POST(request) {
 	const hashedPassword = await bcryptjs.hash(password, salt);
 
 	const newUser = await UserServices.createNewUser(
+		full_name,
 		email,
 		hashedPassword,
 		role,
 		locationID
 	);
 
-	return Response.json({
+	return NextResponse.json({
 		message: 'User created successfully',
 		fail: '',
 		savedUser: newUser,
