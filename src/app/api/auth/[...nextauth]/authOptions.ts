@@ -1,26 +1,31 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { UserServices } from '../../../../lib/prisma';
-
+import { AuthOptions } from 'next-auth';
 const authOptions = {
 	providers: [
 		CredentialsProvider({
 			name: 'credentials',
 			credentials: {},
-			authorize: async (credentials) => {
+			authorize: async (credentials: Record<string, string>) => {
 				try {
 					const { email, password } = credentials;
 					const user = await UserServices.getUserByEmail(email);
-					if (user != null) {
-						//const validate = await bcrypt.compare(password, user[0].password);
-						//if (validate) {
-						//console.log('user', user[0]);
-						return user[0];
-						//}
+
+					if (user !== null) {
+						return {
+							id: user[0].user_id,
+							email: user[0].email,
+							full_name: user[0].full_name,
+							password: user[0].password,
+							location_id: user[0].location_id,
+							role: user[0].role,
+						};
 					} else {
 						return null;
 					}
 				} catch (error) {
 					console.log('Error: ', error);
+					return null;
 				}
 			},
 		}),
@@ -48,4 +53,4 @@ const authOptions = {
 	secret: process.env.NEXTAUTH_SECRET,
 };
 
-export {authOptions}
+export { authOptions };
