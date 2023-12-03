@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { User } from '@/src/app/api/(controller)';
+import { user } from '@/src/app/api/(controller)';
 import { UserServices } from '@/src/lib/prisma';
 const POST = async (request: NextRequest) => {};
 export async function DELETE() {

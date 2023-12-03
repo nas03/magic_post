@@ -2,50 +2,59 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { UserServices } from '../../../../../lib/prisma';
 import { AuthOptions } from 'next-auth';
 
-const authOptions = {
+const authorizeCredentials = async (credentials: Record<string, string>) => {
+	const { email, password } = credentials;
+	console.log('email auth', email);
+	const data = await UserServices.getUserByEmail(email);
+	const user = data[0];
+	console.log(user);
+
+	if (user !== null) {
+		return {
+			id: user.uuid,
+			name: user.full_name,
+			email: user.email,
+			role: user.role,
+		};
+	}
+
+	return null;
+};
+
+const jwtCallback = ({ token, user }) => {
+	if (user) {
+		token.role = user.role;
+	}
+	console.log(token);
+	return token;
+};
+
+const sessionCallback = ({ session, token }) => {
+	if (token) {
+		session.user.role = token.role;
+	}
+	return session;
+};
+
+const authOptions: AuthOptions = {
 	providers: [
 		CredentialsProvider({
 			name: 'credentials',
 			credentials: {},
-			authorize: async (credentials: Record<string, string>) => {
-				const { email, password } = credentials;
-				console.log('email auth', email);
-				const user = await UserServices.getUserByEmail(email);
-				console.log(user);
-				if (user !== null) {
-					return Promise.resolve({
-						id: user[0].user_id.toString,
-						name: user[0].full_name,
-						email: user[0].email,
-						role: user[0].role,
-					});
-				}
-				return null;
-			},
+			authorize: authorizeCredentials,
 		}),
 	],
 	session: {
 		strategy: 'jwt',
 	},
 	callbacks: {
-		async jwt({ token, user }) {
-			if (user) {
-				token.role = user.role;
-			}
-			console.log(token);
-			return token;
-		},
-		async session({ session, token }) {
-			if (token) {
-				session.user.role = token.role;
-			}
-			return session;
-		},
+		jwt: jwtCallback,
+		session: sessionCallback,
 	},
 	pages: {
 		signIn: '/pages/login',
 	},
 	secret: process.env.NEXTAUTH_SECRET,
-} satisfies AuthOptions;
+};
 
 export { authOptions };

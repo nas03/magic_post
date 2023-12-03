@@ -39,9 +39,8 @@ model post {
 }
 
 model status {
-  id               Int            @id @default(autoincrement())
+  package_id       Int            @unique @id
   location_id      Int
-  package_id       Int           
   received_date    DateTime       @db.Date
   transported_date DateTime?      @db.Date
   success          Boolean?
@@ -53,7 +52,7 @@ model status {
 }
 
 model user {
-  user_id     Int       @id @default(autoincrement())
+  uuid        String    @unique @id
   email       String    @unique @db.VarChar(255)
   full_name   String    @db.VarChar(255)
   password    String    @db.VarChar(255)

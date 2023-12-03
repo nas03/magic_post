@@ -1,20 +1,6 @@
 import { PrismaClient, user_role } from '@prisma/client';
 
-export const revalidate = 3600;
-
 const prisma = new PrismaClient();
-
-async function getUserById(id: number) {
-	const data = await prisma.user.findMany({
-		where: {
-			user_id: {
-				equals: id,
-			},
-		},
-	});
-	cleanup();
-	return data;
-}
 
 const getUserByEmail = async (email: string) => {
 	try {
@@ -34,6 +20,7 @@ const getUserByEmail = async (email: string) => {
 };
 
 const createNewUser = async (
+	uuid: string,
 	full_name: string,
 	email: string,
 	password: string,
@@ -43,6 +30,7 @@ const createNewUser = async (
 	try {
 		const newUser = await prisma.user.create({
 			data: {
+				uuid: uuid,
 				full_name: full_name,
 				email: email,
 				password: password,
@@ -83,7 +71,6 @@ const cleanup = async () => {
 };
 
 const UserServices = {
-	getUserById,
 	getUserByEmail,
 	createNewUser,
 	deleteUser,
