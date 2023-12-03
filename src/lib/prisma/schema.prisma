@@ -41,7 +41,7 @@ model post {
 model status {
   id               Int            @id @default(autoincrement())
   location_id      Int
-  package_id       Int
+  package_id       Int           
   received_date    DateTime       @db.Date
   transported_date DateTime?      @db.Date
   success          Boolean?
@@ -54,7 +54,7 @@ model status {
 
 model user {
   user_id     Int       @id @default(autoincrement())
-  email       String    @db.VarChar(255)
+  email       String    @unique @db.VarChar(255)
   full_name   String    @db.VarChar(255)
   password    String    @db.VarChar(255)
   location_id Int

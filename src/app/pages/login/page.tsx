@@ -18,7 +18,9 @@ function page() {
 		const email = formData.get('email');
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirm-password');
-
+		if (confirmPassword != password) {
+			//TODO: Show error
+		}
 		const response = await signIn('credentials', {
 			email,
 			password,

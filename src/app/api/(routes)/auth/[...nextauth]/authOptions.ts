@@ -1,5 +1,5 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { UserServices } from '../../../../lib/prisma';
+import { UserServices } from '../../../../../lib/prisma';
 import { AuthOptions } from 'next-auth';
 
 const authOptions = {
@@ -9,10 +9,16 @@ const authOptions = {
 			credentials: {},
 			authorize: async (credentials: Record<string, string>) => {
 				const { email, password } = credentials;
+				console.log('email auth', email);
 				const user = await UserServices.getUserByEmail(email);
-
+				console.log(user);
 				if (user !== null) {
-					Promise.resolve(user[0]);
+					return Promise.resolve({
+						id: user[0].user_id.toString,
+						name: user[0].full_name,
+						email: user[0].email,
+						role: user[0].role,
+					});
 				}
 				return null;
 			},
@@ -23,15 +29,16 @@ const authOptions = {
 	},
 	callbacks: {
 		async jwt({ token, user }) {
-			console.log('jwt token', token);
 			if (user) {
 				token.role = user.role;
-				token.name = user.full_name;
 			}
+			console.log(token);
 			return token;
 		},
 		async session({ session, token }) {
-			session.user.role = token.role;
+			if (token) {
+				session.user.role = token.role;
+			}
 			return session;
 		},
 	},

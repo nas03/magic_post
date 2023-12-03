@@ -16,7 +16,7 @@ async function getUserById(id: number) {
 	return data;
 }
 
-const getUserByEmail = async (email) => {
+const getUserByEmail = async (email: string) => {
 	try {
 		const user = await prisma.user.findMany({
 			where: {
@@ -57,6 +57,22 @@ const createNewUser = async (
 		throw error;
 	}
 };
+
+const deleteUser = async (email: string) => {
+	try {
+		const deletedUser = await prisma.user.delete({
+			where: {
+				email: email,
+			},
+		});
+		cleanup();
+		return deletedUser;
+	} catch (error) {
+		console.error(`Error deleting user with email`);
+		throw error;
+	}
+};
+
 const cleanup = async () => {
 	try {
 		await prisma.$disconnect();
@@ -67,10 +83,10 @@ const cleanup = async () => {
 };
 
 const UserServices = {
-	revalidate,
 	getUserById,
 	getUserByEmail,
 	createNewUser,
+	deleteUser,
 	cleanup,
 };
 

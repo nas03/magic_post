@@ -10,6 +10,7 @@ export default withAuth(
 			request.nextauth.token?.role !== 'HubManager' &&
 			request.nextauth.token?.role !== 'Admin'
 		) {
+			console.log(request.nextauth.token)
 			return NextResponse.rewrite(new URL('/', request.url));
 		}
 	},
