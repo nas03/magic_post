@@ -18,13 +18,16 @@ function Page() {
 		},
 	});
 	//Get user role
-	// const role = session?.user?.role;
-	// if(role != '....'){
-	//     router.push('/');
-	// }
-
-	// console.log('session', session?.user?.role);
-	// console.log('status', status)
+	const role = session?.user?.role;
+	if(role != '....'){
+	    router.push('/');
+	}
+	
+	console.log('session', session?.user?.role);
+	console.log('status', status);
+	
+	/*FETCH API*/
+	const data = fetch('/api/user/admin/');
 	return (
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
 			<div className=" w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md">
@@ -37,8 +40,8 @@ function Page() {
 						/>
 					</div>
 					<div className=" flex flex-col">
-						<span className=" text-xl font-semibold">Magic Post</span>
-						<span className=" text-gray-200 text-xs">admin panel</span>
+						<span className="text-xl font-semibold">Magic Post</span>
+						<span className="text-gray-200 text-xs">admin panel</span>
 					</div>
 				</div>
 				<form className=" w-[35%] h-[55%] flex justify-center items-center">

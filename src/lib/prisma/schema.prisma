@@ -31,7 +31,7 @@ model Renamedpackage {
 model post {
   location_id                                     Int              @id @default(autoincrement())
   location                                        String           @db.VarChar(255)
-  type                                            String?          @db.VarChar(255)
+  type                                            post_type
   Renamedpackage_Renamedpackage_sender_idTopost   Renamedpackage[] @relation("Renamedpackage_sender_idTopost")
   Renamedpackage_Renamedpackage_receiver_idTopost Renamedpackage[] @relation("Renamedpackage_receiver_idTopost")
   status                                          status[]
@@ -39,7 +39,7 @@ model post {
 }
 
 model status {
-  package_id       Int            @unique @id
+  package_id       Int            @id @unique
   location_id      Int
   received_date    DateTime       @db.Date
   transported_date DateTime?      @db.Date
@@ -52,7 +52,7 @@ model status {
 }
 
 model user {
-  uuid        String    @unique @id
+  uuid        String    @id @unique
   email       String    @unique @db.VarChar(255)
   full_name   String    @db.VarChar(255)
   password    String    @db.VarChar(255)
@@ -61,6 +61,11 @@ model user {
   post        post      @relation(fields: [location_id], references: [location_id], map: "fk_user_post")
 
   @@index([location_id], map: "fk_user_post")
+}
+
+enum post_type {
+  Hub
+  Branch
 }
 
 enum user_role {

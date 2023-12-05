@@ -5,9 +5,22 @@ export const revalidate = 3600;
 const prisma = new PrismaClient();
 
 async function getPost() {
-	return await prisma.post.findMany({
-	
-	});
+	return await prisma.post.findMany({});
+}
+async function getPostWithFilter(filter: string) {
+	try {
+		const result = await prisma.post.findMany({
+			where: {
+				location: {
+					contains: filter,
+				},
+			},
+		});
+		cleanup();
+		return result;
+	} catch (error) {
+		console.log('No records were found');
+	}
 }
 const cleanup = async () => {
 	try {
@@ -19,8 +32,9 @@ const cleanup = async () => {
 };
 
 const PostServices = {
-    getPost,
-    cleanup
-}
+	getPost,
+	getPostWithFilter,
+	cleanup,
+};
 
 export default PostServices;
