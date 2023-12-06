@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 /// This model has been renamed to 'Renamedpackage' during introspection, because the original name 'package' is reserved.
 model Renamedpackage {
   package_id                            Int      @id @default(autoincrement())

@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function getUserById(id) {
 	const data = await prisma.user.findMany({
 		where: {
-			user_id: {
+			uuid: {
 				equals: id,
 			},
 		},
