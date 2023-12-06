@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function page() {
 	const [email, setEmail] = useState('');
@@ -35,7 +36,7 @@ function page() {
 	};
 
 	return (
-		<section className="bg-gray-50 dark:bg-gray-900">
+		<div className="bg-gray-50 dark:bg-gray-900">
 			<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 				<a
 					href="#"
@@ -122,7 +123,7 @@ function page() {
 							<div>
 								<button
 									type="submit"
-									className=" hover:w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-[#F79132] text-white hover:text-[#F79132] hover:border-2 hover:border-[#F79132] hover:bg-transparent">
+									className=" w-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 bg-[#F79132] text-white hover:text-[#F79132] hover:border-2 hover:border-[#F79132] hover:bg-transparent">
 									Login
 								</button>
 							</div>
@@ -138,7 +139,7 @@ function page() {
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 	);
 }
 

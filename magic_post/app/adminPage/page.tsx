@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { MagnifyingGlassIcon, BellAlertIcon, PlusSmallIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon, BellAlertIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
 import { MainContent, SideLeftBar, SideRightBar } from './components'
 
 function page() {
@@ -32,9 +32,9 @@ function page() {
                     </form>
                     <div className=' w-[12%] h-[55%] flex gap-[5%] justify-between'>
                         <BellAlertIcon className=' w-[15%]'/>
-                        <div className=' w-[80%] flex bg-[#4C9E9C] text-white h-full justify-center items-center hover:border-2 hover:border-[#4C9E9C] hover:-p-2 hover:bg-white hover:text-[#4C9E9C]'>
-                            <PlusSmallIcon className=' w-[16%] object-contain'/>
-                            <span>Add Report</span>
+                        <div className=' w-[60%] flex bg-[#4C9E9C] text-white h-full justify-center items-center hover:border-2 hover:border-[#4C9E9C] hover:-p-2 hover:bg-white hover:text-[#4C9E9C]'>
+                            <ArrowLeftOnRectangleIcon/>
+                            <span>Log out</span>
                         </div>
                     </div>
                 </div>

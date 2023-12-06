@@ -4,30 +4,13 @@ import {
 	MagnifyingGlassIcon,
 	BellAlertIcon,
 	PlusSmallIcon,
+	ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/solid';
 import { MainContent, SideLeftBar, SideRightBar } from './components';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 function Page() {
-	const router = useRouter();
-
-	const { data: session, status } = useSession({
-		required: true,
-		onUnauthenticated() {
-			router.push('/');
-		},
-	});
-	//Get user role
-	const role = session?.user?.role;
-	if(role != '....'){
-	    router.push('/');
-	}
 	
-	console.log('session', session?.user?.role);
-	console.log('status', status);
-	
-	/*FETCH API*/
-	const data = fetch('/api/user/admin/');
 	return (
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
 			<div className=" w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md">
@@ -79,11 +62,11 @@ function Page() {
 						</button>
 					</div>
 				</form>
-				<div className=" w-[12%] h-[55%] flex gap-[5%] justify-between">
+				<div className=" w-[10%] h-[55%] flex gap-[5%] justify-end">
 					<BellAlertIcon className=" w-[15%]" />
-					<div className=" w-[80%] flex bg-[#4C9E9C] text-white h-full justify-center items-center hover:border-2 hover:border-[#4C9E9C] hover:-p-2 hover:bg-white hover:text-[#4C9E9C]">
-						<PlusSmallIcon className=" w-[16%] object-contain" />
-						<span>Add Report</span>
+					<div className=" w-[60%] flex rounded-md cursor-pointer gap-1 bg-[#4C9E9C] text-white h-full justify-center items-center hover:border-2 hover:border-[#4C9E9C] hover:bg-white hover:text-[#4C9E9C]">
+						<ArrowLeftOnRectangleIcon className=" w-[20%] object-contain" />
+						<span>Log out</span>
 					</div>
 				</div>
 			</div>
