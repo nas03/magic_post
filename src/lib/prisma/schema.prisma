@@ -1,11 +1,13 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
 
 /// This model has been renamed to 'Renamedpackage' during introspection, because the original name 'package' is reserved.
 model Renamedpackage {

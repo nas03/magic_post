@@ -36,3 +36,4 @@ yarn-error.log*
 next-env.d.ts
 myTODO.md
 yarn.lock
+/src/app/api/(routes)/auth/[...nextauth]
