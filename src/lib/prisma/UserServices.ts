@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 const getUserByEmail = async (email: string) => {
 	try {
+		prisma.$connect;
 		const user = await prisma.user.findMany({
 			where: {
 				email: {
@@ -14,7 +15,7 @@ const getUserByEmail = async (email: string) => {
 		cleanup();
 		return user;
 	} catch (error) {
-		console.error("Can't get user by email");
+		console.error("Can't get user by email", error);
 		throw error;
 	}
 };

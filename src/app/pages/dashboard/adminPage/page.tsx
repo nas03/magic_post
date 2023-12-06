@@ -11,23 +11,13 @@ import { useRouter } from 'next/navigation';
 function Page() {
 	const router = useRouter();
 
-	const { data: session, status } = useSession({
-		required: true,
-		onUnauthenticated() {
-			router.push('/');
-		},
-	});
+	const { data: session, status } = useSession();
 	//Get user role
 	const role = session?.user?.role;
-	if(role != '....'){
-	    router.push('/');
+	if (role == '') {
+		router.push('/');
 	}
-	
-	console.log('session', session?.user?.role);
-	console.log('status', status);
-	
-	/*FETCH API*/
-	const data = fetch('/api/user/admin/');
+
 	return (
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
 			<div className=" w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md">
