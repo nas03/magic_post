@@ -1,16 +1,31 @@
 'use client';
-import React from 'react';
+import React, { use } from 'react';
 import {
 	MagnifyingGlassIcon,
 	BellAlertIcon,
 	PlusSmallIcon,
-	ArrowLeftOnRectangleIcon
+	ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/solid';
 import { MainContent, SideLeftBar, SideRightBar } from './components';
-import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 function Page() {
-	
+	const router = useRouter();
+	//handle view permission
+	// const { data: session, status } = useSession({
+	// 	required: true,
+	// 	onUnauthenticated() {
+	// 		router.push('/');
+	// 	},
+	// });
+	//console.log('adminPage session', session?.expires);
+	//handle sign out
+	const handleSignOut = async () => {
+		console.log('SignOut');
+		await signOut({ redirect: true, callbackUrl: '/' });
+	};
+
 	return (
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
 			<div className=" w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md">
@@ -41,9 +56,9 @@ function Page() {
 								viewBox="0 0 20 20">
 								<path
 									stroke="currentColor"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
 									d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
 								/>
 							</svg>
@@ -66,7 +81,7 @@ function Page() {
 					<BellAlertIcon className=" w-[15%]" />
 					<div className=" w-[60%] flex rounded-md cursor-pointer gap-1 bg-[#4C9E9C] text-white h-full justify-center items-center hover:border-2 hover:border-[#4C9E9C] hover:bg-white hover:text-[#4C9E9C]">
 						<ArrowLeftOnRectangleIcon className=" w-[20%] object-contain" />
-						<span>Log out</span>
+						<span onClick={handleSignOut}>Log out</span>
 					</div>
 				</div>
 			</div>

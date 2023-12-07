@@ -3,7 +3,9 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-
+const dataRow = async() => {
+  const data = fetch('/api/user/admin')
+}
 const rows: GridRowsProp = [
   {id: 1, col1: 1, col2: 'Enpul Rohman', col3: 'Delivered', col4: 'Book', col5: '$3.99', col6: <MoreHorizIcon/> },
   {id: 2, col1: 2, col2: 'Riko Sapto Dimo', col3: 'Delivered', col4: 'Electronic', col5: '$5.99', col6: <MoreHorizIcon/>},
