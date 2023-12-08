@@ -2,15 +2,20 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 function page() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	const { data: session, status } = useSession();
 
 	const router = useRouter();
 
+	if (status == 'authenticated') {
+		router.push('/pages/dashboard/adminPage');
+	}
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		console.log('Submit Form');

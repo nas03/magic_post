@@ -4,6 +4,14 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
 	function middleware(request) {
+		console.log('token from middleware', request.nextauth.token);
+		if (
+			request.nextUrl.pathname.startsWith('/pages/dashboard') &&
+			request.nextauth.token == null
+		) {
+			return NextResponse.redirect('/');
+		}
+
 		if (
 			request.nextUrl.pathname.startsWith('/pages/dashboard') &&
 			request.nextauth.token?.role !== 'BranchManager' &&

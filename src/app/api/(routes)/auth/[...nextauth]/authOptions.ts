@@ -1,13 +1,13 @@
+
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { UserServices } from '../../../../../lib/prisma';
 import { AuthOptions } from 'next-auth';
 
 const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
-	
-	const data = await UserServices.getUserByEmail('sonanhnguyen003@gmail.com');
+	const data = await UserServices.getUserByEmail(email);
 	const user = data[0];
-
+	console.log('data', data);
 	if (user !== null) {
 
 		return {
@@ -30,6 +30,8 @@ const jwtCallback = ({ token, user }) => {
 };
 
 const sessionCallback = ({ session, token }) => {
+	console.log('Session token: ', token);
+
 	if (token) {
 		session.user.role = token.role;
 	}
