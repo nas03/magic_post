@@ -1,6 +1,5 @@
-import { PrismaClient, user_role } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { user_role } from '@prisma/client';
+import prisma from './prisma';
 
 const getUserByEmail = async (email: string) => {
 	try {

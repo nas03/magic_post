@@ -1,11 +1,19 @@
-import { PrismaClient } from '@prisma/client';
+
+
+import prisma from "./prisma";
 
 export const revalidate = 3600;
 
-const prisma = new PrismaClient();
+
 
 async function getPost() {
-	return await prisma.post.findMany({});
+	try {
+		const data = await prisma.post.findMany();
+		cleanup();
+		return data;
+	} catch (error) {
+		console.log(`Can't get all post`)
+	}
 }
 async function getPostWithFilter(filter: string) {
 	try {

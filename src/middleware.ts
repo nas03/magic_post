@@ -12,15 +12,11 @@ export default withAuth(
 		) {
 			return NextResponse.rewrite(new URL('/', request.url));
 		}
-	},
-	{
-		callbacks: {
-			authorized: ({ token }) => {
-				console.log('called from middleware');
-				return !!token;
-			},
-		},
 	}
 );
 
-export const config = { matcher: ['/dashboard/:path*'] };
+export const config = { matcher: [
+	'/pages/dashboard/adminPage',
+	'/api/admin/:path*'
+],
+ };

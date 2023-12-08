@@ -4,12 +4,12 @@ import { AuthOptions } from 'next-auth';
 
 const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
-	console.log('email auth', email);
+	
 	const data = await UserServices.getUserByEmail('sonanhnguyen003@gmail.com');
 	const user = data[0];
 
 	if (user !== null) {
-		console.log('user', user);
+
 		return {
 			id: user.uuid,
 			name: user.full_name,
@@ -25,7 +25,7 @@ const jwtCallback = ({ token, user }) => {
 	if (user) {
 		token.role = user.role;
 	}
-	console.log('NextAuth token: ', token);
+	
 	return token;
 };
 

@@ -1,9 +1,21 @@
 import { PrismaClient } from '@prisma/client';
-import exp from 'constants';
+import prisma from './prisma';
 
-export const revalidate = 3600;
-
-const prisma = new PrismaClient();
+const getPackageStatus = async (id: number) => {
+	try {
+		const data = await prisma.status.findMany({
+			where: {
+				package_id: {
+					equals: id,
+				},
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log(`Can't get package status`);
+		throw error;
+	}
+};
 
 const cleanup = async () => {
 	try {
@@ -15,6 +27,7 @@ const cleanup = async () => {
 };
 
 const PackageServices = {
-    cleanup
-}
-export default PackageServices
+	getPackageStatus,
+	cleanup,
+};
+export default PackageServices;

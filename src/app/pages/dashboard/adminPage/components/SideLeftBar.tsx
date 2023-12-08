@@ -75,7 +75,7 @@ function SideLeftBar() {
             <span className=' text-xl text-gray-400 font-semibold mb-[5%]'>DASHBOARD</span>
             {
                 dataDashboard.map((item, index) => (
-                    <div onClick={() => handleClick(item.name)} 
+                    <div key={index} onClick={() => handleClick(item.name)} 
                         className={` ${ name == item.name ? 'bg-[#F7F8FA] text-[#32989a]' : 'bg-white'} cursor-pointer px-[5%] flex h-[10%] w-full justify-between items-center `}
                         >
                         <div className=' w-full flex gap-[3%] items-center'>
@@ -99,7 +99,7 @@ function SideLeftBar() {
             <span className=' text-xl text-gray-400 font-semibold'>PAYMENT</span>
             {
                 dataPayment.map((item, index) => (
-                    <div onClick={() => handleClick(item.name)} 
+                    <div key={index} onClick={() => handleClick(item.name)} 
                         className={` ${ name == item.name ? 'bg-[#F7F8FA] text-[#32989a]' : 'bg-white'} cursor-pointer px-[5%] flex h-[10%] w-full justify-between items-center `}
                         >
                         <div className=' w-full flex gap-[3%] items-center'>

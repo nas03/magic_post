@@ -43,3 +43,4 @@ bun.lockb
 # src/app/api/(routes)/auth/
 
 .env
+package-lock.json
