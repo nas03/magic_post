@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { post_type } from '@prisma/client';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import axios from 'axios';
+import api from '@/src/lib/axios';
 
 export const revalidate = 30;
 
@@ -17,12 +17,12 @@ interface Post {
 
 const fetchData = async () => {
 	try {
-		const response = await axios.get('/api/admin/post');
+		const response = await api.get('/api/admin/post');
 		const data = response.data.data;
-    let id = 1;
-		const rows: GridRowsProp = data.map((d: Post, index : number) => ({
+		let id = 1;
+		const rows: GridRowsProp = data.map((d: Post, index: number) => ({
 			id: index + 1,
-      col1: d.post_id,
+			col1: d.post_id,
 			col2: d.location,
 			col3: d.type,
 			col4: <MoreHorizIcon />,

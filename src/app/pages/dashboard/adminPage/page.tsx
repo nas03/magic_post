@@ -8,8 +8,6 @@ import {
 } from '@heroicons/react/24/solid';
 import { MainContent, SideLeftBar, SideRightBar } from './components';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 function Page() {
 	return (
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
@@ -41,9 +39,6 @@ function Page() {
 								viewBox="0 0 20 20">
 								<path
 									stroke="currentColor"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
 									strokeLinecap="round"
 									strokeLinejoin="round"
 									strokeWidth="2"

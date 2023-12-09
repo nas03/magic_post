@@ -1,5 +1,5 @@
-import UserServices from './UserServices';
-import PostServices from './PostServices';
-import PackageServices from './PackageServices';
+import { PrismaClient } from '@prisma/client';
 
-export { UserServices, PostServices, PackageServices };
+const prisma = new PrismaClient();
+
+export default prisma;

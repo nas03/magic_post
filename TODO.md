@@ -35,7 +35,8 @@ Công ty cần phát triển một phần mềm nhằm quản lý hệ thống c
 -	Tra cứu trạng thái và tiến trình chuyển phát của kiện hàng mình gửi.
     - <span style="color: #5ced73">Tra cứu tiến trình chuyển</span>
     - <span style="color: #5ced73">Mô tả đơn hàng
-
+### **Small tasks**
+- <span style="color: #5ced73">Chuyển các Services từ prisma sang (controller)
 
 -  <span style="color: #ee6b6e">PRIORITIES
 -  <span style="color: #5ced73">DONE

@@ -1,15 +1,13 @@
-
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { UserServices } from '../../../../../lib/prisma';
 import { AuthOptions } from 'next-auth';
+import { User } from '../../../(controller)';
 
 const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
-	const data = await UserServices.getUserByEmail(email);
+	const data = await User.getUser(email);
 	const user = data[0];
-	console.log('data', data);
-	if (user !== null) {
 
+	if (user !== null) {
 		return {
 			id: user.uuid,
 			name: user.full_name,
@@ -25,7 +23,7 @@ const jwtCallback = ({ token, user }) => {
 	if (user) {
 		token.role = user.role;
 	}
-	
+
 	return token;
 };
 

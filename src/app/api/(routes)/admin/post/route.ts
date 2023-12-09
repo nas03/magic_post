@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { user } from '@/src/app/api/(controller)';
-import { PostServices, UserServices } from '@/src/lib/prisma';
+import { Post, User } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
-	const data = await PostServices.getPost();
+	const data = await Post.getPost();
 	if (data != null) {
 		return NextResponse.json({
 			data: data,

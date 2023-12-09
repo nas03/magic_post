@@ -1,9 +1,6 @@
-import { NextResponse } from 'next/server';
-import { UserServices } from '@/src/lib/prisma';
 import bcryptjs from 'bcryptjs';
-import { PrismaClient, user_role } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { user_role } from '@prisma/client';
+import prisma from '@/src/lib/prisma';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -15,67 +12,74 @@ const createNewUser = async (
 	locationID: number
 ) => {
 	if (password.length < MIN_PASSWORD_LENGTH) {
-		return NextResponse.json({
-			status: 400,
-			fail: 'Password must have at least 8 characters',
-			message: '',
-		});
+		return null;
 	}
 
 	try {
-		const existingUser = await UserServices.getUserByEmail(email);
-
+		const existingUser = await getUser(email);
 		if (existingUser) {
-			return NextResponse.json({
-				status: 400,
-				error: 'User already exists',
-				
-			});
+			return null;
 		}
-
 		const salt = await bcryptjs.genSalt(10);
 		const hashedPassword = await bcryptjs.hash(password, salt);
 		const user_uuid = await bcryptjs.hash(email, salt);
-
-		const newUser = await UserServices.createNewUser(
-			user_uuid,
-			full_name,
-			email,
-			hashedPassword,
-			role,
-			locationID
-		);
-
-		return NextResponse.json({
-			success: true,
-			status: 201,
-			newUser,
+		const newUser = await prisma.user.create({
+			data: {
+				uuid: user_uuid,
+				full_name: full_name,
+				email: email,
+				password: hashedPassword,
+				role: role,
+				location_id: locationID,
+			},
 		});
+
+		return Promise.resolve(newUser);
 	} catch (error) {
 		console.error(`Error creating new user: ${error}`);
-		return NextResponse.json({
-			error: 'Internal Server Error',
-			status: 500,
-		});
+		return null;
+	}
+};
+
+const getUser = async (email: string | null) => {
+	if (email == null) {
+		try {
+			const users = await prisma.user.findMany();
+			return users;
+		} catch (error) {
+			console.log('Cant get all user');
+			return null;
+		}
+	}
+	if (email != null) {
+		try {
+			const user = await prisma.user.findMany({
+				where: {
+					email: {
+						equals: email,
+					},
+				},
+			});
+			return user;
+		} catch (error) {
+			console.error("Can't get user by email", error);
+			throw error;
+		}
 	}
 };
 
 const deleteUser = async (email: string) => {
 	try {
-		const deletedUser = await UserServices.deleteUser(email);
-
-		return NextResponse.json({
-			status: 200,
-			success: true,
-			deletedUser,
+		const deletedUser = await prisma.user.delete({
+			where: {
+				email: email,
+			},
 		});
+		return deletedUser;
 	} catch (error) {
 		console.error(`Error deleting user with email ${email}: ${error}`);
-		return NextResponse.json({
-			error: 'Internal Server Error',
-			status: 500,
-		});
+		return null;
 	}
 };
 
-export { createNewUser, deleteUser };
+export { createNewUser, getUser, deleteUser };

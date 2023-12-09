@@ -11,8 +11,7 @@ import {
 	Divider,
 } from '@mui/material';
 import Link from 'next/link';
-import api from '@/src/lib/axios/api';
-import axios from 'axios';
+import api from '@/src/lib/axios';
 import calculator from '@/src/util/fee-calculator';
 import { Package, Status } from '@/src/util';
 

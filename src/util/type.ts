@@ -29,5 +29,8 @@ export interface User {
 	post_id: number;
 	role: string;
 }
-
-
+export interface Post {
+	post_id: number;
+	location: string;
+	type: string;
+}
