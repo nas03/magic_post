@@ -1,11 +1,11 @@
 
-INSERT INTO post (location_id, location, type) VALUES
+INSERT INTO post (post_id, location, type) VALUES
   (1, 'Location One', 'Branch'),
   (2, 'Location Two', 'Hub'),
   (3, 'Location Three', 'Branch');
 
 
-INSERT INTO user (uuid, email, full_name, password, location_id, role) VALUES
+INSERT INTO user (uuid, email, full_name, password, post_id, role) VALUES
   ('550e8400-e29b-41d4-a716-446655440000', 'sonanhnguyen003@gmail.com', 'User One', '12345678', 1, 'BranchManager'),
   ('550e8400-e29b-41d4-a716-446655440001', '1@gmail.com', 'User One', '12345678', 1, 'BranchManager'),
   ('9f47d0a4-95de-4a92-bdc5-02115f55e10a', 'user2@example.com', 'User Two', 'password2', 2, 'HubManager'),
@@ -17,6 +17,7 @@ VALUES
   (2, 7.2, '2023-02-01', 'Type Y', 'Sender Two', '987-654-3210', 2, 'Receiver Two', 3, '123-456-7890');
 
 
-INSERT INTO status (package_id, location_id, received_date, transported_date, success) VALUES
-  (1, 1, '2023-01-02', '2023-01-03', true),
-  (2, 2, '2023-02-02', NULL, false);
+INSERT INTO status (status_id,package_id, post_id, received_date, transported_date, success, location) VALUES
+  (1,1, 1, '2023-01-02', '2023-01-03', false, 'Location One'),
+  (2,2, 2, '2023-02-02', NULL, false, 'Location Two'),
+  (3,1,2,'2023-03-03', NULL, true,'Location One');

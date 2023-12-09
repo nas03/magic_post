@@ -4,8 +4,8 @@ MagicPost là công ty hoạt động trong lĩnh vực chuyển phát. Công ty
 Người gửi, có hàng cần gửi, đem hàng đến một điểm giao dịch (thường là gần nhất) để gửi. Hàng, sau đó, được đưa đến điểm tập kết ứng với điểm giao dịch của người gửi, rồi được chuyển đến điểm tập kết ứng với điểm giao dịch của người nhận. Tại điểm giao dịch của người nhận, nhân viên giao hàng sẽ chuyển hàng đến tận tay người nhận.
 Công ty cần phát triển một phần mềm nhằm quản lý hệ thống chuyển phát nêu trên. Yêu cầu chức năng cho từng đối **tượng sử dụng như sau:**
 ### **Chức năng cho lãnh đạo công ty**
--	Quản lý hệ thống các điểm giao dịch và điểm tập kết.
--	Quản lý tài khoản trưởng điểm điểm tập kết và điểm giao dịch. Mỗi điểm giao dịch hoặc điểm tập kết có một tài khoản trưởng điểm.
+-	<span style="color: #5ced73">Quản lý hệ thống các điểm giao dịch và điểm tập kết.
+-	<span style="color: #ee6b6e">Quản lý tài khoản trưởng điểm điểm tập kết và điểm giao dịch. Mỗi điểm giao dịch hoặc điểm tập kết có một tài khoản trưởng điểm.
 -	Thống kê hàng gửi, hàng nhận trên toàn quốc, từng điểm giao dịch hoặc điểm tập kết.
 
 ### **Chức năng cho trưởng điểm tại điểm giao dịch**
@@ -33,3 +33,9 @@ Công ty cần phát triển một phần mềm nhằm quản lý hệ thống c
 
 ### **Chức năng cho khách hàng**
 -	Tra cứu trạng thái và tiến trình chuyển phát của kiện hàng mình gửi.
+    - <span style="color: #5ced73">Tra cứu tiến trình chuyển</span>
+    - <span style="color: #5ced73">Mô tả đơn hàng
+
+
+-  <span style="color: #ee6b6e">PRIORITIES
+-  <span style="color: #5ced73">DONE

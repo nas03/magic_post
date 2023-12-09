@@ -2,44 +2,70 @@
 import React, { ComponentProps } from 'react';
 import { ArrowSmallLeftIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
-import {List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider} from '@mui/material';
+import {
+	List,
+	ListItem,
+	ListItemText,
+	ListItemAvatar,
+	Avatar,
+	Divider,
+} from '@mui/material';
 import Link from 'next/link';
 import api from '@/src/lib/axios/api';
+import axios from 'axios';
+import calculator from '@/src/util/fee-calculator';
+import { Package, Status } from '@/src/util';
 
-const fetchData = async() => {
-    try{
-
-        const response = await fetch(`/api/client`);
-        const body = response.body;
-        console.log('response', body);
-    } catch (error) {
-        console.log('axios err', error)
-    }
-
-}
+const fetchData = async (id: number) => {
+	try {
+		const statusRes = await api.get('/api/client', {
+			params: {
+				search: 'status',
+				id: 1,
+			},
+		});
+		const packageRes = await api.get('/api/client', {
+			params: {
+				search: 'package',
+				id: 1,
+			},
+		});
+		const statusData = statusRes.data.data;
+		const packageData: Package = packageRes.data.data;
+		return {
+			packageData,
+			statusData,
+		};
+	} catch (error) {
+		console.log('Error fetching data ORDER NUMBER', error);
+		return null;
+	}
+};
 
 const PackageStatus = ({ packageStatus, date }) => {
 	return (
-		<div className=" w-[15%] flex-col flex">
-			<span className=" text-lg font-bold">{packageStatus}</span>
-			<span className=" text-gray-500 text-sm">{date}</span>
-		</div>
+		<>
+			<div className=" w-[15%] flex-col flex">
+				<span className=" text-lg font-bold">{packageStatus}</span>
+				<span className=" text-gray-500 text-sm">{date}</span>
+			</div>
+		</>
 	);
 };
 
 const CircleIcon = ({ number }) => {
 	return (
-		<div className=" h-[70%] w-6 bg-[#4E4AFF] rounded-full justify-center items-center text-center text-white">
-			<span>{number}</span>
-		</div>
+		<>
+			<div className=" h-[70%] w-6 bg-[#4E4AFF] rounded-full justify-center items-center text-center text-white">
+				<span>{number}</span>
+			</div>
+		</>
 	);
 };
 
-
-
-const Page = ({ params }: { params: { orderNumber: string } }) => {
+const Page = async ({ params }: { params: { orderNumber: number } }) => {
 	const router = useRouter();
-    fetchData();
+	const data = await fetchData(params.orderNumber);
 	return (
 		<div className=" w-[100vw] h-[100vh] flex justify-center items-center bg-white">
 			<div className=" w-full h-full px-[5%] py-[2%]">
@@ -72,24 +98,18 @@ const Page = ({ params }: { params: { orderNumber: string } }) => {
 							alt=""
 						/>
 						<div className=" absolute bg-lineBackground w-full h-full flex justify-between items-center">
-							<CheckCircleIcon className=" h-full w-6 text-[#4E4AFF]" />
-							<CircleIcon number={2}/>
-							<CircleIcon number={3}/>
+							{data.statusData.map((d: Status, index: number) => (
+								<CircleIcon number={index + 1} />
+							))}
 						</div>
 					</div>
 					<div className=" w-full h-[40%] flex justify-between">
-						<PackageStatus
-							packageStatus={`ORDER CONFIRMED`}
-							date={`8:00 AM, Feb 8, 2023`}
-						/>
-						<PackageStatus
-							packageStatus={`SHIPPING`}
-							date={`8:00 AM, Feb 8, 2023`}
-						/>
-						<PackageStatus
-							packageStatus={`TO DELIVER`}
-							date={`Estimated date: Feb 15, 2023`}
-						/>
+						{data.statusData.map((d: Status) => (
+							<PackageStatus
+								packageStatus={d.location}
+								date={d.received_date.slice(0, 10)}
+							/>
+						))}
 					</div>
 				</div>
 				<div className=" w-full h-[10%] my-[1.5%] justify-between flex">
@@ -161,7 +181,10 @@ const Page = ({ params }: { params: { orderNumber: string } }) => {
 							<Divider />
 							<ListItem className=" w-full">
 								<ListItemText primary="Total Cost" className=" font-bold" />
-								<ListItemText primary="$ 900 000 USD" className=" font-bold" />
+								<ListItemText
+									primary={`$ ${calculator(Number(data.packageData.weight))}`}
+									className=" font-bold"
+								/>
 							</ListItem>
 							<Divider />
 						</List>
@@ -170,6 +193,6 @@ const Page = ({ params }: { params: { orderNumber: string } }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Page;

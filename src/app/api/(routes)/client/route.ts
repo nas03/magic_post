@@ -2,30 +2,25 @@ import { PackageServices, PostServices } from '@/src/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
 const GET = async (request: NextRequest) => {
-	// const requestBody = await request.json();
-	// const {id} = requestBody;
-	// const data = await PackageServices.getPackageStatus(1);
-	// if (data == null) {
-	// 	return NextResponse.json({
-	// 		status: 400,
-	// 		data: null,
-	// 	});
-	// }
-	// return NextResponse.json({
-	// 	status: 200,
-	// 	data: data
-	// })
 	const { searchParams } = new URL(request.url);
-	const data = await PostServices.getPost();
-	if (data != null) {
+	const search = searchParams.get('search')
+	const id = searchParams.get('id');
+	let data;
+	if(search == 'status') {
+		 data = await PackageServices.getPackageStatus(Number(id));
+	}
+	else if (search == 'package') {
+		data = await PackageServices.getPackageWithID(Number(id))
+	}
+	if (data == null) {
 		return NextResponse.json({
-			data: data,
-			status: 200,
+			status: 400,
+			data: null,
 		});
 	}
 	return NextResponse.json({
-		data: null,
-		status: 400,
+		status: 200,
+		data: data,
 	});
 };
 

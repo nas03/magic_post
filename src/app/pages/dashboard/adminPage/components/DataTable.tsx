@@ -10,7 +10,7 @@ import axios from 'axios';
 export const revalidate = 30;
 
 interface Post {
-	location_id: number;
+	post_id: number;
 	location: string;
 	type: post_type;
 }
@@ -22,7 +22,7 @@ const fetchData = async () => {
     let id = 1;
 		const rows: GridRowsProp = data.map((d: Post, index : number) => ({
 			id: index + 1,
-      col1: d.location_id,
+      col1: d.post_id,
 			col2: d.location,
 			col3: d.type,
 			col4: <MoreHorizIcon />,
