@@ -6,7 +6,7 @@ Công ty cần phát triển một phần mềm nhằm quản lý hệ thống c
 ### **Chức năng cho lãnh đạo công ty**
 -	<span style="color: #5ced73">Quản lý hệ thống các điểm giao dịch và điểm tập kết.
 -	<span style="color: #ee6b6e">Quản lý tài khoản trưởng điểm điểm tập kết và điểm giao dịch. Mỗi điểm giao dịch hoặc điểm tập kết có một tài khoản trưởng điểm.
--	Thống kê hàng gửi, hàng nhận trên toàn quốc, từng điểm giao dịch hoặc điểm tập kết.
+-	<span style="color: #ee6b6e">Thống kê hàng gửi, hàng nhận trên toàn quốc, từng điểm giao dịch hoặc điểm tập kết.
 
 ### **Chức năng cho trưởng điểm tại điểm giao dịch**
 -	Cấp tài khoản cho giao dịch viên tại điểm giao dịch.
