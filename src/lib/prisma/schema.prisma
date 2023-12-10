@@ -27,11 +27,22 @@ model Renamedpackage {
 }
 
 model post {
-  post_id  Int       @id @default(autoincrement())
-  location String    @db.VarChar(255)
-  type     post_type
-  received_package Int @default(0)
-  transported_package Int @default(0)
+  post_id             Int       @id @default(autoincrement())
+  location            String    @db.VarChar(255)
+  type                post_type
+  received_package    Int       @default(0)
+  transported_package Int       @default(0)
+}
+
+model post_history {
+  id            Int      @id @default(autoincrement())
+  post_id       Int
+  package_id    Int
+  request_date  DateTime @db.Date
+  verified_date DateTime @db.Date
+
+  @@index([post_id], map: "fk_post_history_post")
+  @@index([package_id], map: "fk_post_history_package")
 }
 
 model status {

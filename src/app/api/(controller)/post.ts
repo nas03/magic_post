@@ -1,6 +1,6 @@
 import prisma from '@/src/lib/prisma';
 
-const getPost = async (id: number | null) => {
+const getPost = async (id: string | null) => {
 	try {
 		let data = null;
 		if (id == null) {
@@ -9,7 +9,7 @@ const getPost = async (id: number | null) => {
 			data = await prisma.post.findFirst({
 				where: {
 					post_id: {
-						equals: id,
+						equals: Number(id),
 					},
 				},
 			});
