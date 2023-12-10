@@ -1,15 +1,20 @@
 import { PrismaClient } from '@prisma/client';
 import prisma from '@/src/lib/prisma';
 
-const getPackageWithID = async (id: number) => {
+const getPackage = async (id: number | null) => {
 	try {
-		const data = await prisma.renamedpackage.findFirst({
-			where: {
-				package_id: {
-					equals: id,
+		let data = null;
+		if (id != null) {
+			data = await prisma.renamedpackage.findFirst({
+				where: {
+					package_id: {
+						equals: id,
+					},
 				},
-			},
-		});
+			});
+		} else if (id == null) {
+			data = await prisma.renamedpackage.findMany();
+		}
 		return data;
 	} catch (error) {
 		console.log("Can't get package by id");
@@ -33,4 +38,4 @@ const getPackageStatus = async (id: number) => {
 	}
 };
 
-export { getPackageStatus, getPackageWithID };
+export { getPackageStatus, getPackage };

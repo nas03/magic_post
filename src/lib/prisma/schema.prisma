@@ -30,6 +30,8 @@ model post {
   post_id  Int       @id @default(autoincrement())
   location String    @db.VarChar(255)
   type     post_type
+  received_package Int @default(0)
+  transported_package Int @default(0)
 }
 
 model status {
