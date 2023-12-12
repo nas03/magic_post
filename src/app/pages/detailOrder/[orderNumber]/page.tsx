@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import React, { ComponentProps } from 'react';
 import { ArrowSmallLeftIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';

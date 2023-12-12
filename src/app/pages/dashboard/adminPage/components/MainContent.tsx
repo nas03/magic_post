@@ -18,7 +18,7 @@ function MainContent() {
                     <div className=' w-[30%] rounded-l-lg bg-[#FBE2DE] flex gap-[5%] justify-center items-center'>
                         <img src="/image/onGoing.jpg" className='w-[35%] h-[80%] rounded-xl object-fill' alt="" />
                         <div className='flex flex-col justify-between py-[5%] h-[80%]'>
-                            <span className=' font-semibold text-[#54555E]'>On Going</span>
+                            <span className=' font-semibold text-[#54555E]'>Received</span>
                             <div className=' flex justify-between items-end gap-[30%] w-[80%]'>
                                 <span className=' text-xl font-bold text-[#0F0D16]'>259</span>
                                 <div className=' text-red-500 flex'>
