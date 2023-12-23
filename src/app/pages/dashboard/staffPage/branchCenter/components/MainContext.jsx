@@ -142,7 +142,8 @@ function MainContext() {
                 {showModal ? (
                     <>
                         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                            <div className=' w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center'>
+                            <div className=' w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center relative'>
+                                    <XCircleIcon onClick={() => setShowModal(false)} color='red' className=' z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain  cursor-pointer'/>
                                     <div className="flex items-center py-5 text-2xl font-semibold text-gray-900 dark:text-white">
                                         <img className="w-8 h-8 mr-2 rounded-full" src="/image/magic-post-logo.png" alt="logo"/>
                                         Magic Post    
@@ -192,8 +193,9 @@ function MainContext() {
                 <button onClick={() => openBillHandle()} className=' rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]'>Create User Orders</button>
                 {showModalCf ? (
                     <>
-                        <div className="justify-center items-center flex overflow-x-hidden overflow-y-scroll h-[110vh] fixed inset-0 z-50 outline-none focus:outline-none">
-                            <div className=' w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center'>
+                        <div className="justify-center items-center flex overflow-x-hidden overflow-y-scroll fixed inset-0 z-50 outline-none focus:outline-none">
+                            <div className=' w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center relative'>
+                                    <XCircleIcon onClick={() => setShowModalCf(false)} color='red' className=' z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain  cursor-pointer'/>
                                     <div className="flex items-center py-5 text-2xl font-semibold text-gray-900 dark:text-white">
                                         <img className="w-8 h-8 mr-2 rounded-full" src="/image/magic-post-logo.png" alt="logo"/>
                                         Magic Post    
