@@ -20,6 +20,7 @@ model Renamedpackage {
   receiver_name_location String   @db.VarChar(255)
   receiver_id            Int
   receiver_phone_number  String?  @db.VarChar(255)
+  success                Boolean?
 
   @@index([sender_id], map: "fk_package_post_1")
   @@index([receiver_id], map: "fk_package_post_2")
@@ -35,13 +36,14 @@ model post {
 }
 
 model post_history {
-  id            Int      @id @default(autoincrement())
-  post_id       Int
-  package_id    Int
-  request_date  DateTime @db.Date
-  verified_date DateTime @db.Date
+  id                  Int       @id @default(autoincrement())
+  destination_post_id Int
+  request_post_id     Int
+  package_id          Int
+  request_date        DateTime  @db.Date
+  verified_date       DateTime? @db.Date
 
-  @@index([post_id], map: "fk_post_history_post")
+  @@index([destination_post_id], map: "fk_post_history_post")
   @@index([package_id], map: "fk_post_history_package")
 }
 
@@ -49,10 +51,9 @@ model status {
   status_id        Int       @id @default(autoincrement())
   package_id       Int
   post_id          Int
-  received_date    DateTime  @db.Date
-  transported_date DateTime? @db.Date
-  success          Boolean?
   location         String    @db.VarChar(255)
+  received_date    DateTime? @db.Date
+  transported_date DateTime? @db.Date
 
   @@index([package_id], map: "fk_status_package")
   @@index([post_id], map: "fk_status_post")

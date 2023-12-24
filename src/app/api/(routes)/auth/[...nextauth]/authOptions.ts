@@ -4,15 +4,16 @@ import { User } from '../../../(controller)';
 
 const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
-	const data = await User.getUser(email);
+	const data = await User.getUserByEmail(email);
 	const user = data[0];
-
-	if (user !== null) {
+	const post_id = user.post_id;
+	if (user) {
 		return {
 			id: user.uuid,
 			name: user.full_name,
 			email: user.email,
 			role: user.role,
+			post_id: post_id,
 		};
 	}
 
@@ -22,6 +23,7 @@ const authorizeCredentials = async (credentials: Record<string, string>) => {
 const jwtCallback = ({ token, user }) => {
 	if (user) {
 		token.role = user.role;
+		token.post_id = user.post_id;
 	}
 
 	return token;
@@ -32,6 +34,7 @@ const sessionCallback = ({ session, token }) => {
 
 	if (token) {
 		session.user.role = token.role;
+		session.user.post_id = token.post_id;
 	}
 	return session;
 };

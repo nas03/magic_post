@@ -4,17 +4,17 @@ import { Post, User } from '@/src/app/api/(controller)';
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get('id');
-	const data = await Post.getPost(id);
+	const data = await Post.getPost(Number(id));
 
-	if (data != null) {
+	if (!data) {
 		return NextResponse.json({
-			data: data,
-			status: 200,
+			data: null,
+			status: 400,
 		});
 	}
 	return NextResponse.json({
-		data: null,
-		status: 400,
+		status: 200,
+		data,
 	});
 };
 

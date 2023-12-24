@@ -9,28 +9,30 @@ const createNewUser = async (
 	email: string,
 	password: string,
 	role: user_role,
-	locationID: number
+	post_id: number
 ) => {
 	if (password.length < MIN_PASSWORD_LENGTH) {
 		return null;
 	}
 
 	try {
-		const existingUser = await getUser(email);
+		const existingUser = await getUserByEmail(email);
 		if (existingUser) {
 			return null;
 		}
+
 		const salt = await bcryptjs.genSalt(10);
 		const hashedPassword = await bcryptjs.hash(password, salt);
 		const user_uuid = await bcryptjs.hash(email, salt);
+
 		const newUser = await prisma.user.create({
 			data: {
 				uuid: user_uuid,
-				full_name: full_name,
-				email: email,
+				full_name,
+				email,
 				password: hashedPassword,
-				role: role,
-				location_id: locationID,
+				role,
+				post_id: post_id,
 			},
 		});
 
@@ -41,39 +43,34 @@ const createNewUser = async (
 	}
 };
 
-const getUser = async (email: string | null) => {
+const getUserByEmail = async (email: string | null) => {
 	if (email == null) {
 		try {
 			const users = await prisma.user.findMany();
 			return users;
 		} catch (error) {
-			console.log('Cant get all user');
+			console.log('Error fetching all users', error);
 			return null;
 		}
 	}
-	if (email != null) {
-		try {
-			const user = await prisma.user.findMany({
-				where: {
-					email: {
-						equals: email,
-					},
-				},
-			});
-			return user;
-		} catch (error) {
-			console.error("Can't get user by email", error);
-			throw error;
-		}
+
+	try {
+		const user = await prisma.user.findMany({
+			where: {
+				email: { equals: email },
+			},
+		});
+		return user;
+	} catch (error) {
+		console.error(`Error fetching user by email: ${error}`);
+		throw error;
 	}
 };
 
 const deleteUser = async (email: string) => {
 	try {
 		const deletedUser = await prisma.user.delete({
-			where: {
-				email: email,
-			},
+			where: { email },
 		});
 		return deletedUser;
 	} catch (error) {
@@ -82,4 +79,4 @@ const deleteUser = async (email: string) => {
 	}
 };
 
-export { createNewUser, getUser, deleteUser };
+export { createNewUser, getUserByEmail, deleteUser };

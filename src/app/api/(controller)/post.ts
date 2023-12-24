@@ -1,94 +1,73 @@
 import prisma from '@/src/lib/prisma';
 
-const getPost = async (id: string | null) => {
+// Find all posts if id = 0 or specific post with the given id
+const getPost = async (id: number) => {
 	try {
-		let data = null;
-		if (id == null) {
-			data = await prisma.post.findMany();
-		} else if (id != null) {
-			data = await prisma.post.findFirst({
-				where: {
-					post_id: {
-						equals: Number(id),
+		return id === 0
+			? await prisma.post.findMany()
+			: await prisma.post.findFirst({
+					where: {
+						post_id: { equals: id },
 					},
-				},
-			});
-		}
-		return data;
+			  });
 	} catch (error) {
-		console.log(`Can't get  post`);
+		console.error(`Error fetching post: ${error.message}`);
 	}
 };
+
+// Find posts with a location filter
 const getPostWithFilter = async (filter: string) => {
 	try {
-		const result = await prisma.post.findMany({
+		return await prisma.post.findMany({
 			where: {
-				location: {
-					contains: filter,
-				},
+				location: { contains: filter },
 			},
 		});
-		return result;
 	} catch (error) {
-		console.log('No records were found');
+		console.error(`Error fetching posts with filter: ${error.message}`);
 	}
 };
 
-const getReceivedPackageCount = async (post_id: number | null) => {
+// Get the number of received or transported packages for a post with the given id
+const getPackageCount = async (
+	post_id: number,
+	packageType: 'received' | 'transported'
+) => {
 	try {
-		let data = null;
-		if (post_id != null) {
-			data = await prisma.post.aggregate({
-				where: {
-					post_id: {
-						equals: post_id,
-					},
-				},
-				_sum: {
-					received_package: true,
-				},
-			});
-		} else if (post_id == null) {
-			data = await prisma.post.aggregate({
-				_sum: {
-					received_package: true,
-				},
-			});
-		}
+		const data =
+			post_id !== 0
+				? await prisma.post.aggregate({
+						where: {
+							post_id: {
+								equals: post_id,
+							},
+						},
+						_sum: {
+							[`${packageType}_package`]: true,
+						},
+				  })
+				: await prisma.post.aggregate({
+						_sum: {
+							[`${packageType}_package`]: true,
+						},
+				  });
+
 		return data;
 	} catch (error) {
-		console.log('Error counting package each post');
+		console.error(
+			`Error counting ${packageType} packages for post: ${error.message}`
+		);
 		return null;
 	}
 };
 
-const getTransportedPackageCount = async (post_id: number | null) => {
-	try {
-		let data = null;
-		if (post_id != null) {
-			data = await prisma.post.aggregate({
-				where: {
-					post_id: {
-						equals: post_id,
-					},
-				},
-				_sum: {
-					transported_package: true,
-				},
-			});
-		} else if (post_id == null) {
-			data = await prisma.post.aggregate({
-				_sum: {
-					transported_package: true,
-				},
-			});
-		}
-		return data;
-	} catch (error) {
-		console.log('Error counting package each post');
-		return null;
-	}
-};
+// Get the number of received packages for a post with the given id
+const getReceivedPackageCount = async (post_id: number) =>
+	getPackageCount(post_id, 'received');
+
+// Get the number of transported packages for a post with the given id
+const getTransportedPackageCount = async (post_id: number) =>
+	getPackageCount(post_id, 'transported');
 
 export {
 	getPost,

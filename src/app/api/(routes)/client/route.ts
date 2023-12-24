@@ -9,7 +9,7 @@ const GET = async (request: NextRequest) => {
 	if (search == 'status') {
 		data = await Package.getPackageStatus(Number(id));
 	} else if (search == 'package') {
-		data = await Package.getPackageWithID(Number(id));
+		data = await Package.getPackage(Number(id));
 	}
 	if (data == null) {
 		return NextResponse.json({

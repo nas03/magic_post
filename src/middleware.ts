@@ -1,24 +1,33 @@
-// export { default } from "next-auth/middleware"
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 
 export default withAuth(function middleware(request) {
-	console.log('token from middleware', request.nextauth.token);
-	if (
-		request.nextUrl.pathname.startsWith('/pages/dashboard') &&
-		request.nextauth.token == null
-	) {
-		return NextResponse.redirect('/');
-	}
+	const token = request.nextauth.token;
+	const { pathname } = request.nextUrl;
 
-	if (
-		request.nextUrl.pathname.startsWith('/pages/dashboard') &&
-		request.nextauth.token?.role !== 'BranchManager' &&
-		request.nextauth.token?.role !== 'HubManager' &&
-		request.nextauth.token?.role !== 'Admin'
-	) {
+	if (pathname.startsWith('/pages/dashboard') && !token) {
 		return NextResponse.rewrite(new URL('/', request.url));
 	}
+
+	// const allowedRoles = ['BranchManager', 'HubManager', 'Admin'];
+	// if (
+	// 	pathname.startsWith('/pages/dashboard/adminPage') &&
+	// 	!allowedRoles.includes(token?.role)
+	// ) {
+	// 	return NextResponse.rewrite(new URL('/', request.url));
+	// }
+
+	// const staffRoles = ['BranchStaff', 'HubStaff'];
+	// if (
+	// 	(pathname.startsWith('/pages/dashboard/staffPage/branchCenter') &&
+	// 		!staffRoles.includes(token?.role)) ||
+	// 	(pathname.startsWith('/pages/dashboard/staffPage/hubCenter') &&
+	// 		!staffRoles.includes(token?.role))
+	// ) {
+	// 	return NextResponse.rewrite(new URL('/', request.url));
+	// }
 });
 
-export const config = { matcher: ['/pages/dashboard/adminPage'] };
+export const config = {
+	matcher: ['/pages/dashboard/:path*'],
+};

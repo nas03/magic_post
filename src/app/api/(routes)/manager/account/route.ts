@@ -1,5 +1,4 @@
-import { metadata } from '../../../../layout';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { User } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
