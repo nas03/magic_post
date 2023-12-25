@@ -34,18 +34,25 @@ model LocationStatistics {
 }
 
 model Package {
-  id                   Int            @id @default(autoincrement())
-  sender               String
-  receiver             String
-  transaction_point_id Int
-  state                Package_status
-  location_id          Int
-  location             Location       @relation(fields: [location_id], references: [id])
-  shipment_id          Int            @unique
-  shipment             ShipmentLog    @relation(fields: [shipment_id], references: [id])
+  id                      Int                  @id @default(autoincrement())
+  sender                  String
+  receiver                String
+  sender_location         String
+  receiver_location       String
+  sender_phone            String
+  receiver_phone          String
+  type                    Package_type
+  fee                     Float
+  customerInstruction     Customer_instruction @default(CALL)
+  received_location_id    Int
+  destination_location_id Int
+  state                   Package_status       @default(ONGOING)
+  shipment_id             Int?                 @unique
+  received_location       Location             @relation(fields: [received_location_id], references: [id])
+  shipment                ShipmentLog?         @relation(fields: [shipment_id], references: [id])
 
-  @@index([location_id])
-  @@index([transaction_point_id])
+  @@index([received_location_id])
+  @@index([destination_location_id])
 }
 
 model TransitionLog {
@@ -55,22 +62,21 @@ model TransitionLog {
   request_location     Int
   destination_location Int
   location_id          Int
-  location             Location  @relation(fields: [location_id], references: [id])
   package_id           Int
+  location             Location  @relation(fields: [location_id], references: [id])
 
-  @@index([package_id])
   @@index([location_id])
+  @@index([package_id])
 }
 
 model ShipmentLog {
-  id                  Int                  @id @default(autoincrement())
-  request_timestamp   DateTime             @default(now())
-  status              Package_status
-  request_location    Int
-  location_id         Int
-  location            Location             @relation(fields: [location_id], references: [id])
-  package             Package?
-  customerInstruction Customer_instruction
+  id                Int            @id @default(autoincrement())
+  request_timestamp DateTime       @default(now())
+  status            Package_status
+  location_id       Int
+  package_id        Int
+  location          Location       @relation(fields: [location_id], references: [id])
+  package           Package?
 
   @@index([location_id])
 }
@@ -88,14 +94,6 @@ model User {
   @@index([id])
 }
 
-enum Customer_instruction {
-  CANCEL
-  INSTANT_RETURN
-  RETURN_BEFORE
-  CALL
-  RETURN_AFTER_EXPIRED
-}
-
 enum Location_type {
   BRANCH
   TRANSSHIPMENT_HUB
@@ -111,7 +109,20 @@ enum User_role {
   LEADER
   TRANSSHIPMENT_HUB_MANAGER
   BRANCH_CENTER_MANAGER
-  BRANCH_OFFFICER
+  BRANCH_OFFICER
   HUB_OFFICER
   CUSTOMER
+}
+
+enum Customer_instruction {
+  CANCEL
+  INSTANT_RETURN
+  RETURN_BEFORE
+  CALL
+  RETURN_AFTER_EXPIRED
+}
+
+enum Package_type {
+  DOCUMENT
+  GOODS
 }

@@ -1,4 +1,4 @@
 import * as User from './user';
-import * as Post from './post';
+import * as Location from './location';
 import * as Package from './package';
-export { User, Post, Package };
+export { User, Location, Package };

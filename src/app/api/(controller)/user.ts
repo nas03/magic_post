@@ -25,15 +25,15 @@ const createNewUser = async (
 
 		const newUser = await prisma.user.create({
 			data: {
-				fullName,
-				email,
+				fullName: fullName,
+				email: email,
 				password: hashedPassword,
-				role,
-				location_id,
+				role: role,
+				location_id: location_id,
 			},
 		});
 
-		return Promise.resolve(newUser);
+		return newUser;
 	} catch (error) {
 		console.error(`Error creating new user: ${error}`);
 		return null;
@@ -45,7 +45,7 @@ const getUserByEmail = async (email: string | null) => {
 		const data =
 			email == null
 				? await prisma.user.findMany()
-				: await prisma.user.findFirst({
+				: await prisma.user.findUnique({
 						where: {
 							email: email,
 						},
@@ -56,7 +56,6 @@ const getUserByEmail = async (email: string | null) => {
 		return null;
 	}
 };
-
 const deleteUser = async (email: string) => {
 	try {
 		const deletedUser = await prisma.user.delete({

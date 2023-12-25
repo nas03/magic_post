@@ -1,16 +1,15 @@
 import prisma from '@/src/lib/prisma';
+import { ShipmentLog, TransitionLog } from '@/src/util';
 //Create a new transition log
-const createNewTransitionLog = async (
-	request_location: number,
-	destination_location: number,
-	locationId: number
-) => {
+const createNewTransitionLog = async (dataLog: TransitionLog) => {
 	try {
 		const data = await prisma.transitionLog.create({
 			data: {
-				request_location: request_location,
-				destination_location: destination_location,
-				location_id: locationId,
+				verified_timestamp: dataLog.verified_timestamp,
+				request_location: dataLog.request_location,
+				destination_location: dataLog.destination_location,
+				location_id: dataLog.location_id,
+				package_id: dataLog.package_id,
 			},
 		});
 		return data;
@@ -19,11 +18,15 @@ const createNewTransitionLog = async (
 		return null;
 	}
 };
-//TODO: Create shipment log from branch center to receiver customer
-const createNewShipmentLog = async (...params: any) => {
+
+const createNewShipmentLog = async (dataLog: ShipmentLog) => {
 	try {
-		const data = prisma.shipmentLog.create({
-			data: params,
+		const data = await prisma.shipmentLog.create({
+			data: {
+				status: dataLog.status,
+				location_id: dataLog.location_id,
+				package_id: dataLog.package_id,
+			},
 		});
 		return data;
 	} catch (error) {
@@ -31,22 +34,27 @@ const createNewShipmentLog = async (...params: any) => {
 		return null;
 	}
 };
-//Verify package have been transported from transshipment hub to branch
-const verifyPackageTransportedToBranch = async (transhipment_id: number, date: Date) => {
+//Verify package have been transported from transhipment hub to branch
+const verifyPackageTransported = async (
+	transhipment_id: number,
+	verified_date: Date
+) => {
 	try {
-		const data = prisma.transitionLog.update({
+		const data = await prisma.transitionLog.update({
 			where: {
-				id: transhipment_id
+				id: transhipment_id,
 			},
-			data : {
-				verified_timestamp:  date
-			}
-
-		})
+			data: {
+				verified_timestamp: verified_date,
+			},
+		});
+		return data;
 	} catch (error) {
-		console.log('Error verifying package transported to branch', error);
+		console.log('Error verifying package transported ', error);
+		return null;
 	}
 };
+//
 //Fetching statistics of success, failed package
 const getPackageStatusCount = async (
 	type: 'RETURNED' | 'RECEIVED',
@@ -57,13 +65,13 @@ const getPackageStatusCount = async (
 			type === 'RETURNED'
 				? await prisma.package.count({
 						where: {
-							location_id: locationID,
+							destination_location_id: locationID,
 							state: 'RETURNED',
 						},
 				  })
 				: await prisma.package.count({
 						where: {
-							location_id: locationID,
+							destination_location_id: locationID,
 							state: 'RECEIVED',
 						},
 				  });
@@ -171,4 +179,8 @@ export {
 	getLocationWithFilter,
 	getPackageCountForLocation,
 	deleteLocationById,
+	createNewTransitionLog,
+	createNewShipmentLog,
+	verifyPackageTransported,
+	getPackageStatusCount,
 };

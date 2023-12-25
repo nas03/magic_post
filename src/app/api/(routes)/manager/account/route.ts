@@ -1,4 +1,5 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { metadata } from '../../../../layout';
+import { NextRequest, NextResponse } from 'next/server';
 import { User } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
@@ -21,24 +22,38 @@ const GET = async (request: NextRequest) => {
 };
 
 const POST = async (request: NextRequest) => {
-	const { full_name, email, password, role, locationID } = await request.json();
-	const newUser = User.createNewUser(
-		full_name,
+	const { fullName, email, password, role, location_id } = await request.json();
+	const newUser = await User.createNewUser(
 		email,
+		fullName,
 		password,
 		role,
-		locationID
+		location_id
 	);
 	if (!newUser) {
 		return NextResponse.json({
 			status: 400,
-			error: "Can't create new user",
+			newUser,
 		});
 	}
 	return NextResponse.json({
 		status: 200,
-		error: null,
+		newUser,
 	});
 };
-
-export { GET, POST };
+const DELETE = async (request: NextRequest) => {
+	const {searchParams} = new URL(request.url);
+	const email = searchParams.get('email');
+	const deleteUser = await User.deleteUser(email);
+	if(!deleteUser) {
+		return NextResponse.json({
+			status: 400,
+			deleteUser
+		})
+	}
+	return NextResponse.json({
+		status: 200,
+		deleteUser
+	})
+};
+export { GET, POST, DELETE };

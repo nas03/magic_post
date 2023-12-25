@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
-function page() {
+function Page() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const { data: session, status } = useSession();
@@ -30,7 +30,7 @@ function page() {
 		if (response?.ok) {
 			router.push('/pages/dashboard/adminPage');
 		} else {
-			//TODO: @Babybluess Show error on page
+			//TODO: @Babybluess Show error on Page
 			const error = response?.error;
 		}
 	};
@@ -119,4 +119,4 @@ function page() {
 	);
 }
 
-export default page;
+export default Page;
