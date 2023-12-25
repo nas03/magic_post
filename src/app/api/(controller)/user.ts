@@ -1,15 +1,14 @@
 import bcryptjs from 'bcryptjs';
-import { user_role } from '@prisma/client';
 import prisma from '@/src/lib/prisma';
-
+import { User_role } from '@prisma/client';
 const MIN_PASSWORD_LENGTH = 8;
 
 const createNewUser = async (
-	full_name: string,
+	fullName: string,
 	email: string,
 	password: string,
-	role: user_role,
-	post_id: number
+	role: User_role,
+	location_id: number
 ) => {
 	if (password.length < MIN_PASSWORD_LENGTH) {
 		return null;
@@ -23,16 +22,14 @@ const createNewUser = async (
 
 		const salt = await bcryptjs.genSalt(10);
 		const hashedPassword = await bcryptjs.hash(password, salt);
-		const user_uuid = await bcryptjs.hash(email, salt);
 
 		const newUser = await prisma.user.create({
 			data: {
-				uuid: user_uuid,
-				full_name,
+				fullName,
 				email,
 				password: hashedPassword,
 				role,
-				post_id: post_id,
+				location_id,
 			},
 		});
 
@@ -44,26 +41,19 @@ const createNewUser = async (
 };
 
 const getUserByEmail = async (email: string | null) => {
-	if (email == null) {
-		try {
-			const users = await prisma.user.findMany();
-			return users;
-		} catch (error) {
-			console.log('Error fetching all users', error);
-			return null;
-		}
-	}
-
 	try {
-		const user = await prisma.user.findMany({
-			where: {
-				email: { equals: email },
-			},
-		});
-		return user;
+		const data =
+			email == null
+				? await prisma.user.findMany()
+				: await prisma.user.findFirst({
+						where: {
+							email: email,
+						},
+				  });
+		return data;
 	} catch (error) {
 		console.error(`Error fetching user by email: ${error}`);
-		throw error;
+		return null;
 	}
 };
 

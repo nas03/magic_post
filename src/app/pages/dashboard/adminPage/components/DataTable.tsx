@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import api from '@/src/lib/axios';
 import { useSession } from 'next-auth/react';
-import { post_type, } from '@prisma/client';
 export const revalidate = 30;
 
 interface Post {

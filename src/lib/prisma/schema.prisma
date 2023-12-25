@@ -8,77 +8,110 @@ datasource db {
   relationMode = "prisma"
 }
 
-/// This model has been renamed to 'Renamedpackage' during introspection, because the original name 'package' is reserved.
-model Renamedpackage {
-  package_id             Int      @id @default(autoincrement())
-  weight                 Float    @db.Float
-  send_date              DateTime @db.Date
-  type                   String   @db.VarChar(255)
-  sender_name_location   String   @db.VarChar(255)
-  sender_phone_number    String   @db.VarChar(255)
-  sender_id              Int
-  receiver_name_location String   @db.VarChar(255)
-  receiver_id            Int
-  receiver_phone_number  String?  @db.VarChar(255)
-  success                Boolean?
-
-  @@index([sender_id], map: "fk_package_post_1")
-  @@index([receiver_id], map: "fk_package_post_2")
-  @@map("package")
+model Customer {
+  id   Int    @id @default(autoincrement())
+  name String
 }
 
-model post {
-  post_id             Int       @id @default(autoincrement())
-  location            String    @db.VarChar(255)
-  type                post_type
-  received_package    Int       @default(0)
-  transported_package Int       @default(0)
+model Location {
+  id            Int                 @id @default(autoincrement())
+  name          String
+  location      String
+  type          Location_type
+  statistics    LocationStatistics?
+  transitionLog TransitionLog[]
+  employees     User[]
+  packages      Package[]
+  shipmentLog   ShipmentLog[]
 }
 
-model post_history {
-  id                  Int       @id @default(autoincrement())
-  destination_post_id Int
-  request_post_id     Int
-  package_id          Int
-  request_date        DateTime  @db.Date
-  verified_date       DateTime? @db.Date
-
-  @@index([destination_post_id], map: "fk_post_history_post")
-  @@index([package_id], map: "fk_post_history_package")
+model LocationStatistics {
+  id            Int      @id @default(autoincrement())
+  sentCount     Int
+  receivedCount Int
+  location_id   Int      @unique
+  location      Location @relation(fields: [location_id], references: [id])
 }
 
-model status {
-  status_id        Int       @id @default(autoincrement())
-  package_id       Int
-  post_id          Int
-  location         String    @db.VarChar(255)
-  received_date    DateTime? @db.Date
-  transported_date DateTime? @db.Date
+model Package {
+  id                   Int            @id @default(autoincrement())
+  sender               String
+  receiver             String
+  transaction_point_id Int
+  state                Package_status
+  location_id          Int
+  location             Location       @relation(fields: [location_id], references: [id])
+  shipment_id          Int            @unique
+  shipment             ShipmentLog    @relation(fields: [shipment_id], references: [id])
 
-  @@index([package_id], map: "fk_status_package")
-  @@index([post_id], map: "fk_status_post")
+  @@index([location_id])
+  @@index([transaction_point_id])
 }
 
-model user {
-  uuid      String    @id @unique
-  email     String    @unique @db.VarChar(255)
-  full_name String    @db.VarChar(255)
-  password  String    @db.VarChar(255)
-  post_id   Int
-  role      user_role
+model TransitionLog {
+  id                   Int       @id @default(autoincrement())
+  request_timestamp    DateTime  @default(now())
+  verified_timestamp   DateTime?
+  request_location     Int
+  destination_location Int
+  location_id          Int
+  location             Location  @relation(fields: [location_id], references: [id])
+  package_id           Int
 
-  @@index([post_id], map: "fk_user_post")
+  @@index([package_id])
+  @@index([location_id])
 }
 
-enum post_type {
-  Hub
-  Branch
+model ShipmentLog {
+  id                  Int                  @id @default(autoincrement())
+  request_timestamp   DateTime             @default(now())
+  status              Package_status
+  request_location    Int
+  location_id         Int
+  location            Location             @relation(fields: [location_id], references: [id])
+  package             Package?
+  customerInstruction Customer_instruction
+
+  @@index([location_id])
 }
 
-enum user_role {
-  BranchManager
-  HubManager
-  BranchStaff
-  TransactionStaff
-  Admin
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  fullName    String
+  role        User_role
+  location_id Int
+  location    Location  @relation(fields: [location_id], references: [id])
+
+  @@index([location_id])
+  @@index([id])
+}
+
+enum Customer_instruction {
+  CANCEL
+  INSTANT_RETURN
+  RETURN_BEFORE
+  CALL
+  RETURN_AFTER_EXPIRED
+}
+
+enum Location_type {
+  BRANCH
+  TRANSSHIPMENT_HUB
+}
+
+enum Package_status {
+  ONGOING
+  RECEIVED
+  RETURNED
+}
+
+enum User_role {
+  LEADER
+  TRANSSHIPMENT_HUB_MANAGER
+  BRANCH_CENTER_MANAGER
+  BRANCH_OFFFICER
+  HUB_OFFICER
+  CUSTOMER
 }
