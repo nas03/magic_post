@@ -19,7 +19,7 @@ model Location {
   location      String
   type          Location_type
   statistics    LocationStatistics?
-  transitionLog TransitionLog[]
+  transshipmentLog TransshipmentLog[]
   employees     User[]
   packages      Package[]
   shipmentLog   ShipmentLog[]
@@ -55,7 +55,7 @@ model Package {
   @@index([destination_location_id])
 }
 
-model TransitionLog {
+model TransshipmentLog {
   id                   Int       @id @default(autoincrement())
   request_timestamp    DateTime  @default(now())
   verified_timestamp   DateTime?
@@ -65,8 +65,8 @@ model TransitionLog {
   package_id           Int
   location             Location  @relation(fields: [location_id], references: [id])
 
-  @@index([location_id])
-  @@index([package_id])
+  @@index([location_id], map: "TransshipmentLog_location_id_idx")
+  @@index([package_id], map: "TransshipmentLog_package_id_idx")
 }
 
 model ShipmentLog {

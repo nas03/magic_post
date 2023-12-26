@@ -1,5 +1,7 @@
 const RATE = 2;
-
+interface FormDataJson {
+	[key: string]: string | Blob | string[] | undefined;
+}
 const calculator = (weight: number) => {
 	return weight * RATE;
 };
@@ -13,4 +15,18 @@ const getFormattedDate = (date: Date) => {
 	const formattedDate = new Date(year, month - 1, day);
 	return formattedDate;
 };
-export { calculator, getFormattedDate };
+const formDataToJson = (formData: FormData): FormDataJson => {
+	const jsonObject: FormDataJson = {};
+	formData.forEach((value, key) => {
+		if (Object.prototype.hasOwnProperty.call(jsonObject, key)) {
+			if (!Array.isArray(jsonObject[key])) {
+				jsonObject[key] = [jsonObject[key] as string];
+			}
+			(jsonObject[key] as string[]).push(value.toString());
+		} else {
+			jsonObject[key] = value.toString();
+		}
+	});
+	return jsonObject;
+};
+export { calculator, getFormattedDate, formDataToJson };

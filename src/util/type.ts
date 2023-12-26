@@ -1,31 +1,29 @@
-
-  
-  interface Customer {
+interface Customer {
 	id: number;
 	name: string;
-  }
-  
-  interface Location {
+}
+
+interface Location {
 	id: number;
 	name: string;
 	location: string;
 	type: LocationType;
 	statistics?: LocationStatistics | null;
-	transitionLog: TransitionLog[];
+	transitionLog: TransshipmentLog[];
 	employees: User[];
 	packages: Package[];
 	shipmentLog: ShipmentLog[];
-  }
-  
-  interface LocationStatistics {
+}
+
+interface LocationStatistics {
 	id: number;
 	sentCount: number;
 	receivedCount: number;
 	location_id: number;
 	location: Location;
-  }
-  
-  interface Package {
+}
+
+interface Package {
 	id?: number;
 	sender: string;
 	receiver: string;
@@ -39,11 +37,9 @@
 	destination_location_id: number;
 	state?: PackageStatus;
 	shipment_id?: number | null;
-	received_location?: Location;
-	shipment?: ShipmentLog | null;
-  }
-  
-  interface TransitionLog {
+}
+
+interface TransshipmentLog {
 	id?: number;
 	request_timestamp?: Date;
 	verified_timestamp?: Date | null;
@@ -52,9 +48,9 @@
 	location_id: number;
 	package_id: number;
 	location?: Location;
-  }
-  
-  interface ShipmentLog {
+}
+
+interface ShipmentLog {
 	id?: number;
 	request_timestamp?: Date;
 	status: PackageStatus;
@@ -62,9 +58,9 @@
 	package_id: number;
 	location?: Location;
 	package?: Package | null;
-  }
-  
-  interface User {
+}
+
+interface User {
 	id: number;
 	email: string;
 	password: string;
@@ -72,47 +68,47 @@
 	role: UserRole;
 	location_id: number;
 	location: Location;
-  }
-  
-  enum LocationType {
+}
+
+enum LocationType {
 	BRANCH = 'BRANCH',
 	TRANSSHIPMENT_HUB = 'TRANSSHIPMENT_HUB',
-  }
-  
-  enum PackageStatus {
+}
+
+enum PackageStatus {
 	ONGOING = 'ONGOING',
 	RECEIVED = 'RECEIVED',
 	RETURNED = 'RETURNED',
-  }
-  
-  enum UserRole {
+}
+
+enum UserRole {
 	LEADER = 'LEADER',
 	TRANSSHIPMENT_HUB_MANAGER = 'TRANSSHIPMENT_HUB_MANAGER',
 	BRANCH_CENTER_MANAGER = 'BRANCH_CENTER_MANAGER',
 	BRANCH_OFFICER = 'BRANCH_OFFICER',
 	HUB_OFFICER = 'HUB_OFFICER',
 	CUSTOMER = 'CUSTOMER',
-  }
-  
-  enum CustomerInstruction {
+}
+
+enum CustomerInstruction {
 	CANCEL = 'CANCEL',
 	INSTANT_RETURN = 'INSTANT_RETURN',
 	RETURN_BEFORE = 'RETURN_BEFORE',
 	CALL = 'CALL',
 	RETURN_AFTER_EXPIRED = 'RETURN_AFTER_EXPIRED',
-  }
-  
-  enum PackageType {
+}
+
+enum PackageType {
 	DOCUMENT = 'DOCUMENT',
 	GOODS = 'GOODS',
-  }
-  
-  export type {
+}
+
+export type {
 	Customer,
 	Location,
 	LocationStatistics,
 	Package,
-	TransitionLog,
+	TransshipmentLog,
 	ShipmentLog,
 	User,
 	LocationType,
@@ -120,5 +116,4 @@
 	UserRole,
 	CustomerInstruction,
 	PackageType,
-  };
-  
+};

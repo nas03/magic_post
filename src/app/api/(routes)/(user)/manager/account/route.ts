@@ -1,12 +1,13 @@
-import { metadata } from '../../../../layout';
+import { User_role } from '@prisma/client';
+import { metadata } from '../../../../../layout';
 import { NextRequest, NextResponse } from 'next/server';
-import { User } from '@/src/app/api/(controller)';
+import { UserController } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const email = searchParams.get('email');
 
-	let user = await User.getUserByEmail(email);
+	let user = await UserController.getUserByEmail(email);
 
 	if (!user) {
 		return NextResponse.json({
@@ -22,13 +23,15 @@ const GET = async (request: NextRequest) => {
 };
 
 const POST = async (request: NextRequest) => {
+	console.log('api called');
 	const { fullName, email, password, role, location_id } = await request.json();
-	const newUser = await User.createNewUser(
-		email,
+
+	const newUser = await UserController.createNewUser(
 		fullName,
+		email,
 		password,
-		role,
-		location_id
+		role as User_role,
+		Number(location_id)
 	);
 	if (!newUser) {
 		return NextResponse.json({
@@ -36,24 +39,25 @@ const POST = async (request: NextRequest) => {
 			newUser,
 		});
 	}
+	console.log('success');
 	return NextResponse.json({
 		status: 200,
 		newUser,
 	});
 };
 const DELETE = async (request: NextRequest) => {
-	const {searchParams} = new URL(request.url);
+	const { searchParams } = new URL(request.url);
 	const email = searchParams.get('email');
-	const deleteUser = await User.deleteUser(email);
-	if(!deleteUser) {
+	const deleteUser = await UserController.deleteUser(email);
+	if (!deleteUser) {
 		return NextResponse.json({
 			status: 400,
-			deleteUser
-		})
+			deleteUser,
+		});
 	}
 	return NextResponse.json({
 		status: 200,
-		deleteUser
-	})
+		deleteUser,
+	});
 };
 export { GET, POST, DELETE };

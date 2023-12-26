@@ -7,7 +7,7 @@ const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const email = searchParams.get('email');
 
-	let user = await User.getUserByEmail(email);
+	let user = await UserController.getUserByEmail(email);
 
 	if (!user) {
 		return NextResponse.json({
@@ -26,7 +26,7 @@ const POST = async (request: NextRequest) => {
 	console.log('api called');
 	const { fullName, email, password, role, location_id } = await request.json();
 
-	const newUser = await User.createNewUser(
+	const newUser = await UserController.createNewUser(
 		fullName,
 		email,
 		password,
@@ -48,7 +48,7 @@ const POST = async (request: NextRequest) => {
 const DELETE = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const email = searchParams.get('email');
-	const deleteUser = await User.deleteUser(email);
+	const deleteUser = await UserController.deleteUser(email);
 	if (!deleteUser) {
 		return NextResponse.json({
 			status: 400,

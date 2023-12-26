@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import api from '@/src/lib/axios';
 import { useSession } from 'next-auth/react';
-import { TransitionLog } from '@/src/util';
+import { TransshipmentLog } from '@/src/util';
 
 const columns: GridColDef[] = [
 	{ field: 'col1', headerName: 'ID', width: 100 },
@@ -32,7 +32,7 @@ export default function DataTable({ tableData }) {
 		},
 	];
 	if (tableData && tableData[0] != null) {
-		rows = tableData.map((log: TransitionLog, index) => ({
+		rows = tableData.map((log: TransshipmentLog, index) => ({
 			id: index + 1,
 			col1: log.id,
 			col2: log.request_location,

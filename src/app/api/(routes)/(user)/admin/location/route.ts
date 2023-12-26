@@ -17,7 +17,7 @@ const GET = async (request: NextRequest) => {
 	// }
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get('id');
-	const data = await Location.getPost(Number(id));
+	const data = await LocationController.getPost(Number(id));
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

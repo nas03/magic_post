@@ -1,18 +1,34 @@
 import prisma from '@/src/lib/prisma';
 import { Package_status } from '@prisma/client';
-import { Package, getFormattedDate, TransitionLog } from '@/src/util';
-import { Location } from '@/src/app/api/(controller)';
+import { Package, getFormattedDate, TransshipmentLog } from '@/src/util';
+import {
+	LocationController,
+	TransshipmentLogController,
+} from '@/src/app/api/(controller)';
 //Get all packages if id = 0 or specific package with id != 0
-const getPackage = async (id: number) => {
+const getPackage = async (package_id: number) => {
 	try {
 		const data =
-			id === 0
+			package_id == 0
 				? await prisma.package.findMany()
-				: await prisma.package.findFirst({
+				: await prisma.package.findUnique({
 						where: {
-							id: {
-								equals: id,
-							},
+							id: package_id,
+						},
+						select: {
+							id: true,
+							sender: true,
+							receiver: true,
+							sender_location: true,
+							receiver_location: true,
+							sender_phone: true,
+							receiver_phone: true,
+							type: true,
+							fee: true,
+							received_location_id: true,
+							destination_location_id: true,
+							state: true,
+							shipment_id: true,
 						},
 				  });
 		return data;
@@ -22,9 +38,9 @@ const getPackage = async (id: number) => {
 	}
 };
 //Get transition log of package with id
-const getPackageTransitionLog = async (package_id: number) => {
+const getPackageTransshipmentLog = async (package_id: number) => {
 	try {
-		const data = await prisma.transitionLog.findMany({
+		const data = await prisma.transshipmentLog.findMany({
 			where: {
 				package_id: {
 					equals: package_id,
@@ -55,15 +71,26 @@ const createNewPackage = async (data: Package) => {
 			},
 		});
 		const currentDate = getFormattedDate(new Date()) as Date;
-		const logData: TransitionLog = {
+		const logData: TransshipmentLog = {
 			verified_timestamp: currentDate,
 			request_location: data.received_location_id,
 			destination_location: data.received_location_id,
 			location_id: data.received_location_id,
 			package_id: newPackage.id,
 		};
-		const newTransitionLog = await Location.createNewTransitionLog(logData);
-		return { newPackage, newTransitionLog };
+		const newTransshipmentLog =
+			await TransshipmentLogController.createNewTransshipmentLog(logData);
+		const updateReceived = await prisma.locationStatistics.update({
+			where: {
+				location_id: data.received_location_id,
+			},
+			data: {
+				receivedCount: {
+					increment: 1,
+				},
+			},
+		});
+		return { newPackage, newTransshipmentLog, updateReceived };
 	} catch (error) {
 		console.log('Error create new package', error);
 		return null;
@@ -95,5 +122,5 @@ export {
 	getPackage,
 	createNewPackage,
 	updatePackageState,
-	getPackageTransitionLog,
+	getPackageTransshipmentLog,
 };

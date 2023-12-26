@@ -13,45 +13,18 @@ import { Provider } from 'react-redux';
 import { useState } from 'react';
 import api from '@/src/lib/axios';
 
-const fetchRowsData = async (location_id: number) => {
-	try {
-		const response = await api.get('/api/branch-officer/client', {
-			params: {
-				location_id,
-			},
-		});
-		const data = response.data.data;
-		return data;
-	} catch (error) {
-		console.error('Error fetching data:', error);
-		return [];
-	}
-};
+export const runtime = 'edge'
 
-const fetchPackageData = async (package_id: number) => {
-	try {
-		const response = await api.get('/api/branch-officer/package', {
-			params: {
-				package_id,
-			},
-		});
-		const data = response.data.data;
-		return data;
-	} catch (error) {
-		console.log('Error fetching package to UI', error);
-		return null;
-	}
-};
 function Page() {
 	const [rowsData, setRowsData] = useState(null);
 	const { data: session } = useSession();
 	if (session && session.user.location_id) {
 		const fetchAllData = async () => {
-			const rows = await fetchRowsData(session.user.location_id);
+			// const rows = await fetchRowsData(session.user.location_id);
 			// const package = await fetchPackageData();
 
-			console.log('rows', rows);
-			setRowsData(rows);
+			// console.log('rows', rows);
+			// setRowsData(rows);
 		};
 		fetchAllData();
 	}

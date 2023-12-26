@@ -29,8 +29,8 @@ INSERT INTO Package (sender, receiver, transaction_point_id, location_id, state,
   ('Sender B', 'Receiver B', 2, 3, 'RECEIVED', 2),
   ('Sender C', 'Receiver C', 1, 2, 'RETURNED', 3);
 
--- Dummy TransitionLogs
-INSERT INTO TransitionLog (request_timestamp, request_location, destination_location, location_id) VALUES
+-- Dummy TransshipmentLogs
+INSERT INTO TransshipmentLog (request_timestamp, request_location, destination_location, location_id) VALUES
   ('2023-12-25', 1, 2, 1),
   ('2023-12-26', 3, 2, 3),
   ('2023-12-27', 2, 1, 2);

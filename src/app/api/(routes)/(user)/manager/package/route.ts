@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Package } from '@/src/app/api/(controller)'
+import { LocationController } from '../@/src/app/api/(controller)';
+import { User_role } from '@prisma/client';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
-	const package_id = searchParams.get('package_id');
-	const data = await Package.getPackage(Number(package_id));
+	const location_id = Number(searchParams.get('location_id'));
+	const role = searchParams.get('role') as User_role;
+	const data =
+		role == 'BRANCH_CENTER_MANAGER'
+			? await LocationController.getPackageStatusCount(location_id)
+			: await LocationController.getPackageCountForLocation(location_id);
+
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

@@ -1,4 +1,12 @@
-import * as User from './user';
-import * as Location from './location';
-import * as Package from './package';
-export { User, Location, Package };
+import * as UserController from './user';
+import * as LocationController from './location';
+import * as PackageController from './package';
+import * as TransshipmentLogController from './transshipment-log';
+import * as ShipmentLogController from './shipment-log';
+export {
+	UserController,
+	LocationController,
+	PackageController,
+	TransshipmentLogController,
+	ShipmentLogController,
+};
