@@ -1,6 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import prisma from '@/src/lib/prisma';
 import { User_role } from '@prisma/client';
+import { equal } from 'assert';
 const MIN_PASSWORD_LENGTH = 8;
 
 const createNewUser = async (
@@ -45,9 +46,11 @@ const getUserByEmail = async (email: string | null) => {
 		const data =
 			email == null
 				? await prisma.user.findMany()
-				: await prisma.user.findUnique({
+				: await prisma.user.findMany({
 						where: {
-							email: email,
+							email: {
+								equals: email,
+							},
 						},
 				  });
 		return data;

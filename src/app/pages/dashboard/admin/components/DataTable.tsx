@@ -4,24 +4,18 @@ import { useState, useEffect } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import api from '@/src/lib/axios';
 import { useSession } from 'next-auth/react';
+import { Location } from '@/src/util';
 
-interface Location {
-	location_id: number;
-	location: string;
-	type: string;
-}
-
-const fetchData = async (location_id: number, role: string) => {
+const fetchData = async () => {
 	try {
-		//TODO: fix this
 		const response = await api.get('/api/admin/location');
-
 		const data = response.data.data;
-		const rows: GridRowsProp = data.map((d: Location, index: number) => ({
-			id: index + 1,
-			col1: d.location,
-			col2: d.location,
-			col3: d.type,
+		console.log('data', data);
+		const rows: GridRowsProp = data.map((location: Location) => ({
+			id: location.id,
+			col1: location.name,
+			col2: location.location,
+			col3: location.type,
 			col4: <MoreHorizIcon />,
 		}));
 
@@ -33,9 +27,10 @@ const fetchData = async (location_id: number, role: string) => {
 };
 
 const columns: GridColDef[] = [
-	{ field: 'col1', headerName: 'Location ID', width: 100 },
-	{ field: 'col2', headerName: 'Location', width: 300 },
-	{ field: 'col3', headerName: 'Type', width: 100 },
+	{ field: 'col1', headerName: 'ID', width: 100 },
+	{ field: 'col2', headerName: 'Name', width: 200 },
+	{ field: 'col3', headerName: 'Location', width: 100 },
+	{ field: 'col4', headerName: 'Type', width: 100 },
 	{
 		field: 'col6',
 		headerName: 'Actions',
@@ -51,11 +46,8 @@ export default function DataTable() {
 
 	useEffect(() => {
 		const fetchDataAndSetRows = async () => {
-			if (session) {
-				const data = await fetchData(
-					session.user.location_id,
-					session.user.role
-				);
+			if (session.user.role == 'LEADER') {
+				const data = await fetchData();
 				setRows(data);
 				console.log(data);
 			}

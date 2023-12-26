@@ -6,14 +6,13 @@ const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
 	const data = await User.getUserByEmail(email);
 	const user = data[0];
-	const location_id = user.location_id;
 	if (user) {
 		return {
-			id: user.email,
+			id: user.id.toString(),
 			name: user.fullName,
 			email: user.email,
 			role: user.role,
-			location_id: location_id,
+			location_id: user.location_id,
 		};
 	}
 
@@ -30,6 +29,7 @@ const jwtCallback = ({ token, user }) => {
 };
 
 const sessionCallback = ({ session, token }) => {
+	console.log('Session token: ', token);
 
 	if (token) {
 		session.user.role = token.role;
@@ -48,9 +48,6 @@ const authOptions: AuthOptions = {
 	],
 	session: {
 		strategy: 'jwt',
-	},
-	jwt: {
-		maxAge: 3600,
 	},
 	callbacks: {
 		jwt: jwtCallback,
