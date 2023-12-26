@@ -9,6 +9,18 @@ import {
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
+	const location_id = Number(searchParams.get('location_id'));
+	const data = await Location.getTransitionLog(location_id);
+	if (!data || !data[0]) {
+		return NextResponse.json({
+			status: 400,
+			data: null,
+		});
+	}
+	return NextResponse.json({
+		status: 200,
+		data,
+	});
 };
 
 const POST = async (request: NextRequest) => {

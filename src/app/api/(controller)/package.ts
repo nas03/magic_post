@@ -1,7 +1,7 @@
 import prisma from '@/src/lib/prisma';
 import { Package_status } from '@prisma/client';
 import { Package, getFormattedDate, TransitionLog } from '@/src/util';
-import { Location } from './index';
+import { Location } from '@/src/app/api/(controller)';
 //Get all packages if id = 0 or specific package with id != 0
 const getPackage = async (id: number) => {
 	try {

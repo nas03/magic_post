@@ -139,6 +139,22 @@ const getPackageCountForLocation = async (locationId: number) => {
 		return null;
 	}
 };
+//Get transition log for a location
+const getTransitionLog = async (location_id: number) => {
+	try {
+		const data = await prisma.transitionLog.findMany({
+			where: {
+				location_id: {
+					equals: location_id,
+				},
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error fetching transition log data', error);
+		return null;
+	}
+};
 //Delete a location
 const deleteLocationById = async (locationId: number) => {
 	try {
@@ -183,4 +199,5 @@ export {
 	createNewShipmentLog,
 	verifyPackageTransported,
 	getPackageStatusCount,
+	getTransitionLog,
 };

@@ -43,11 +43,11 @@ model Package {
   receiver_phone          String
   type                    Package_type
   fee                     Float
-  customerInstruction     Customer_instruction @default(CALL)
   received_location_id    Int
-  destination_location_id Int
   state                   Package_status       @default(ONGOING)
+  destination_location_id Int
   shipment_id             Int?                 @unique
+  customerInstruction     Customer_instruction @default(CALL)
   received_location       Location             @relation(fields: [received_location_id], references: [id])
   shipment                ShipmentLog?         @relation(fields: [shipment_id], references: [id])
 

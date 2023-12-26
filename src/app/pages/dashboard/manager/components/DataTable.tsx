@@ -11,12 +11,13 @@ const fetchData = async () => {
 		const response = await api.get('/api/admin/location');
 		const data = response.data.data;
 		console.log('data', data);
-		const rows: GridRowsProp = data.map((location: Location) => ({
-			id: location.id,
-			col1: location.name,
-			col2: location.location,
-			col3: location.type,
-			col4: <MoreHorizIcon />,
+		const rows: GridRowsProp = data.map((location: Location, index) => ({
+			id: index + 1,
+			col1: location.id,
+			col2: location.name,
+			col3: location.location,
+			col4: location.type,
+			col5: <MoreHorizIcon />,
 		}));
 
 		return rows;

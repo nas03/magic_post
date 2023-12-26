@@ -29,8 +29,6 @@ const jwtCallback = ({ token, user }) => {
 };
 
 const sessionCallback = ({ session, token }) => {
-	console.log('Session token: ', token);
-
 	if (token) {
 		session.user.role = token.role;
 		session.user.location_id = token.location_id;

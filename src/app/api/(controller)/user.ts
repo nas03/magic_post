@@ -17,7 +17,7 @@ const createNewUser = async (
 
 	try {
 		const existingUser = await getUserByEmail(email);
-		if (existingUser) {
+		if (existingUser[0] != null) {
 			return null;
 		}
 
@@ -33,7 +33,9 @@ const createNewUser = async (
 				location_id: location_id,
 			},
 		});
-
+		if (!newUser) {
+			console.log('Failed creating new USerer');
+		}
 		return newUser;
 	} catch (error) {
 		console.error(`Error creating new user: ${error}`);
