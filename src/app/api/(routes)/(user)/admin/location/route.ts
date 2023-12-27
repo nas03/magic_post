@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { User, Location } from '@/src/app/api/(controller)';
+import { UserController, LocationController } from '@/src/app/api/(controller)';
 import { env } from 'process';
 import { getToken } from 'next-auth/jwt';
 import nextAuth from 'next-auth';
@@ -17,7 +17,7 @@ const GET = async (request: NextRequest) => {
 	// }
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get('id');
-	const data = await LocationController.getPost(Number(id));
+	const data = await LocationController.getLocation(Number(id));
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

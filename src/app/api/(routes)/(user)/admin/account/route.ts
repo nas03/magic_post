@@ -1,7 +1,6 @@
 import { User_role } from '@prisma/client';
-import { metadata } from '../../../../layout';
 import { NextRequest, NextResponse } from 'next/server';
-import { User } from '@/src/app/api/(controller)';
+import { UserController } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);

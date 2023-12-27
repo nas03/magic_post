@@ -1,6 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { AuthOptions } from 'next-auth';
-import { User } from '@/src/app/api/(controller)';
+import { UserController } from '@/src/app/api/(controller)';
 
 const authorizeCredentials = async (credentials: Record<string, string>) => {
 	const { email, password } = credentials;
