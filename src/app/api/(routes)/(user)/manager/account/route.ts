@@ -1,5 +1,5 @@
 import { User_role } from '@prisma/client';
-import { metadata } from '../../../../../layout';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { UserController } from '@/src/app/api/(controller)';
 
