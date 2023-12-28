@@ -15,9 +15,7 @@ import {
 } from '../../../../../context/actions/updateOrderList';
 import axios from 'axios';
 
-
 const MainContext = (props) => {
-    console.log(props.tableData)
 	const dispatch = useDispatch();
 	const tableType = useSelector((state) => state.tableData.tableData);
 	const orderNameList = useSelector((state) => state.orderList.nameList);
@@ -378,7 +376,7 @@ const MainContext = (props) => {
 											/>
 										</div>
 									</div>
-                                    {/* //TODO:  */}
+									{/* //TODO:  */}
 									<div className=" w-[90%] border-2 border-black flex">
 										<div className=" w-[50%] border-r-2 border-black">
 											<div className="border-b-2 border-black p-2">
@@ -623,6 +621,6 @@ const MainContext = (props) => {
 			)}
 		</div>
 	);
-}
+};
 
 export default MainContext;
