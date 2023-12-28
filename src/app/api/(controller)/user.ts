@@ -42,7 +42,18 @@ const createNewUser = async (
 		return null;
 	}
 };
-
+const getUserByType = async (userType: User_role) => {
+	try {
+		return prisma.user.findMany({
+			where: {
+				role: userType,
+			},
+		});
+	} catch (error) {
+		console.log('Error get user by type', error);
+		return null;
+	}
+};
 const getUserByEmail = async (email: string | null) => {
 	try {
 		const data =
@@ -64,7 +75,7 @@ const getUserByEmail = async (email: string | null) => {
 const deleteUser = async (email: string) => {
 	try {
 		const deletedUser = await prisma.user.delete({
-			where: { email },
+			where: { email: email },
 		});
 		return deletedUser;
 	} catch (error) {
@@ -72,5 +83,35 @@ const deleteUser = async (email: string) => {
 		return null;
 	}
 };
-
-export { createNewUser, getUserByEmail, deleteUser };
+const updateUserWithID = async (
+	id: number,
+	fullName: string,
+	email: string,
+	location_id: number,
+	role: User_role
+) => {
+	try {
+		const data = await prisma.user.update({
+			where: {
+				id: Number(id),
+			},
+			data: {
+				fullName: fullName,
+				email: email,
+				location_id: location_id,
+				role: role,
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error updating user', error);
+		return null;
+	}
+};
+export {
+	createNewUser,
+	getUserByEmail,
+	deleteUser,
+	getUserByType,
+	updateUserWithID,
+};

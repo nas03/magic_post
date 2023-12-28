@@ -95,7 +95,7 @@ function MainContent(props) {
 					?
 					<DataAccount tableType={currentTable}/>
 					:
-					<DataTable tableType={currentTable} tableData={props.rowsData} />
+					<DataTable tableType={currentTable} />
 				}
 			</div>
 		</div>

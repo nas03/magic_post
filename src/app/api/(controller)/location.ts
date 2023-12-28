@@ -1,5 +1,6 @@
 import prisma from '@/src/lib/prisma';
 import { ShipmentLog, TransshipmentLog } from '@/src/util';
+import { Location_type } from '@prisma/client';
 
 //Verify package have been transported from transhipment hub to branch
 const verifyPackageTransported = async (
@@ -72,7 +73,19 @@ const getLocation = async (location_id: number) => {
 		console.error(`Error fetching location: ${error.message}`);
 	}
 };
-
+const getLocationWithType = async (location_type: Location_type) => {
+	try {
+		return await prisma.location.findMany({
+			where: {
+				type: {
+					equals: location_type,
+				},
+			},
+		});
+	} catch (error) {
+		console.error(`Error fetching location: ${error.message}`);
+	}
+};
 // Find posts with a location filter
 const getLocationWithFilter = async (filter: string) => {
 	try {
@@ -118,9 +131,9 @@ const getTransshipmentStatistics = async (locationId: number) => {
 //Delete a location
 const deleteLocationById = async (locationId: number) => {
 	try {
+		console.log(locationId);
 		const existingLocation = await prisma.location.findUnique({
 			where: { id: locationId },
-			include: { transshipmentLog: true },
 		});
 
 		if (!existingLocation) {
@@ -129,27 +142,59 @@ const deleteLocationById = async (locationId: number) => {
 		}
 
 		// Delete associated TransshipmentLog records
-		const transitionLogIds = existingLocation.transshipmentLog.map(
-			(log) => log.id
-		);
-		await prisma.transshipmentLog.deleteMany({
-			where: {
-				id: { in: transitionLogIds },
-			},
-		});
-
-		// Delete the location
-		await prisma.location.delete({
+		try {
+			await prisma.transshipmentLog.deleteMany({
+				where: {
+					location_id: locationId,
+				},
+			});
+		} catch (error) {
+			throw error;
+		}
+		try {
+			await prisma.locationStatistics.deleteMany({
+				where: {
+					location_id: locationId,
+				},
+			});
+		} catch (error) {
+			throw error;
+		}
+		const data = await prisma.location.delete({
 			where: { id: locationId },
 		});
+		return data;
 	} catch (error) {
 		console.error(
 			'Error deleting location and associated TransshipmentLog records:',
 			error
 		);
+		return null;
 	}
 };
-
+const updateLocation = async (
+	location_id: number,
+	location: string,
+	name: string,
+	type: Location_type
+) => {
+	try {
+		const data = await prisma.location.update({
+			where: {
+				id: location_id,
+			},
+			data: {
+				location: location,
+				name: name,
+				type: type,
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error updating location info', error);
+		return null;
+	}
+};
 export {
 	getLocation,
 	getLocationWithFilter,
@@ -157,4 +202,6 @@ export {
 	deleteLocationById,
 	verifyPackageTransported,
 	getShipmentStatistics,
+	getLocationWithType,
+	updateLocation,
 };

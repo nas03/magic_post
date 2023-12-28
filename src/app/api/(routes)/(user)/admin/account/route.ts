@@ -4,9 +4,9 @@ import { UserController } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
-	const email = searchParams.get('email');
+	const user_type = searchParams.get('user_type') as User_role;
 
-	let user = await UserController.getUserByEmail(email);
+	let user = await UserController.getUserByType(user_type);
 
 	if (!user) {
 		return NextResponse.json({
@@ -44,9 +44,31 @@ const POST = async (request: NextRequest) => {
 		newUser,
 	});
 };
+const PATCH = async (request: NextRequest) => {
+	const { id, name, email, role, location_id } = await request.json();
+	const data = await UserController.updateUserWithID(
+		Number(id),
+		name,
+		email,
+		Number(location_id),
+		role
+	);
+	if (!data) {
+		return NextResponse.json({
+			status: 400,
+			data: null,
+		});
+	}
+	return NextResponse.json({
+		status: 200,
+		data,
+	});
+};
 const DELETE = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
+	console.log('routes', searchParams);
 	const email = searchParams.get('email');
+	console.log('route email', email);
 	const deleteUser = await UserController.deleteUser(email);
 	if (!deleteUser) {
 		return NextResponse.json({
@@ -59,4 +81,4 @@ const DELETE = async (request: NextRequest) => {
 		deleteUser,
 	});
 };
-export { GET, POST, DELETE };
+export { GET, POST, DELETE, PATCH };
