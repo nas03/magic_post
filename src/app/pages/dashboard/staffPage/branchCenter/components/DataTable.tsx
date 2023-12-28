@@ -11,7 +11,10 @@ import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useMemo, useCallback } from 'react';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useSelector, useDispatch } from 'react-redux';
-import {updateOrderType} from '../../../../../context/actions/updateDataBranch'
+import {
+	updateOrderType,
+	updateOrderQuality,
+} from '../../../../../context/actions/updateDataBranch';
 
 let rows = [
 	{
@@ -21,23 +24,22 @@ let rows = [
 		col3: false,
 		col4: 0,
 		col5: 'Package',
-		col6: 2
+		col6: 2,
 	},
 ];
 
 type Row = {
-		id: number,
-		col1: number,
-		col2: string,
-		col3: boolean,
-		col4: number,
-		col5: string,
-		col6: number
-}
+	id: number;
+	col1: number;
+	col2: string;
+	col3: boolean;
+	col4: number;
+	col5: string;
+	col6: number;
+};
 
 export default function DataTable({ tableData }) {
 	const [row, setRow] = useState<Row[]>(rows);
-
 
 	// if (tableData && tableData[0] != null) {
 	// 	rows = tableData.map((log: TransshipmentLog, index) => ({
@@ -49,73 +51,79 @@ export default function DataTable({ tableData }) {
 	// 	}));
 	// }
 
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const deleteUser = useCallback(
 		(id: GridRowId) => () => {
-		  setTimeout(() => {
-			setRow((prevRows) => prevRows.filter((row) => row.id !== id));
-		  });
+			setTimeout(() => {
+				setRow((prevRows) => prevRows.filter((row) => row.id !== id));
+			});
 		},
-		[],
-	  )
-	
-	  const toggleAdmin = useCallback(
-		(id: GridRowId) => () => {
-		  setRow((prevRows) =>
-			prevRows.map((row) =>
-			  row.id === id ? { ...row, col3: !row.col3 } : row,
-			),
-		  );
-		},
-		[],
-	  );
-	
-	  const duplicateUser = useCallback(
-		(id: GridRowId) => () => {
-		  setRow((prevRows) => {
-			const rowToDuplicate = prevRows.find((row) => row.id === id)!;
-			return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
-		  });
-		},
-		[],
-	  );
+		[]
+	);
 
-	  const columns = useMemo<GridColDef<Row>[]>(() => [
-		{ field: 'col1', headerName: 'ID', width: 100 },
-		{ field: 'col2', headerName: 'Request', width: 200 },
-		{ field: 'col3', headerName: 'Verify', type: 'boolean', width: 100 },
-		{ field: 'col4', headerName: 'PackageID', width: 100 },
-		{ field: 'col5', headerName: 'PackageType', width: 150 },
-		{ field: 'col6', headerName: 'PackageQuality', width: 150 },
-		{
-			field: 'actions',
-			type: 'actions',
-			width: 80,
-			getActions: (params) => [
-			  <GridActionsCellItem
-				icon={<DeleteIcon />}
-				label="Delete"
-				onClick={deleteUser(params.id)}
-			  />,
-			  <GridActionsCellItem
-				icon={<SecurityIcon />}
-				label="Toggle Admin"
-				onClick={toggleAdmin(params.id)}
-				showInMenu
-			  />,
-			  <GridActionsCellItem
-				icon={<FileCopyIcon />}
-				label="Duplicate User"
-				onClick={duplicateUser(params.id)}
-				showInMenu
-			  />,
-			],
-		  },
+	const toggleAdmin = useCallback(
+		(id: GridRowId) => () => {
+			setRow((prevRows) =>
+				prevRows.map((row) =>
+					row.id === id ? { ...row, col3: !row.col3 } : row
+				)
+			);
+		},
+		[]
+	);
+
+	const duplicateUser = useCallback(
+		(id: GridRowId) => () => {
+			setRow((prevRows) => {
+				const rowToDuplicate = prevRows.find((row) => row.id === id)!;
+				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
+			});
+		},
+		[]
+	);
+
+	const columns = useMemo<GridColDef<Row>[]>(
+		() => [
+			{ field: 'col1', headerName: 'ID', width: 100 },
+			{ field: 'col2', headerName: 'Request', width: 200 },
+			{ field: 'col3', headerName: 'Verify', type: 'boolean', width: 100 },
+			{ field: 'col4', headerName: 'PackageID', width: 100 },
+			{ field: 'col5', headerName: 'PackageType', width: 150 },
+			{ field: 'col6', headerName: 'PackageQuality', width: 150 },
+			{
+				field: 'actions',
+				type: 'actions',
+				width: 80,
+				getActions: (params) => [
+					<GridActionsCellItem
+						icon={<DeleteIcon />}
+						label="Delete"
+						onClick={deleteUser(params.id)}
+					/>,
+					<GridActionsCellItem
+						icon={<SecurityIcon />}
+						label="Toggle Admin"
+						onClick={toggleAdmin(params.id)}
+						showInMenu
+					/>,
+					<GridActionsCellItem
+						icon={<FileCopyIcon />}
+						label="Duplicate User"
+						onClick={duplicateUser(params.id)}
+						showInMenu
+					/>,
+				],
+			},
 		],
-		[deleteUser, toggleAdmin, duplicateUser],
-	)
-	
+		[deleteUser, toggleAdmin, duplicateUser]
+	);
+
+	const getOrderTypeAndQuality = (e: any) => {
+		dispatch(updateOrderType(e.col5));
+		dispatch(updateOrderQuality(e.col6));
+	};
+
 	return (
 		<div style={{ height: 400, width: '100%' }}>
 			<DataGrid
@@ -127,7 +135,7 @@ export default function DataTable({ tableData }) {
 					},
 				}}
 				checkboxSelection
-				onRowClick={(e) =>  dispatch(updateOrderType(e.row.col5))}
+				onRowClick={(e) => getOrderTypeAndQuality(e.row)}
 				disableRowSelectionOnClick
 			/>
 		</div>

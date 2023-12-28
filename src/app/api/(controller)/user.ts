@@ -72,6 +72,24 @@ const getUserByEmail = async (email: string | null) => {
 		return null;
 	}
 };
+const getEmployeeByLocation = async (location_id: number) => {
+	try {
+		const data = await prisma.user.findMany({
+			where: {
+				location_id: {
+					equals: location_id,
+				},
+				role: {
+					in: ['BRANCH_OFFICER', 'HUB_OFFICER'],
+				},
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error get User by location', error);
+		return null;
+	}
+};
 const deleteUser = async (email: string) => {
 	try {
 		const deletedUser = await prisma.user.delete({
@@ -114,4 +132,5 @@ export {
 	deleteUser,
 	getUserByType,
 	updateUserWithID,
+	getEmployeeByLocation,
 };

@@ -54,8 +54,9 @@ const CircleIcon = ({ number }) => {
 	);
 };
 
-const Page = async ({ params }: { params: { orderNumber: number } }) => {
-	const data = await fetchData(params.orderNumber);
+const Page = ({ params }: { params: { orderNumber: number } }) => {
+	const router = useRouter();
+	//const data = await fetchData(params.orderNumber);
 
 	return (
 		<div className=" w-[100vw] h-[100vh] flex justify-center items-center ">
@@ -71,7 +72,7 @@ const Page = async ({ params }: { params: { orderNumber: number } }) => {
 				<div className=" w-full h-[15%] justify-between flex-col flex px-[1%]">
 					<div className=" w-[80%]  flex gap-[3%]">
 						<span className=" text-5xl font-semibold">
-							Order details #{params.orderNumber}
+							Order details #1
 						</span>
 						<div className=" w-[20%] bg-[#EEF2FF] p-2 rounded-xl flex justify-center items-center">
 							<span className=" text-[#403DFF] text-xl font-semibold">
@@ -115,7 +116,7 @@ const Page = async ({ params }: { params: { orderNumber: number } }) => {
 							Tracking Number
 						</label>
 						<span className=" w-full py-2 px-4 border-2 border-gray-400 rounded-xl">
-							{params.orderNumber}
+							1
 						</span>
 					</form>
 				</div>

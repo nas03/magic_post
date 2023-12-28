@@ -13,9 +13,20 @@ function Page() {
 	const router = useRouter();
 
 	if (status == 'authenticated') {
-		router.push('/pages/dashboard/adminPage');
+		const role = session?.user?.role;
+
+		// Redirect based on the user's role
+		if (role === 'LEADER') {
+			router.push('/pages/dashboard/adminPage');
+		} else if (role === 'BRANCH_CENTER_MANAGER') {
+			router.push('/pages/dashboard/manager');
+		} else {
+			// Handle other roles or redirect to a default page
+			router.push('/');
+		}
 	}
-	const handleSubmit = async (e: any) => {
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log('Submit Form');
 
@@ -28,9 +39,20 @@ function Page() {
 			redirect: false,
 		});
 		if (response?.ok) {
-			router.push('/pages/dashboard/adminPage');
+			console.log(response);
+			const role = response?.session?.user?.role;
+
+			// Redirect based on the user's role
+			if (role === 'LEADER') {
+				router.push('/pages/dashboard/adminPage');
+			} else if (role === 'BRANCH_CENTER_MANAGER') {
+				router.push('/pages/dashboard/userPage');
+			} else {
+				// Handle other roles or redirect to a default page
+				router.push('/');
+			}
 		} else {
-			//TODO: @Babybluess Show error on Page
+			// TODO: @Babybluess Show error on Page
 			const error = response?.error;
 		}
 	};
@@ -85,17 +107,29 @@ function Page() {
 									required
 								/>
 							</div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label className="text-gray-500 dark:text-gray-300">Remember me</label>
-                                    </div>
-                                </div>
-                                <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
-                            </div>
+							<div className="flex items-center justify-between">
+								<div className="flex items-start">
+									<div className="flex items-center h-5">
+										<input
+											id="remember"
+											aria-describedby="remember"
+											type="checkbox"
+											className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+											required
+										/>
+									</div>
+									<div className="ml-3 text-sm">
+										<label className="text-gray-500 dark:text-gray-300">
+											Remember me
+										</label>
+									</div>
+								</div>
+								<a
+									href="#"
+									className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+									Forgot password?
+								</a>
+							</div>
 							<div>
 								<button
 									type="submit"

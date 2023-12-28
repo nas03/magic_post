@@ -5,9 +5,9 @@ import { UserController } from '@/src/app/api/(controller)';
 
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
-	const email = searchParams.get('email');
-
-	let user = await UserController.getUserByEmail(email);
+	const location_id = Number(searchParams.get('location_id'));
+	console.log('location', location_id);
+	let user = await UserController.getEmployeeByLocation(location_id);
 
 	if (!user) {
 		return NextResponse.json({
@@ -23,7 +23,6 @@ const GET = async (request: NextRequest) => {
 };
 
 const POST = async (request: NextRequest) => {
-	console.log('api called');
 	const { fullName, email, password, role, location_id } = await request.json();
 
 	const newUser = await UserController.createNewUser(

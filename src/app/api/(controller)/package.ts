@@ -1,3 +1,4 @@
+import { equal } from 'assert';
 import prisma from '@/src/lib/prisma';
 import { Package_status } from '@prisma/client';
 import { Package, getFormattedDate, TransshipmentLog } from '@/src/util';
@@ -53,6 +54,35 @@ const getPackageTransshipmentLog = async (package_id: number) => {
 		return null;
 	}
 };
+//Get packages received by location
+const getBranchPackage = async (location_id: number) => {
+	try {
+		const data = await prisma.package.findMany({
+			where: {
+				OR: [
+					{
+						received_location_id: {
+							equals: location_id,
+						},
+					},
+					{
+						destination_location_id: {
+							equals: location_id,
+						},
+						state: {
+							equals: 'RECEIVED',
+						},
+					},
+				],
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error get Package received by location');
+		return null;
+	}
+};
+
 //Create new package
 const createNewPackage = async (data: Package) => {
 	try {
@@ -123,4 +153,5 @@ export {
 	createNewPackage,
 	updatePackageState,
 	getPackageTransshipmentLog,
+	getBranchPackage,
 };

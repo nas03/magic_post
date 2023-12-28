@@ -50,10 +50,7 @@ const fetchUser = async (userType: User_role) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		next: {
-			revalidate: 3600,
-		},
-		cache: 'force-cache',
+		cache: 'reload',
 	});
 	const { data } = await response.json();
 	return data;
@@ -94,6 +91,7 @@ export default function DataAccount({ tableType }) {
 				});
 
 				const data = await deletedUser.json();
+				await fetchData();
 				console.log('data', data);
 			} catch (error) {
 				console.error('Error deleting user:', error);
@@ -177,10 +175,11 @@ export default function DataAccount({ tableType }) {
 			cache: 'no-cache',
 		});
 		const body = await response.json();
+		await fetchData();
+		console.log('body', body);
 		if (!body) {
 			console.log('Error');
 		}
-		await fetchData();
 	};
 	const userType: User_role =
 		tableType === 'Gathering Leader'
@@ -208,7 +207,7 @@ export default function DataAccount({ tableType }) {
 		}, 3600 * 1000); // Fetch every 60 seconds (adjust as needed)
 
 		return () => clearInterval(intervalId);
-	}, [tableType, row]);
+	}, [tableType]);
 
 	return (
 		<>
