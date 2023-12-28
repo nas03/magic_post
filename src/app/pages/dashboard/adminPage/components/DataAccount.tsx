@@ -56,7 +56,7 @@ type Row = {
 
 
 
-export default function DataAccount() {
+export default function DataAccount({tableType}) {
 	const [row, setRow] = useState<Row[]>(rows);
 	const { data: session } = useSession();
     const dispatch = useDispatch()

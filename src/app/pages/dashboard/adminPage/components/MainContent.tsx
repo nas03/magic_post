@@ -12,7 +12,11 @@ import { table } from 'console';
 
 function MainContent(props) {
 	const tableType = useSelector((state: any) => state.dataAdmin.tableType)
-	
+	const [currentTable, setCurrentTable] = useState('')
+
+	useEffect(() =>{
+		setCurrentTable(tableType)
+	},[tableType])
 
 	return (
 		<div className=" w-full h-full p-[2%]">
@@ -87,13 +91,12 @@ function MainContent(props) {
 					</span>
 					<DateTimePickerValue />
 				</div>
-				{/* <DataTable tableData={props.rowsData} /> */}
 				{
 					tableType === 'Gathering Leader'  || tableType == 'Transaction Leader' 
 					?
-					<DataAccount/>
+					<DataAccount tableType={currentTable}/>
 					:
-					<DataTable tableData={props.rowsData} />
+					<DataTable tableType={currentTable} tableData={props.rowsData} />
 				}
 			</div>
 		</div>

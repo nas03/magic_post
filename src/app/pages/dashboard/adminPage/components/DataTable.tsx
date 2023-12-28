@@ -32,7 +32,7 @@ type Row = {
 
 
 
-const DataTable = ({ tableData }) => {
+const DataTable = ({ tableData, tableType }) => {
 	 const [row, setRow] = useState<Row[]>(rows);
 	 const [showModal, setShowModal] = useState(false)
 	 const [ID, setID] = useState('')
