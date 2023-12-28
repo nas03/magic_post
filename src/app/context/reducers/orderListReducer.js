@@ -16,12 +16,12 @@ const orderListReducer = (state = initialState, action) => {
         case 'UPDATEORDERNAME':
             return {
                 ...state,
-                nameList: state.nameList.concat(action.orderName + ', ')
+                nameList: state.nameList.concat(action.orderName !== '' ? action.orderName + ', ' : '')
             }   
         case 'UPDATEORDERTYPE':
             return {
                 ...state,
-                typeList: state.typeList.concat(action.orderType + ', ')
+                typeList: state.typeList.concat(action.orderType !== '' ? action.orderType + ', ' : '')
             }   
         case 'CLEARORDERNAME':
             return {
