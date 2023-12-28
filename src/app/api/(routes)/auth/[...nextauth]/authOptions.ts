@@ -1,3 +1,4 @@
+import { signIn } from 'next-auth/react';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { AuthOptions } from 'next-auth';
 import { UserController } from '@/src/app/api/(controller)';
@@ -33,9 +34,12 @@ const sessionCallback = ({ session, token }) => {
 		session.user.role = token.role;
 		session.user.location_id = token.location_id;
 	}
+	console.log('session', session);
 	return session;
 };
-
+// const signInCallBack = ({ user, account, profile, email, credentials }) => {
+// 	return user;
+// };
 const authOptions: AuthOptions = {
 	providers: [
 		CredentialsProvider({
@@ -50,6 +54,7 @@ const authOptions: AuthOptions = {
 	callbacks: {
 		jwt: jwtCallback,
 		session: sessionCallback,
+		// signIn: signInCallBack,
 	},
 	pages: {
 		signIn: '/pages/login',

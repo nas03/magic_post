@@ -1,33 +1,33 @@
 import * as React from 'react';
-import {
-	DataGrid,
-	GridRowsProp,
-	GridColDef,
-	GridActionsCellItem,
-	GridRowId,
-} from '@mui/x-data-grid';
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { LocationType, addSearchParams, formDataToJson } from '@/src/util';
-import { Location } from '@/src/util';
+import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { useState, useEffect, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
+import { Location, User, formDataToJson } from '@/src/util';
+import DeleteIcon from '@mui/icons-material/Delete';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import { useCallback } from 'react';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
-import { MapPinIcon, XCircleIcon } from '@heroicons/react/24/solid';
-import { useSelector, useDispatch } from 'react-redux';
 import {
 	updateNameAdmin,
 	updateIDAdmin,
 	updateLocationAdmin,
-	updateTypeAdmin,
+	updateRoleAdmin,
+	updateEmailAdmin,
 } from '../../../../context/actions/updateDataAdmin';
-import { Location_type } from '@prisma/client';
-
-let rows: Row[] = [
+import { useSelector, useDispatch } from 'react-redux';
+import { XCircleIcon } from '@heroicons/react/24/solid';
+import { User_role } from '@prisma/client';
+import { addSearchParams } from '@/src/util';
+import { stat } from 'fs';
+let rows = [
 	{
 		id: 0,
 		col1: 0,
 		col2: '',
 		col3: '',
-		col4: 'false',
+		col4: '',
+		col5: '',
 	},
 ];
 
@@ -37,12 +37,13 @@ type Row = {
 	col2: string;
 	col3: string;
 	col4: string;
+	col5: string;
 };
 
-const fetchLocation = async (locationType: Location_type) => {
+const fetchUser = async (location_id: number) => {
 	const url = new URL(
-		addSearchParams(new URL('http://localhost:3000/api/admin/location'), {
-			location_type: locationType,
+		addSearchParams(new URL('http://localhost:3000/api/manager/account'), {
+			location_id: location_id,
 		})
 	);
 	const response = await fetch(url, {
@@ -50,62 +51,76 @@ const fetchLocation = async (locationType: Location_type) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		next: {
-			revalidate: 3600,
-		},
-		cache: 'reload'
+		cache: 'reload',
 	});
 	const { data } = await response.json();
 	return data;
 };
-const DataTable = ({ tableType }) => {
+
+export default function DataAccount({
+	tableType,
+	managerRole,
+	managerLocation,
+}) {
+	console.log('tableType', tableType);
 	const [row, setRow] = useState<Row[]>(rows);
+	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [ID, setID] = useState('');
 	const [name, setName] = useState('');
 	const [location, setLocation] = useState('');
-	const [type, setType] = useState('');
-	const dispatch = useDispatch();
+	const [role, setRole] = useState('');
+	const [email, setEmail] = useState('');
 	const dataAdmin = useSelector((state: any) => state.dataAdmin);
-	const [selectedUser, setSelectedUser] = useState(null);
+
+	const modifyInfo = () => {
+		setShowModal(false);
+	};
+
+	const deleteUser = useCallback(
+		async (id: GridRowId) => {
+			try {
+				const getRow = row.at(Number(id) - 1);
+				const email = getRow.col3;
+				const url = new URL(
+					addSearchParams(new URL('http://localhost:3000/api/admin/account'), {
+						email: email,
+					})
+				);
+
+				const deletedUser = await fetch(url, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				const data = await deletedUser.json();
+				await fetchData();
+				console.log('data', data);
+			} catch (error) {
+				console.error('Error deleting user:', error);
+			}
+		},
+		[row]
+	);
 
 	const duplicateUser = useCallback(
 		(id: GridRowId) => () => {
 			setRow((prevRows) => {
-				const rowToDuplicate = prevRows.find((row) => row.id === id);
+				const rowToDuplicate = prevRows.find((row) => row.id === id)!;
 				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
 			});
 		},
 		[]
 	);
-	const handleUpdateLocation = async (e: any) => {
-		e.preventDefault();
-		const formData = formDataToJson(new FormData(e.target));
-		const data = {
-			id: formData.id as string,
-			location: formData.location as string,
-			name: formData.name as string,
-			type: formData.type as Location_type,
-		};
-		const response = await fetch('http://localhost:3000/api/admin/location', {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-			cache: 'no-cache',
-		});
-		const body = await response.json();
-		if (!body.data) {
-			//TODO: Show error
-		}
-		await fetchData();
-	};
+
 	const modifyUser = (item: any) => {
 		dispatch(updateIDAdmin(item.col1));
 		dispatch(updateNameAdmin(item.col2));
-		dispatch(updateLocationAdmin(item.col3));
-		dispatch(updateTypeAdmin(item.col4));
+		dispatch(updateEmailAdmin(item.col3));
+		dispatch(updateRoleAdmin(item.col4));
+		dispatch(updateLocationAdmin(item.col5));
 		setShowModal(true);
 	};
 
@@ -113,13 +128,19 @@ const DataTable = ({ tableType }) => {
 		() => [
 			{ field: 'col1', headerName: 'ID', width: 100 },
 			{ field: 'col2', headerName: 'Name', width: 200 },
-			{ field: 'col3', headerName: 'Location', width: 100 },
-			{ field: 'col4', headerName: 'Type', width: 100 },
+			{ field: 'col3', headerName: 'Email', width: 100 },
+			{ field: 'col4', headerName: 'Role', width: 100 },
+			{ field: 'col5', headerName: 'Location ID', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
 				width: 80,
 				getActions: (params) => [
+					<GridActionsCellItem
+						icon={<DeleteIcon />}
+						label="Delete"
+						onClick={() => deleteUser(params.id)}
+					/>,
 					<GridActionsCellItem
 						icon={<DisplaySettingsIcon />}
 						label="Modify"
@@ -135,37 +156,60 @@ const DataTable = ({ tableType }) => {
 				],
 			},
 		],
-		[duplicateUser]
+		[deleteUser, duplicateUser]
 	);
 
-	const modifyInfo = () => {
-		setShowModal(false);
-	};
 	//DATA PROCESSING
+	const handleUpdateAccount = async (e: any) => {
+		e.preventDefault();
+		const formData = formDataToJson(new FormData(e.target));
+		console.log('formData', formData);
+		const data = {
+			id: formData.id,
+			name: formData.name,
+			email: formData.email,
+			location_id: formData.location,
+			role: formData.role as User_role,
+		};
+		const response = await fetch('http://localhost:3000/api/admin/account', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			cache: 'no-cache',
+		});
+		const body = await response.json();
+		await fetchData();
+		console.log('body', body);
+		if (!body) {
+			console.log('Error');
+		}
+	};
 
-	const locationType: Location_type =
-		tableType === 'Transaction Point' ? 'TRANSSHIPMENT_HUB' : 'BRANCH';
 	const fetchData = async () => {
-		const data = await fetchLocation(locationType);
-		const tableLocationRow = data.map((loc: Location, index) => {
+		const data = await fetchUser(Number(managerLocation));
+		const tableUserRow = data.map((user: User, index) => {
 			return {
 				id: index + 1,
-				col1: loc.id,
-				col2: loc.name,
-				col3: loc.location,
-				col4: loc.type,
+				col1: user.id,
+				col2: user.fullName,
+				col3: user.email,
+				col4: user.role,
+				col5: user.location_id,
 			};
 		});
-		setRow(tableLocationRow);
+		setRow(tableUserRow);
 	};
+
 	useEffect(() => {
 		fetchData();
 		const intervalId = setInterval(() => {
-			fetchData();
-		}, 3600 * 1000);
+			fetchData(); // Fetch data at regular intervals
+		}, 3600 * 1000); // Fetch every 60 seconds (adjust as needed)
 
 		return () => clearInterval(intervalId);
-	}, [tableType]);
+	}, [managerLocation]);
 
 	return (
 		<>
@@ -208,7 +252,7 @@ const DataTable = ({ tableType }) => {
 										className="space-y-4 md:space-y-6"
 										action="#"
 										onSubmit={(e) => {
-											handleUpdateLocation(e);
+											handleUpdateAccount(e);
 											modifyInfo();
 										}}>
 										<div>
@@ -221,7 +265,7 @@ const DataTable = ({ tableType }) => {
 												id="id"
 												onChange={(e) => setID(e.target.value)}
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												defaultValue={dataAdmin.IDAm}
+												value={dataAdmin.IDAm}
 												required
 											/>
 										</div>
@@ -241,10 +285,24 @@ const DataTable = ({ tableType }) => {
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Location
+												Email
 											</label>
 											<input
 												type="text"
+												name="email"
+												id="email"
+												defaultValue={dataAdmin.emailAM}
+												onChange={(e) => setEmail(e.target.value)}
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Location
+											</label>
+											<input
+												type="number"
 												name="location"
 												id="location"
 												defaultValue={dataAdmin.locationAm}
@@ -255,14 +313,14 @@ const DataTable = ({ tableType }) => {
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Type
+												Role
 											</label>
 											<input
 												type="text"
-												name="type"
-												id="type"
-												defaultValue={dataAdmin.typeAm}
-												onChange={(e) => setType(e.target.value)}
+												name="role"
+												id="role"
+												defaultValue={dataAdmin.roleAm}
+												onChange={(e) => setRole(e.target.value)}
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 												required
 											/>
@@ -282,6 +340,4 @@ const DataTable = ({ tableType }) => {
 			) : null}
 		</>
 	);
-};
-
-export default DataTable;
+}
