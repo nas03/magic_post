@@ -30,6 +30,7 @@
     "next-auth": "^4.24.5",
     "print-js": "^1.6.0",
     "prisma": "latest",
+    "qrcode": "^1.5.3",
     "qrcodejs": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

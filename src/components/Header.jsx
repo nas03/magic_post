@@ -1,4 +1,4 @@
-'use client';
+
 import React, { useState, createContext } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -15,6 +15,8 @@ import axios from 'axios';
 import { Link } from 'react-scroll';
 import LogIn from './LogIn';
 import CustomButton from './CustomButton';
+import QRCode from 'qrcode'
+import QrCode from './QRCode';
 
 export const InputContext = createContext();
 
@@ -28,40 +30,24 @@ const Header = () => {
 
 	const [orderNumber, setOrderNumber] = useState('');
 
-	const config = {
-		headers: { Authorization: 'Bearer 1e818890-8aea-11ee-b22a-0dc7d55af999' },
-	};
-	const bodyParameters = {
-		colorDark: 'black',
-		qrCategory: 'url',
-		text: orderNumber,
-	};
-	const getQrCode = async () => {
+	const generateQR = async() => {
 		try {
-			setLoading(true);
-			const res = await axios.post(
-				'https://qrtiger.com/api/qr/static',
-				bodyParameters,
-				config
-			);
-			setResponse(res.data.url);
+		  setResponse(await QRCode.toDataURL(orderNumber))
 		} catch (err) {
-			setError(err);
-		} finally {
-			setLoading(false);
+		  console.error(err)
 		}
-	};
+	  }
 
 	const value = {
 		orderNumber,
-		getQrCode,
+		generateQR,
 		response,
 		loading,
 		error,
 	};
 
 	const handleSubmit = () => {
-		getQrCode();
+		generateQR();
 		onOpen();
 	};
 
@@ -82,7 +68,7 @@ const Header = () => {
 								</ModalHeader>
 								<ModalBody>
 									<InputContext.Provider value={value}>
-										<QRCode />
+										<QrCode/>
 									</InputContext.Provider>
 								</ModalBody>
 								<ModalFooter>

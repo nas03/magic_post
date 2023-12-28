@@ -3,8 +3,9 @@ import { XCircleIcon } from '@heroicons/react/24/solid'
 import React, { useState, useRef } from 'react'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import printJS from "print-js";
 import { useReactToPrint } from 'react-to-print';
+import QRCode from 'qrcode'
+
 
 const UserOrder = ({orderNumber}) => {
 	const dataBranch = useSelector((state) => state.dataBranch)
@@ -19,26 +20,17 @@ const UserOrder = ({orderNumber}) => {
 
     const [response, setResponse] = useState('');
 
-    const config = {
-		headers: { Authorization: 'Bearer 1e818890-8aea-11ee-b22a-0dc7d55af999' },
-	};
-	const bodyParameters = {
-		colorDark: 'black',
-		qrCategory: 'url',
-		text: orderNumber,
-	};
-	const getQrCode = async () => {
+
+	//QRcode Ver2
+	const generateQR = async(text) => {
 		try {
-			const res = await axios.post(
-				'https://qrtiger.com/api/qr/static',
-				bodyParameters,
-				config
-			);
-			setResponse(res.data.url);
+		  setResponse(await QRCode.toDataURL(orderNumber))
 		} catch (err) {
-			console.log(err);
+		  console.error(err)
 		}
-	};
+	  }
+
+	generateQR()
 
 	const componentRef = useRef();
 	const handlePrint = useReactToPrint({
@@ -62,7 +54,7 @@ const UserOrder = ({orderNumber}) => {
 											<div className="bg-white rounded-r-md flex items-center justify-center pb-2">
 												{response ? (
 													<>
-														<div className="w-[40%] pt-5">
+														<div className="w-[50%] pt-5">
 															<img
 																className=" w-52"
 																src={response}
