@@ -1,7 +1,5 @@
-'use client';
 import React, { ComponentProps } from 'react';
 import { ArrowSmallLeftIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/navigation';
 import {
 	List,
 	ListItem,
@@ -12,7 +10,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import api from '@/src/lib/axios';
-import { Package, TransshipmentLog, Location } from '@/src/util';
+import { Package, TransshipmentLog, Location } from '@/src/util/type';
 import { getFormattedDate } from '@/src/util';
 const fetchData = async (package_id: number) => {
 	try {
@@ -57,11 +55,10 @@ const CircleIcon = ({ number }) => {
 };
 
 const Page = async ({ params }: { params: { orderNumber: number } }) => {
-	const router = useRouter();
 	const data = await fetchData(params.orderNumber);
 
 	return (
-		<div className=" w-[100vw] h-[100vh] flex justify-center items-center bg-white">
+		<div className=" w-[100vw] h-[100vh] flex justify-center items-center ">
 			<div className=" w-full h-full px-[5%] py-[2%]">
 				<div className="w-full h-[10%] flex gap-1 text-gray-500">
 					<Link
