@@ -67,19 +67,20 @@ function Page() {
 	const [receivedCount, setReceivedCount] = useState(0);
 	const [rowsData, setRowsData] = useState(null);
 	// const { data: session, status } = useSession();
-	useEffect(() => {
-		const fetchAllData = async () => {
-			// const packageData = await fetchPackageData();
-			// const rows = await fetchRowsData();
-			const res = await getPackageStatistics(1, 'BRANCH_CENTER_MANAGER');
-			console.log('res', res);
-			// setRowsData(rows);
-			// setSentCount(packageData.sentCount);
-			// setReceivedCount(packageData.receivedCount);
-		};
+	// useEffect(() => {
+	// 	const fetchAllData = async () => {
+	// 		// const packageData = await fetchPackageData();
+	// 		// const rows = await fetchRowsData();
+	// 		const res = await getPackageStatistics(1, 'BRANCH_CENTER_MANAGER');
+	// 		console.log('res', res);
+	// 		// setRowsData(rows);
+	// 		// setSentCount(packageData.sentCount);
+	// 		// setReceivedCount(packageData.receivedCount);
+	// 	};
+	// }
 
-	fetchAllData();
-	console.log(rowsData);
+	// fetchAllData();
+	// console.log(rowsData);
 	return (
 	<Provider store={myStore}>
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">

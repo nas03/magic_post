@@ -28,6 +28,7 @@
     "framer-motion": "^10.16.5",
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
+    "print-js": "^1.6.0",
     "prisma": "latest",
     "qrcodejs": "^1.0.0",
     "react": "^18.2.0",

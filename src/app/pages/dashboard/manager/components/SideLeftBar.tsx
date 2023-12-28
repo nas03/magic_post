@@ -6,12 +6,10 @@ import { InputLabel } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useDispatch } from 'react-redux'
 
 function SideLeftBar() {
     const [name, setName] = useState('')
     const [role, setRole] = useState('')
-    const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
 
     const handleClick = (name:any) => {

@@ -33,7 +33,6 @@ function MainContent(props) {
 							alt=""
 						/>
 						<div className="flex flex-col justify-between py-[5%] h-[80%]">
-							//TODO:
 							<span className=" font-semibold text-[#54555E]">Received</span>
 							<div className=" flex justify-between items-end gap-[30%] w-[80%]">
 								<span className=" text-xl font-bold text-[#0F0D16]">

@@ -10,6 +10,8 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useMemo, useCallback } from 'react';
 import SecurityIcon from '@mui/icons-material/Security';
+import { useSelector, useDispatch } from 'react-redux';
+import {updateOrderType, updateOrderQuality} from '../../../../../context/actions/updateDataBranch'
 
 let rows = [
 	{
@@ -17,7 +19,9 @@ let rows = [
 		col1: 0,
 		col2: '',
 		col3: false,
-		col4: 0
+		col4: 0,
+		col5: 'Package',
+		col6: 2
 	},
 ];
 
@@ -26,7 +30,9 @@ type Row = {
 		col1: number,
 		col2: string,
 		col3: boolean,
-		col4: number
+		col4: number,
+		col5: string,
+		col6: number
 }
 
 export default function DataTable({ tableData }) {
@@ -43,6 +49,7 @@ export default function DataTable({ tableData }) {
 	// 	}));
 	// }
 
+	const dispatch = useDispatch()
 
 	const deleteUser = useCallback(
 		(id: GridRowId) => () => {
@@ -79,6 +86,8 @@ export default function DataTable({ tableData }) {
 		{ field: 'col2', headerName: 'Request', width: 200 },
 		{ field: 'col3', headerName: 'Verify', type: 'boolean', width: 100 },
 		{ field: 'col4', headerName: 'PackageID', width: 100 },
+		{ field: 'col5', headerName: 'PackageType', width: 150 },
+		{ field: 'col6', headerName: 'PackageQuality', width: 150 },
 		{
 			field: 'actions',
 			type: 'actions',
@@ -107,7 +116,10 @@ export default function DataTable({ tableData }) {
 		[deleteUser, toggleAdmin, duplicateUser],
 	)
 	
-
+	const getOrderTypeAndQuality = (e:any) => {
+		dispatch(updateOrderType(e.col5))
+		dispatch(updateOrderQuality(e.col6))
+	}
 
 	return (
 		<div style={{ height: 400, width: '100%' }}>
@@ -120,6 +132,7 @@ export default function DataTable({ tableData }) {
 					},
 				}}
 				checkboxSelection
+				onRowClick={(e) =>  getOrderTypeAndQuality(e.row)}
 				disableRowSelectionOnClick
 			/>
 		</div>
