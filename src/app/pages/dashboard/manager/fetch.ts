@@ -1,18 +1,27 @@
-//Get receive package from other locations
+// Get receive package from other locations
 
-import api from '@/src/lib/axios';
-import { formDataToJson } from '@/src/util';
+import { formDataToJson, addSearchParams } from '@/src/util';
 import { User_role } from '@prisma/client';
 
 const getPackageStatistics = async (location_id: number, role: User_role) => {
 	try {
-		const response = await api.get('/api/manager/package', {
-			params: {
-				location_id,
-				role,
+		const searchParams = {
+			location_id: location_id,
+			role: role,
+		};
+		const url = addSearchParams(
+			new URL('http://localhost:3000/api/manager/package'),
+			searchParams
+		);
+
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
 			},
 		});
-		const data = response.data.data;
+		const data = await response.json();
+		console.log('data', data);
 		return data;
 	} catch (error) {
 		console.log('Error fetching manager package statistics');
@@ -30,20 +39,52 @@ const createNewEmployeeAccount = async (e: any) => {
 		role: formData.role,
 		location_id: formData.location_id,
 	};
-	const response = await api.post('/api/manager/account', data);
-	if (!response) {
-		//TODO: show error
+
+	try {
+		const response = await fetch('http://localhost:3000/api/manager/account', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+
+		if (!response.ok) {
+			// Handle error here
+			console.error('Error creating employee account');
+			return;
+		}
+
+		// Handle successful response here
+		console.log('Employee account created successfully');
+	} catch (error) {
+		console.error('Error creating employee account', error);
 	}
 };
 
 const deleteEmployeeAccount = async (email: string) => {
-	const response = await api.delete('/api/manager/account', {
-		params: {
-			email,
-		},
-	});
-	if (!response) {
-		//TODO: show error
+	try {
+		const searchParams = {
+			email: email,
+		};
+		const url = addSearchParams(
+			new URL('http://localhost:3000/api/manager/account'),
+			searchParams
+		);
+		const response = await fetch(url, {
+			method: 'DELETE',
+		});
+
+		if (!response.ok) {
+			// Handle error here
+			console.error('Error deleting employee account');
+			return;
+		}
+
+		// Handle successful response here
+		console.log('Employee account deleted successfully');
+	} catch (error) {
+		console.error('Error deleting employee account', error);
 	}
 };
 
@@ -54,8 +95,25 @@ const updateEmployeeAccount = async (e: any) => {
 		email: formData.email,
 		fullName: formData.fullName,
 	};
-	const response = await api.patch('/api/manager/account', data);
-	if (!response) {
-		//TODO: Show error
+
+	try {
+		const response = await fetch('http://localhost:3000/api/manager/account', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+
+		if (!response.ok) {
+			// Handle error here
+			console.error('Error updating employee account');
+			return;
+		}
+
+		// Handle successful response here
+		console.log('Employee account updated successfully');
+	} catch (error) {
+		console.error('Error updating employee account', error);
 	}
 };

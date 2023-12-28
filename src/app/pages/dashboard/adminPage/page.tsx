@@ -1,7 +1,7 @@
 'use client';
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Location } from '@/src/util';
+import { Location, addSearchParams } from '@/src/util';
 import {
 	MagnifyingGlassIcon,
 	BellAlertIcon,
@@ -12,7 +12,7 @@ import { MainContent, SideLeftBar, SideRightBar } from './components';
 import { signOut } from 'next-auth/react';
 import api from '@/src/lib/axios';
 import { GridRowsProp } from '@mui/x-data-grid';
-import { Provider } from 'react-redux'
+import { User_role } from '@prisma/client';import { Provider } from 'react-redux'
 import myStore from '../../../context/store'
 
 const fetchPackageData = async () => {
@@ -36,22 +36,50 @@ const fetchRowsData = async () => {
 		return [];
 	}
 };
+const getPackageStatistics = async (location_id: number, role: User_role) => {
+	try {
+		const searchParams = {
+			location_id: location_id,
+			role: role,
+		};
+		const url = addSearchParams(
+			new URL('http://localhost:3000/api/manager/package'),
+			searchParams
+		);
+
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const data = await response.json();
+		console.log('data', data);
+		return data;
+	} catch (error) {
+		console.log('Error fetching manager package statistics');
+		throw error;
+	}
+};
+
 function Page() {
 	const [sentCount, setSentCount] = useState(0);
 	const [receivedCount, setReceivedCount] = useState(0);
 	const [rowsData, setRowsData] = useState(null);
 	// const { data: session, status } = useSession();
-
-	const fetchAllData = async () => {
-		const packageData = await fetchPackageData();
-		const rows = await fetchRowsData();
-		setRowsData(rows);
-		setSentCount(packageData.sentCount);
-		setReceivedCount(packageData.receivedCount);
-	};
+	useEffect(() => {
+		const fetchAllData = async () => {
+			// const packageData = await fetchPackageData();
+			// const rows = await fetchRowsData();
+			const res = await getPackageStatistics(1, 'BRANCH_CENTER_MANAGER');
+			console.log('res', res);
+			// setRowsData(rows);
+			// setSentCount(packageData.sentCount);
+			// setReceivedCount(packageData.receivedCount);
+		};
 
 	fetchAllData();
-	// console.log(rowsData);
+	console.log(rowsData);
 	return (
 	<Provider store={myStore}>
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
