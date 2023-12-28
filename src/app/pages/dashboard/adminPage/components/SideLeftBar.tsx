@@ -120,7 +120,7 @@ function SideLeftBar() {
 							<XCircleIcon
 								onClick={() => setShowModal(false)}
 								color="red"
-								className=" z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain  cursor-pointer"
+								className=" z-50 w-5 h-5 absolute right-[5%] top-2 object-contain cursor-pointer"
 							/>
 							<div className="flex justify-center py-5 items-center text-2xl font-semibold text-gray-900 dark:text-white">
 								<img

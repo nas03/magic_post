@@ -8,7 +8,32 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import api from '@/src/lib/axios';
 import { useDispatch } from 'react-redux';
 import { updateOrderList, updateOrderName, updateOrderType } from '../../../../../context/actions/updateOrderList'
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import { useMemo, useCallback } from 'react';
+import SecurityIcon from '@mui/icons-material/Security';
 
+
+
+
+let rows = [
+	{
+		id: 0,
+		col1: 0,
+		col2: '',
+		col3: '',
+		Approve: false,
+	},
+];
+
+type Row = {
+		id: number,
+		col1: number,
+		col2: string,
+		col3: string,
+		Approve: boolean,
+}
 
 export const revalidate = 30;
 
@@ -38,34 +63,23 @@ const fetchData = async () => {
 	}
 };
 
-const columns: GridColDef[] = [
-	{ field: 'col1', headerName: 'Post ID', width: 100 },
-	{ field: 'col2', headerName: 'Post', width: 300 },
-	{ field: 'col3', headerName: 'Type', width: 100 },
-	// {
-	// 	field: 'col6',
-	// 	headerName: 'Actions',
-	// 	sortable: false,
-	// 	width: 140,
-	// 	renderCell: () => <MoreHorizIcon/>,
-	// },
-]
+
 
 export default function DataTable() {
-	const [rows, setRows] = useState<GridRowsProp>([]);
-	const [selectedRow, setSelectedRow] = useState([])	
+	const [selectedRow, setSelectedRow] = useState([])
+	const [row, setRow] = useState<Row[]>(rows);
 
 	const dispatch = useDispatch()
 
-	useEffect(() => {
-		const fetchDataAndSetRows = async () => {
-			const data = await fetchData();
-			setRows(data);
-			console.log(data);
-		};
+	// useEffect(() => {
+	// 	const fetchDataAndSetRows = async () => {
+	// 		const data = await fetchData();
+	// 		setRow(data);
+	// 		console.log(data);
+	// 	};
 
-		fetchDataAndSetRows();
-	}, []);
+	// 	fetchDataAndSetRows();
+	// }, []);
 
 	const handleClick = (item:any) => {
 		dispatch(updateOrderList(item.row))
@@ -74,11 +88,74 @@ export default function DataTable() {
 		console.log('name', item.row.col2)
 	}
 
+	const deleteUser = useCallback(
+		(id: GridRowId) => () => {
+		  setTimeout(() => {
+			setRow((prevRows) => prevRows.filter((row) => row.id !== id));
+		  });
+		},
+		[],
+	  )
+	
+	  const toggleAdmin = useCallback(
+		(id: GridRowId) => () => {
+		  setRow((prevRows) =>
+			prevRows.map((row) =>
+			  row.id === id ? { ...row, Approve: !row.Approve } : row,
+			),
+		  );
+		},
+		[],
+	  );
+	
+	  const duplicateUser = useCallback(
+		(id: GridRowId) => () => {
+		  setRow((prevRows) => {
+			const rowToDuplicate = prevRows.find((row) => row.id === id)!;
+			return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
+		  });
+		},
+		[],
+	  );
+	
+	const columns = useMemo<GridColDef<Row>[]>(() => [
+		{ field: 'col1', headerName: 'Post ID', width: 100 },
+		{ field: 'col2', headerName: 'Post', width: 300 },
+		{ field: 'col3', headerName: 'Type', width: 100 },
+		{ field: 'Approve', type: 'boolean', width: 120 },
+		{
+			field: 'actions',
+			type: 'actions',
+			width: 80,
+			getActions: (params) => [
+			  <GridActionsCellItem
+				icon={<DeleteIcon />}
+				label="Delete"
+				onClick={deleteUser(params.id)}
+			  />,
+			  <GridActionsCellItem
+				icon={<SecurityIcon />}
+				label="Toggle Admin"
+				onClick={toggleAdmin(params.id)}
+				showInMenu
+			  />,
+			  <GridActionsCellItem
+				icon={<FileCopyIcon />}
+				label="Duplicate User"
+				onClick={duplicateUser(params.id)}
+				showInMenu
+			  />,
+			],
+		  },
+		],
+		[deleteUser, toggleAdmin, duplicateUser],
+	)
+
 	return (
 		<div style={{ height: 300, width: '100%' }}>
 			<DataGrid
 				onRowClick={(item) => handleClick(item)}
-				rows={rows}
+				rows={row}
 				columns={columns}
 				initialState={{
 					pagination: {

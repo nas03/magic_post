@@ -12,13 +12,15 @@ import { MainContent, SideLeftBar, SideRightBar } from './components';
 import { signOut } from 'next-auth/react';
 import api from '@/src/lib/axios';
 import { GridRowsProp } from '@mui/x-data-grid';
+import { Provider } from 'react-redux'
+import myStore from '../../../context/store'
 
 const fetchPackageData = async () => {
 	const response = await api.get('/api/admin/package');
 	const data = response.data.data._sum;
 	const sentCount = data.sentCount;
 	const receivedCount = data.receivedCount;
-	console.log(sentCount, receivedCount);
+	// console.log(sentCount, receivedCount);
 	return {
 		sentCount,
 		receivedCount,
@@ -49,8 +51,9 @@ function Page() {
 	};
 
 	fetchAllData();
-	console.log(rowsData);
+	// console.log(rowsData);
 	return (
+	<Provider store={myStore}>
 		<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
 			<div className=" w-full h-[10%] flex justify-between items-center px-[1%] border-y-[1px] shadow-md">
 				<div className=" w-[20%] flex gap-[3%]  items-center">
@@ -127,6 +130,7 @@ function Page() {
 				</div>
 			</div>
 		</div>
+	</Provider>
 	);
 }
 

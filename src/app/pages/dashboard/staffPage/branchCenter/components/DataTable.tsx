@@ -5,46 +5,114 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import api from '@/src/lib/axios';
 import { useSession } from 'next-auth/react';
 import { TransshipmentLog } from '@/src/util';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import { useMemo, useCallback } from 'react';
+import SecurityIcon from '@mui/icons-material/Security';
 
-const columns: GridColDef[] = [
-	{ field: 'col1', headerName: 'ID', width: 100 },
-	{ field: 'col2', headerName: 'Request', width: 200 },
-	{ field: 'col3', headerName: 'Verify', width: 100 },
-	{ field: 'col4', headerName: 'PackageID', width: 100 },
+let rows = [
 	{
-		field: 'col6',
-		headerName: 'Actions',
-		sortable: false,
-		width: 140,
-		renderCell: () => <MoreHorizIcon />,
+		id: 0,
+		col1: 0,
+		col2: '',
+		col3: false,
+		col4: 0
 	},
 ];
 
+type Row = {
+		id: number,
+		col1: number,
+		col2: string,
+		col3: boolean,
+		col4: number
+}
+
 export default function DataTable({ tableData }) {
-	let rows: GridRowsProp = [
-		{
-			id: 0,
-			col1: 0,
-			col2: null,
-			col3: null,
-			col4: null,
-			col5: <MoreHorizIcon />,
+	const [row, setRow] = useState<Row[]>(rows);
+
+
+	// if (tableData && tableData[0] != null) {
+	// 	rows = tableData.map((log: TransshipmentLog, index) => ({
+	// 		id: index + 1,
+	// 		col1: log.id,
+	// 		col2: log.request_location,
+	// 		col3: log.verified_timestamp ? 'Confirmed' : 'Pending',
+	// 		col4: log.package_id,
+	// 	}));
+	// }
+
+
+	const deleteUser = useCallback(
+		(id: GridRowId) => () => {
+		  setTimeout(() => {
+			setRow((prevRows) => prevRows.filter((row) => row.id !== id));
+		  });
 		},
-	];
-	if (tableData && tableData[0] != null) {
-		rows = tableData.map((log: TransshipmentLog, index) => ({
-			id: index + 1,
-			col1: log.id,
-			col2: log.request_location,
-			col3: log.verified_timestamp ? 'Confirmed' : 'Pending',
-			col4: log.package_id,
-			col5: <MoreHorizIcon />,
-		}));
-	}
+		[],
+	  )
+	
+	  const toggleAdmin = useCallback(
+		(id: GridRowId) => () => {
+		  setRow((prevRows) =>
+			prevRows.map((row) =>
+			  row.id === id ? { ...row, col3: !row.col3 } : row,
+			),
+		  );
+		},
+		[],
+	  );
+	
+	  const duplicateUser = useCallback(
+		(id: GridRowId) => () => {
+		  setRow((prevRows) => {
+			const rowToDuplicate = prevRows.find((row) => row.id === id)!;
+			return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
+		  });
+		},
+		[],
+	  );
+
+	  const columns = useMemo<GridColDef<Row>[]>(() => [
+		{ field: 'col1', headerName: 'ID', width: 100 },
+		{ field: 'col2', headerName: 'Request', width: 200 },
+		{ field: 'col3', headerName: 'Verify', type: 'boolean', width: 100 },
+		{ field: 'col4', headerName: 'PackageID', width: 100 },
+		{
+			field: 'actions',
+			type: 'actions',
+			width: 80,
+			getActions: (params) => [
+			  <GridActionsCellItem
+				icon={<DeleteIcon />}
+				label="Delete"
+				onClick={deleteUser(params.id)}
+			  />,
+			  <GridActionsCellItem
+				icon={<SecurityIcon />}
+				label="Toggle Admin"
+				onClick={toggleAdmin(params.id)}
+				showInMenu
+			  />,
+			  <GridActionsCellItem
+				icon={<FileCopyIcon />}
+				label="Duplicate User"
+				onClick={duplicateUser(params.id)}
+				showInMenu
+			  />,
+			],
+		  },
+		],
+		[deleteUser, toggleAdmin, duplicateUser],
+	)
+	
+
+
 	return (
 		<div style={{ height: 400, width: '100%' }}>
 			<DataGrid
-				rows={rows}
+				rows={row}
 				columns={columns}
 				initialState={{
 					pagination: {
