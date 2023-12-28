@@ -1,8 +1,7 @@
 import { XCircleIcon } from '@heroicons/react/24/solid'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import {updateSenderBranch,  updateSenderLocation, updateSenderPhone, updateReceiverBranch, updateReceiverLocation, updateReceiverPhone} from '../../../../../context/actions/updateDataBranch'
-// import { useRouter } from 'next/router'
+import {updateSenderBranch,  updateSenderLocation, updateSenderPhone, updateReceiverBranch, updateReceiverLocation, updateReceiverPhone, updateCustomInstruction} from '../../../../../context/actions/updateDataBranch'
 import Link from 'next/link';
 
 const CreateUserOrder = () => {
@@ -11,7 +10,8 @@ const CreateUserOrder = () => {
     const [orderNumber, setOrderNumber] = useState('');
     const dispatch = useDispatch();
 	const dataBranch = useSelector((state:any) => state.dataBranch)
-	// const router = useRouter()
+
+	console.log('sender', dataBranch.sender)
 
     const openBillHandle = () => {
 		setShowModalBill(true);
@@ -21,8 +21,6 @@ const CreateUserOrder = () => {
 
 
   return (
-           
-
              <>
 					<button
 						onClick={() => openBillHandle()}
@@ -118,12 +116,16 @@ const CreateUserOrder = () => {
 													</div>
 													<div>
 														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-															Order Quality
+															Custom Intruction
 														</label>
-														<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{dataBranch.orderQuality}</span>
+														<input
+															type="text"
+															onChange={(e) => dispatch(updateCustomInstruction(e.target.value))}
+															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+															required
+														/>
 													</div>
-                                                {/* <button type="submit" onClick={() => router.push('/user-Order')} className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Generate Bill</button> */}
-                                                <Link href={'/pages/dashboard/staffPage/branchCenter/user-Order'} className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Generate Bill</Link>
+                                               <Link href={'/pages/dashboard/staffPage/branchCenter/user-Order'} className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Generate Bill</Link>
                                             </form>
                                         </div>
                                     </div>

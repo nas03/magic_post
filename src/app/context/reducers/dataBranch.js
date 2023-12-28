@@ -8,7 +8,7 @@ const initialState = {
    receiverLocation: '',
    receiverPhone: '',
    orderType: '',
-   orderQuality: 0
+   customInstruction: ''
 }
 
 const dataBranchReducer = (state = initialState, action) => {
@@ -46,12 +46,12 @@ const dataBranchReducer = (state = initialState, action) => {
         case 'UPDATEORDERTYPE':
             return {
                 ...state,
-                orderType: state.orderType.concat(action.Type + ', ')
+                orderType: action.Type
             }   
-        case 'UPDATEORDERQUALITY':
+        case 'UPDATECUSTOMINSTRUCTION':
             return {
                 ...state,
-                orderQuality: action.Quality + state.orderQuality
+                orderQuality: action.Instruction
             }   
         default:
             return state

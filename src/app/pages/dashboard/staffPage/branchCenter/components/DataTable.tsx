@@ -11,7 +11,7 @@ import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { useMemo, useCallback } from 'react';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useSelector, useDispatch } from 'react-redux';
-import {updateOrderType, updateOrderQuality} from '../../../../../context/actions/updateDataBranch'
+import {updateOrderType} from '../../../../../context/actions/updateDataBranch'
 
 let rows = [
 	{
@@ -116,11 +116,6 @@ export default function DataTable({ tableData }) {
 		[deleteUser, toggleAdmin, duplicateUser],
 	)
 	
-	const getOrderTypeAndQuality = (e:any) => {
-		dispatch(updateOrderType(e.col5))
-		dispatch(updateOrderQuality(e.col6))
-	}
-
 	return (
 		<div style={{ height: 400, width: '100%' }}>
 			<DataGrid
@@ -132,7 +127,7 @@ export default function DataTable({ tableData }) {
 					},
 				}}
 				checkboxSelection
-				onRowClick={(e) =>  getOrderTypeAndQuality(e.row)}
+				onRowClick={(e) =>  dispatch(updateOrderType(e.row.col5))}
 				disableRowSelectionOnClick
 			/>
 		</div>

@@ -47,7 +47,7 @@
     "components/QRCode.jsx",
     "src/components/CustomButton.jsx",
     "src/app/pages/login/page.jsx"
-, "src/app/pages/dashboard/leaderPage/gatherPoint/components/MainContent.jsx", "src/app/pages/dashboard/adminPage/components/DataTable.tsx", "src/app/pages/dashboard/staffPage/branchCenter/components/CreateUserOrder.tsx"  ],
+, "src/app/pages/dashboard/leaderPage/gatherPoint/components/MainContent.jsx", "src/app/pages/dashboard/adminPage/components/DataTable.tsx", "src/app/pages/dashboard/staffPage/branchCenter/components/CreateUserOrder.tsx", "src/app/pages/dashboard/staffPage/branchCenter/components/UserOrder.jsx"  ],
   "exclude": [
     "node_modules"
   ]

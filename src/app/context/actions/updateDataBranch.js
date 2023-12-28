@@ -36,7 +36,7 @@ export const updateOrderType = (type) => ({
     Type: type
 })
 
-export const updateOrderQuality = (quality) => ({
-    type: 'UPDATEORDERQUALITY',
-    Quality: quality
+export const updateCustomInstruction = (instruction) => ({
+    type: 'UPDATECUSTOMINSTRUCTION',
+    Instruction: instruction
 })
