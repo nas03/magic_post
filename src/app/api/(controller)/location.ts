@@ -120,7 +120,7 @@ const deleteLocationById = async (locationId: number) => {
 	try {
 		const existingLocation = await prisma.location.findUnique({
 			where: { id: locationId },
-			include: { transitionLog: true },
+			include: { transshipmentLog: true },
 		});
 
 		if (!existingLocation) {
@@ -129,7 +129,7 @@ const deleteLocationById = async (locationId: number) => {
 		}
 
 		// Delete associated TransshipmentLog records
-		const transitionLogIds = existingLocation.transitionLog.map(
+		const transitionLogIds = existingLocation.transshipmentLog.map(
 			(log) => log.id
 		);
 		await prisma.transshipmentLog.deleteMany({

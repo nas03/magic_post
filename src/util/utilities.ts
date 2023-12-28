@@ -29,4 +29,10 @@ const formDataToJson = (formData: FormData): FormDataJson => {
 	});
 	return jsonObject;
 };
-export { calculator, getFormattedDate, formDataToJson };
+const addSearchParams = (url: URL, searchParams: object) => {
+	Object.keys(searchParams).forEach((key) =>
+		url.searchParams.append(key, searchParams[key])
+	);
+	return url;
+};
+export { calculator, getFormattedDate, formDataToJson, addSearchParams };

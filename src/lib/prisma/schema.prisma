@@ -14,15 +14,15 @@ model Customer {
 }
 
 model Location {
-  id            Int                 @id @default(autoincrement())
-  name          String
-  location      String
-  type          Location_type
-  statistics    LocationStatistics?
+  id               Int                 @id @default(autoincrement())
+  name             String
+  location         String
+  type             Location_type
+  statistics       LocationStatistics?
   transshipmentLog TransshipmentLog[]
-  employees     User[]
-  packages      Package[]
-  shipmentLog   ShipmentLog[]
+  employees        User[]
+  packages         Package[]
+  shipmentLog      ShipmentLog[]
 }
 
 model LocationStatistics {
@@ -65,8 +65,8 @@ model TransshipmentLog {
   package_id           Int
   location             Location  @relation(fields: [location_id], references: [id])
 
-  @@index([location_id], map: "TransshipmentLog_location_id_idx")
-  @@index([package_id], map: "TransshipmentLog_package_id_idx")
+  @@index([location_id], map: "TransitionLog_location_id_idx")
+  @@index([package_id], map: "TransitionLog_package_id_idx")
 }
 
 model ShipmentLog {
