@@ -159,38 +159,37 @@ const MainContext = (props) => {
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 														Order Name
 													</label>
-													<span
+													<input
 														id="Order Name"
-														placeholder="Empty"
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-														{orderNameList}
-													</span>
+														placeholder={orderNameList}
+														required
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 														Order Type
 													</label>
-													<span
+													<input
 														id="Order Name"
-														placeholder="Empty"
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-														{orderTypeList}
-													</span>
+														placeholder={orderTypeList}
+														required
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 														Come From
 													</label>
-													<span
+													<input
 														id="come from"
 														placeholder="Empty"
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "></span>
+														required
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 														Roads to goal
 													</label>
-													<div className=" w-full h-[5vw] flex justify-between">
+													{/* <div className=" w-full h-[5vw] flex justify-between">
 														{
 															<div className=" w-full, h-[60%]">
 																<MapPinIcon className=" w-3 h-3 object-contain" />
@@ -199,7 +198,12 @@ const MainContext = (props) => {
 																</span>
 															</div>
 														}
-													</div>
+													</div> */}
+													<input
+														id="Roads"
+														placeholder="Empty"
+														required
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
 												</div>
 												<button
 													type="submit"
