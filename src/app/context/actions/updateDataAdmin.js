@@ -18,3 +18,15 @@ export const updateIDAdmin = (id) => ({
     type: 'UPDATEIDADMIN',
     id: id
 })
+
+
+export const updateTableType = (type) => ({
+    type: 'UPDATETABLETYPEADMIN',
+    tableType: type
+})
+
+
+export const updateRoleAdmin = (role) => ({
+    type: 'UPDATEROLEADMIN',
+    Role: role
+})

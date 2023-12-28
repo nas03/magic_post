@@ -4,7 +4,9 @@ const initialState = {
    IDAm: '',
    nameAm: '',
    locationAm: '',
-   typeAm: ''
+   typeAm: '',
+   tableType: '',
+   roleAm: ''
 }
 
 const dataAdminReducer = (state = initialState, action) => {
@@ -28,6 +30,16 @@ const dataAdminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 typeAm: action.Type
+            }   
+        case 'UPDATETABLETYPEADMIN':
+            return {
+                ...state,
+                tableType: action.tableType
+            }   
+        case 'UPDATEROLEADMIN':
+            return {
+                ...state,
+                roleAm: action.Role
             }   
         default:
             return state

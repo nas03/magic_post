@@ -19,14 +19,21 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import api from '@/src/lib/axios';
+import {updateTableType} from '../../../../context/actions/updateDataAdmin'
+import { useDispatch } from 'react-redux'
 
 function SideLeftBar() {
 	const [name, setName] = useState('');
 	const [role, setRole] = useState('');
 	const [showModal, setShowModal] = useState(false);
+	const dispatch = useDispatch()
+	
+
+
 	//* Handle create account function
 	const handleClick = async (name: any) => {
 		setName(name);
+		dispatch(updateTableType(name))
 	};
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();

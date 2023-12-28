@@ -5,10 +5,15 @@ import DateTimePickerValue from './DateTime';
 import DataTable from './DataTable';
 import { useSession } from 'next-auth/react';
 import api from '@/src/lib/axios';
+import DataAccount from './DataAccount';
+import { useSelector } from 'react-redux'
+import { table } from 'console';
 
 
 function MainContent(props) {
-  
+	const tableType = useSelector((state: any) => state.dataAdmin.tableType)
+	
+
 	return (
 		<div className=" w-full h-full p-[2%]">
 			<div className=" w-full h-[30%] flex flex-col gap-[5%]">
@@ -82,7 +87,14 @@ function MainContent(props) {
 					</span>
 					<DateTimePickerValue />
 				</div>
-				<DataTable tableData={props.rowsData} />
+				{/* <DataTable tableData={props.rowsData} /> */}
+				{
+					tableType === 'Gathering Leader'  || tableType == 'Transaction Leader' 
+					?
+					<DataAccount/>
+					:
+					<DataTable tableData={props.rowsData} />
+				}
 			</div>
 		</div>
 	);
