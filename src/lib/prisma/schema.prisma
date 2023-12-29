@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Customer {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Location {
+  id               Int                 @id @default(autoincrement())
+  name             String
+  location         String
+  type             Location_type
+  statistics       LocationStatistics?
+  transshipmentLog TransshipmentLog[]
+  employees        User[]
+  packages         Package[]
+  shipmentLog      ShipmentLog[]
+}
+
+model LocationStatistics {
+  id            Int      @id @default(autoincrement())
+  sentCount     Int
+  receivedCount Int
+  location_id   Int      @unique
+  location      Location @relation(fields: [location_id], references: [id])
+}
+
+model Package {
+  id                      Int                  @id @default(autoincrement())
+  sender                  String
+  receiver                String
+  sender_location         String
+  receiver_location       String
+  sender_phone            String
+  receiver_phone          String
+  type                    Package_type
+  fee                     Float
+  received_location_id    Int
+  state                   Package_status       @default(ONGOING)
+  destination_location_id Int
+  shipment_id             Int?                 @unique
+  customerInstruction     Customer_instruction @default(CALL)
+  received_location       Location             @relation(fields: [received_location_id], references: [id])
+  shipment                ShipmentLog?         @relation(fields: [shipment_id], references: [id])
+
+  @@index([received_location_id])
+  @@index([destination_location_id])
+}
+
+model TransshipmentLog {
+  id                   Int       @id @default(autoincrement())
+  request_timestamp    DateTime  @default(now())
+  verified_timestamp   DateTime?
+  request_location     Int
+  destination_location Int
+  location_id          Int
+  package_id           Int
+  location             Location  @relation(fields: [location_id], references: [id])
+
+  @@index([location_id], map: "TransitionLog_location_id_idx")
+  @@index([package_id], map: "TransitionLog_package_id_idx")
+}
+
+model ShipmentLog {
+  id                Int            @id @default(autoincrement())
+  request_timestamp DateTime       @default(now())
+  status            Package_status
+  location_id       Int
+  package_id        Int
+  location          Location       @relation(fields: [location_id], references: [id])
+  package           Package?
+
+  @@index([location_id])
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  fullName    String
+  role        User_role
+  location_id Int
+  location    Location  @relation(fields: [location_id], references: [id])
+
+  @@index([location_id])
+  @@index([id])
+}
+
+enum Location_type {
+  BRANCH
+  TRANSSHIPMENT_HUB
+}
+
+enum Package_status {
+  ONGOING
+  SHIP
+  RECEIVED
+  RETURNED
+}
+
+enum User_role {
+  LEADER
+  TRANSSHIPMENT_HUB_MANAGER
+  BRANCH_CENTER_MANAGER
+  BRANCH_OFFICER
+  HUB_OFFICER
+  CUSTOMER
+}
+
+enum Customer_instruction {
+  CANCEL
+  INSTANT_RETURN
+  RETURN_BEFORE
+  CALL
+  RETURN_AFTER_EXPIRED
+}
+
+enum Package_type {
+  DOCUMENT
+  GOODS
+}

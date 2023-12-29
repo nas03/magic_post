@@ -1,0 +1,293 @@
+import * as React from 'react';
+import {
+	DataGrid,
+	GridRowsProp,
+	GridColDef,
+	GridActionsCellItem,
+	GridRowId,
+} from '@mui/x-data-grid';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+	LocationType,
+	Package,
+	addSearchParams,
+	formDataToJson,
+} from '@/src/util';
+import { Location } from '@/src/util';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
+import { MapPinIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+	updateNameAdmin,
+	updateIDAdmin,
+	updateLocationAdmin,
+	updateTypeAdmin,
+} from '../../../../context/actions/updateDataAdmin';
+import { Location_type } from '@prisma/client';
+
+let rows: Row[] = [
+	{
+		id: 0,
+		col1: 0,
+		col2: '',
+		col3: '',
+		col4: 'false',
+	},
+];
+
+type Row = {
+	id: number;
+	col1: number;
+	col2: string;
+	col3: string;
+	col4: string;
+};
+
+const fetchPackage = async (location_id: number, role: string) => {
+	const url = new URL(
+		addSearchParams(new URL('http://localhost:3000/api/manager/shipment-log'), {
+			location_id: location_id,
+		})
+	);
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		next: {
+			revalidate: 3600,
+		},
+		cache: 'reload',
+	});
+	const { data } = await response.json();
+	return data;
+};
+const DataTable = ({ tableType, managerRole, managerLocation }) => {
+	const [row, setRow] = useState<Row[]>(rows);
+	const [showModal, setShowModal] = useState(false);
+	const [ID, setID] = useState('');
+	const [name, setName] = useState('');
+	const [location, setLocation] = useState('');
+	const [type, setType] = useState('');
+	const dispatch = useDispatch();
+	const dataAdmin = useSelector((state: any) => state.dataAdmin);
+	const [selectedUser, setSelectedUser] = useState(null);
+
+	const duplicateUser = useCallback(
+		(id: GridRowId) => () => {
+			setRow((prevRows) => {
+				const rowToDuplicate = prevRows.find((row) => row.id === id);
+				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
+			});
+		},
+		[]
+	);
+	const handleUpdateLocation = async (e: any) => {
+		e.preventDefault();
+		const formData = formDataToJson(new FormData(e.target));
+		const data = {
+			id: formData.id as string,
+			location: formData.location as string,
+			name: formData.name as string,
+			type: formData.type as Location_type,
+		};
+		const response = await fetch('http://localhost:3000/api/manager/location', {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+			cache: 'no-cache',
+		});
+		const body = await response.json();
+		if (!body.data) {
+			//TODO: Show error
+		}
+		await fetchData();
+	};
+	const modifyUser = (item: any) => {
+		dispatch(updateIDAdmin(item.col1));
+		dispatch(updateNameAdmin(item.col2));
+		dispatch(updateLocationAdmin(item.col3));
+		dispatch(updateTypeAdmin(item.col4));
+		setShowModal(true);
+	};
+
+	const columns = useMemo<GridColDef<Row>[]>(
+		() => [
+			{ field: 'col1', headerName: 'ID', width: 100 },
+			{ field: 'col2', headerName: 'State', width: 100 },
+			{ field: 'col3', headerName: 'Type', width: 100 },
+			{ field: 'col4', headerName: 'Sender', width: 150 },
+			{ field: 'col5', headerName: 'Receiver', width: 150 },
+			{
+				field: 'actions',
+				type: 'actions',
+				width: 80,
+				getActions: (params) => [
+					<GridActionsCellItem
+						icon={<DisplaySettingsIcon />}
+						label="Modify"
+						onClick={() => modifyUser(params.row)}
+						showInMenu
+					/>,
+					<GridActionsCellItem
+						icon={<FileCopyIcon />}
+						label="Duplicate User"
+						onClick={duplicateUser(params.id)}
+						showInMenu
+					/>,
+				],
+			},
+		],
+		[duplicateUser]
+	);
+
+	const modifyInfo = () => {
+		setShowModal(false);
+	};
+	//DATA PROCESSING
+
+	const fetchData = async () => {
+		const data = await fetchPackage(managerLocation, managerRole);
+
+		const tablePackageRow = data.map((pack: Package, index) => {
+			return {
+				id: index + 1,
+				col1: pack.id,
+				col2: pack.state,
+				col3: pack.type,
+				col4: pack.sender,
+				col5: pack.receiver,
+			};
+		});
+		setRow(tablePackageRow);
+	};
+	useEffect(() => {
+		fetchData();
+		const intervalId = setInterval(() => {
+			fetchData();
+		}, 3600 * 1000);
+
+		return () => clearInterval(intervalId);
+	}, [tableType]);
+
+	return (
+		<>
+			<div style={{ height: 400, width: '100%' }}>
+				<DataGrid
+					rows={row}
+					columns={columns}
+					initialState={{
+						pagination: {
+							paginationModel: { pageSize: 5, page: 0 },
+						},
+					}}
+					checkboxSelection
+					disableRowSelectionOnClick
+				/>
+			</div>
+			{showModal ? (
+				<>
+					<div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+						<div className=" w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center relative">
+							<XCircleIcon
+								onClick={() => setShowModal(false)}
+								color="red"
+								className=" z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain  cursor-pointer"
+							/>
+							<div className="flex items-center py-5 text-2xl font-semibold text-gray-900 dark:text-white ">
+								<img
+									className="w-8 h-8 mr-2 rounded-full"
+									src="/image/magic-post-logo.png"
+									alt="logo"
+								/>
+								Magic Post
+							</div>
+							<div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+								<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+									<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+										Modify Information
+									</h1>
+									<form
+										className="space-y-4 md:space-y-6"
+										action="#"
+										onSubmit={(e) => {
+											handleUpdateLocation(e);
+											modifyInfo();
+										}}>
+										<div>
+											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												ID
+											</label>
+											<input
+												type="text"
+												name="id"
+												id="id"
+												onChange={(e) => setID(e.target.value)}
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												defaultValue={dataAdmin.IDAm}
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Name
+											</label>
+											<input
+												type="text"
+												name="name"
+												id="name"
+												defaultValue={dataAdmin.nameAm}
+												onChange={(e) => setName(e.target.value)}
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Location
+											</label>
+											<input
+												type="text"
+												name="location"
+												id="location"
+												defaultValue={dataAdmin.locationAm}
+												onChange={(e) => setLocation(e.target.value)}
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Type
+											</label>
+											<input
+												type="text"
+												name="type"
+												id="type"
+												defaultValue={dataAdmin.typeAm}
+												onChange={(e) => setType(e.target.value)}
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+										<button
+											type="submit"
+											className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+											Confirm Changes
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+				</>
+			) : null}
+		</>
+	);
+};
+
+export default DataTable;
