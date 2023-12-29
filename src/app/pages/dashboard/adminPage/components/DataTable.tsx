@@ -20,6 +20,7 @@ import {
 	updateTypeAdmin,
 } from '../../../../context/actions/updateDataAdmin';
 import { Location_type } from '@prisma/client';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 let rows: Row[] = [
 	{
@@ -78,6 +79,14 @@ const DataTable = ({ tableType }) => {
 		},
 		[]
 	);
+
+	const deletePackage = useCallback(
+		(id: number) => () => {
+			setRow((prevRows) => prevRows.filter((row) => row.id !== id));
+		},
+		[]
+	);
+
 	const handleUpdateLocation = async (e: any) => {
 		e.preventDefault();
 		const formData = formDataToJson(new FormData(e.target));
@@ -121,6 +130,11 @@ const DataTable = ({ tableType }) => {
 				width: 80,
 				getActions: (params) => [
 					<GridActionsCellItem
+						icon={<DeleteIcon />}
+						label="Delete"
+						onClick={deletePackage(params.id)}
+					/>,
+					<GridActionsCellItem
 						icon={<DisplaySettingsIcon />}
 						label="Modify"
 						onClick={() => modifyUser(params.row)}
@@ -135,7 +149,7 @@ const DataTable = ({ tableType }) => {
 				],
 			},
 		],
-		[duplicateUser]
+		[duplicateUser, deletePackage]
 	);
 
 	const modifyInfo = () => {
