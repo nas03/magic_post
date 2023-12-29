@@ -81,30 +81,25 @@ const getPackageLog = async (orderNumber: number) => {
 	console.log('order', orderNumber);
 	const data = await prisma.transshipmentLog.findMany({
 		where: {
-			AND: {
-				package_id: {
-					equals: Number(orderNumber),
-				},
-				verified_timestamp: {
-					not: {
-						equals: null,
-					},
-				},
+			package_id: {
+				equals: Number(orderNumber),
 			},
+		},
+		orderBy: {
+			id: 'asc',
 		},
 		select: {
 			destination_location: true,
 		},
 	});
-	console.log('data', data);
+	
 	const loc = await Promise.all(
 		data.map(async (log) => {
 			const des = log.destination_location;
-			const location = await prisma.location.findMany({
+			
+			const location = await prisma.location.findUnique({
 				where: {
-					id: {
-						equals: des,
-					},
+					id: des,
 				},
 				select: {
 					name: true,
@@ -114,6 +109,7 @@ const getPackageLog = async (orderNumber: number) => {
 		})
 	);
 	const res = loc.flat();
+	
 	return res;
 };
 export {

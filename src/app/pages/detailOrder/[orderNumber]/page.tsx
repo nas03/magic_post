@@ -46,7 +46,6 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					cache: 'force-cache',
 				}
 			);
 			const { data } = await response.json();
@@ -91,15 +90,16 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 								className=" w-full h-full px-5"
 								alt=""
 							/>
-							<div className=" absolute bg-lineBackground w-full h-full flex justify-between items-center">
-								{/* {transLog.map((index) => (
-									<CircleIcon number={index + 1} />
-								))} */}
-								<CircleIcon number={'22'}/>
+							<div className="absolute bg-lineBackground w-full h-full flex justify-between items-center">
+								{transLog.map((log, index) => (
+									<CircleIcon key={index} number={index + 1} />
+								))}
 							</div>
 						</div>
 						<div className=" w-full h-[40%] flex justify-between">
-							{/* <PackageStatus location={transLog.name} /> */}
+							{transLog.map((log) => (
+								<PackageStatus location={log.name} />
+							))}
 						</div>
 					</div>
 					<div className=" w-full h-[10%] my-[1.5%] justify-between flex">
