@@ -51,7 +51,6 @@ function UpdateOrderState() {
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Package ID
-												Package ID
 											</label>
 											<input
 												type="text"
