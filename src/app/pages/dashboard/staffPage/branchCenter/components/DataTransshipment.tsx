@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import { updateOrderType } from '../../../../../context/actions/updateDataBranch';
 import { addSearchParams } from '@/src/util';
-import { Package, TransshipmentLog } from '@/src/util';
+import { Package, TransshipmentLog, getFormattedDate } from '@/src/util';
 
 const initialRows = [
 	{
@@ -134,8 +134,8 @@ const DataTransshipment = () => {
 					id: index + 1,
 					col1: pack.id,
 					col2: pack.request_location,
-					col3: pack.request_timestamp,
-					col4: pack.verified_timestamp,
+					col3: getFormattedDate(new Date(pack.request_timestamp)),
+					col4: getFormattedDate(new Date(pack.verified_timestamp)),
 				})
 			);
 			setRows(tableTransshipmentRow);

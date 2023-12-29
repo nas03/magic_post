@@ -100,7 +100,7 @@ const createNewPackage = async (data: Package) => {
 				destination_location_id: data.destination_location_id,
 			},
 		});
-		const currentDate = getFormattedDate(new Date()) as Date;
+		const currentDate = new Date(getFormattedDate(new Date())) as Date;
 		const logData: TransshipmentLog = {
 			verified_timestamp: currentDate,
 			request_location: data.received_location_id,

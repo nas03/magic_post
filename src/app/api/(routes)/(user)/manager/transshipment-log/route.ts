@@ -45,7 +45,7 @@ const PATCH = async (request: NextRequest) => {
 	const { transhipment_id } = dataRes;
 	const data = await LocationController.verifyPackageTransported(
 		Number(transhipment_id),
-		getFormattedDate(new Date())
+		new Date(getFormattedDate(new Date()))
 	);
 	if (!data) {
 		return NextResponse.json({

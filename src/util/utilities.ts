@@ -5,14 +5,15 @@ interface FormDataJson {
 const calculator = (weight: number) => {
 	return weight * RATE;
 };
-const getFormattedDate = (date: Date) => {
+const getFormattedDate = (date) => {
 	// Get individual components of the date
-	const day = date.getDate();
-	const month = date.getMonth() + 1; // Months are zero-based
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
 	const year = date.getFullYear();
 
-	// Create a new Date object with the components
-	const formattedDate = new Date(year, month - 1, day);
+	// Create the formatted date string
+	const formattedDate = `${day}-${month}-${year}`;
+
 	return formattedDate;
 };
 const formDataToJson = (formData: FormData): FormDataJson => {
