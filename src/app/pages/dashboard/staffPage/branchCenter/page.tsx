@@ -16,8 +16,15 @@ import api from '@/src/lib/axios';
 export const runtime = 'edge';
 
 function Page() {
-
-
+	const { data: session, status } = useSession();
+	const [staffLocation, setStaffLocation] = useState<number | undefined>(
+		session?.user?.location_id
+	);
+	useEffect(() => {
+		if (status === 'authenticated') {
+			setStaffLocation(session?.user?.location_id);
+		}
+	}, [session, status]);
 	return (
 		<Provider store={myStore}>
 			<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">
@@ -83,7 +90,7 @@ function Page() {
 				</div>
 				<div className=" h-[90%] w-full flex">
 					<div className=" h-full w-[15%] flex justify-center">
-						<SideLeftBar />
+						<SideLeftBar staffLocation={staffLocation} />
 					</div>
 					<div className=" h-full w-[85%] flex justify-center border-l-2 border-gray-300 ">
 						<MainContext />

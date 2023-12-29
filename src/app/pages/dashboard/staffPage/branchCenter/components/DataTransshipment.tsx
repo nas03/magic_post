@@ -16,7 +16,7 @@ const initialRows = [
 		col2: '',
 		col3: '',
 		col4: '',
-		col5: false
+		col5: false,
 	},
 ];
 
@@ -28,7 +28,6 @@ type Row = {
 	col4: string;
 	col5: boolean;
 };
-
 const fetchTransshipmentLog = async (location_id: number) => {
 	const url = new URL(
 		addSearchParams(
@@ -47,14 +46,15 @@ const fetchTransshipmentLog = async (location_id: number) => {
 		next: {
 			revalidate: 3600,
 		},
-		cache: 'reload',
+		cache: 'default',
 	});
 	const { data } = await response.json();
 	console.log('data', data);
 	return data;
 };
 const DataTransshipment = () => {
-	const [rows, setRows] = useState<Row[]>(initialRows);
+	const [rows, setRows] = useState<Row[]>([]);
+	const [isComponentMounted, setComponentMounted] = useState(false);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
 	const [staffLocation, setStaffLocation] = useState<number | undefined>(
@@ -67,26 +67,57 @@ const DataTransshipment = () => {
 		},
 		[]
 	);
-
-	const verify = useCallback(
-		(id: number) => () => {
-			setRows((prevRows) =>
-				prevRows.map((row) =>
-					row.id === id ? { ...row, col5: !row.col5 } : row
-				)
+	const fetchData = useCallback(async () => {
+		if (staffLocation !== undefined) {
+			const data = await fetchTransshipmentLog(staffLocation);
+			const tableTransshipmentRow = data.map(
+				(pack: TransshipmentLog, index) => ({
+					id: index + 1,
+					col1: pack.id,
+					col2: pack.request_location,
+					col3: getFormattedDate(new Date(pack.request_timestamp)),
+					col4: null,
+				})
 			);
+			setRows(tableTransshipmentRow);
+		}
+	}, [staffLocation]);
+
+	const verifyPackage = useCallback(
+		async (id: number) => {
+			const getRow = rows.find((row) => row.id === id);
+			if (!getRow) return;
+
+			const transshipment_id = Number(getRow.col1);
+			const response = await fetch(
+				'http://localhost:3000/api/employee/transshipment-log',
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(transshipment_id),
+				}
+			);
+
+			const body = await response.json();
+			await fetchData();
+			console.log('res', body);
 		},
-		[]
+		[rows, fetchData]
 	);
 
 	const duplicatePackage = useCallback(
 		(id: number) => () => {
-			setRows((prevRows) => {
-				const rowToDuplicate = prevRows.find((row) => row.id === id)!;
-				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
-			});
+			const rowToDuplicate = rows.find((row) => row.id === id);
+			if (!rowToDuplicate) return;
+
+			setRows((prevRows) => [
+				...prevRows,
+				{ ...rowToDuplicate, id: Date.now() },
+			]);
 		},
-		[]
+		[rows]
 	);
 
 	const columns = useMemo(
@@ -95,7 +126,6 @@ const DataTransshipment = () => {
 			{ field: 'col2', headerName: 'Request Location', width: 100 },
 			{ field: 'col3', headerName: 'Request Timestamp', width: 150 },
 			{ field: 'col4', headerName: 'Verify Timestamp', width: 150 },
-			{ field: 'col5', headerName: 'Verify', type: 'boolean', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -109,7 +139,7 @@ const DataTransshipment = () => {
 					<GridActionsCellItem
 						icon={<SecurityIcon />}
 						label="Toggle Admin"
-						onClick={verify(params.id)}
+						onClick={() => verifyPackage(params.id)}
 						showInMenu
 					/>,
 					<GridActionsCellItem
@@ -121,33 +151,20 @@ const DataTransshipment = () => {
 				],
 			},
 		],
-		[deletePackage, verify, duplicatePackage]
+		[deletePackage, verifyPackage, duplicatePackage]
 	);
 
-	const fetchData = async () => {
-		if (staffLocation !== undefined) {
-			const data = await fetchTransshipmentLog(staffLocation);
-			const tableTransshipmentRow = data.map(
-				(pack: TransshipmentLog, index) => ({
-					id: index + 1,
-					col1: pack.id,
-					col2: pack.request_location,
-					col3: getFormattedDate(new Date(pack.request_timestamp)),
-					col4: getFormattedDate(new Date(pack.verified_timestamp)),
-				})
-			);
-			setRows(tableTransshipmentRow);
-		}
-	};
-
 	useEffect(() => {
+		if (!isComponentMounted) {
+			setRows(initialRows);
+			setComponentMounted(true);
+		}
+
 		fetchData();
-		const intervalId = setInterval(() => {
-			fetchData();
-		}, 3600 * 1000);
+		const intervalId = setInterval(fetchData, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [staffLocation]);
+	}, [staffLocation, isComponentMounted, fetchData]);
 
 	useEffect(() => {
 		if (status === 'authenticated') {

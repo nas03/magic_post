@@ -1,19 +1,16 @@
 import prisma from '@/src/lib/prisma';
-import { ShipmentLog, TransshipmentLog } from '@/src/util';
+import { ShipmentLog, TransshipmentLog, getFormattedDate } from '@/src/util';
 import { Location_type } from '@prisma/client';
 
 //Verify package have been transported from transhipment hub to branch
-const verifyPackageTransported = async (
-	transhipment_id: number,
-	verified_date: Date
-) => {
+const verifyPackageTransported = async (transshipment_id: number) => {
 	try {
 		const data = await prisma.transshipmentLog.update({
 			where: {
-				id: transhipment_id,
+				id: transshipment_id,
 			},
 			data: {
-				verified_timestamp: verified_date,
+				verified_timestamp: new Date(),
 			},
 		});
 		const updateReceived = await prisma.locationStatistics.update({
@@ -26,6 +23,7 @@ const verifyPackageTransported = async (
 				},
 			},
 		});
+		console.log('update', updateReceived);
 		return data;
 	} catch (error) {
 		console.log('Error verifying package transported ', error);

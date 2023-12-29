@@ -21,13 +21,12 @@ function Page() {
 	// Update managerRole when the session changes
 	useEffect(() => {
 		if (status == 'authenticated') {
-			setManagerRole(session?.user?.role || '');
-			setManagerLocation(session?.user?.location_id || 0);
+			setManagerRole(session.user.role);
+			setManagerLocation(session.user.location_id);
 		}
 		console.log('role', managerRole, managerLocation);
 	}, [session, status]);
 
-	
 	return (
 		<Provider store={myStore}>
 			<div className=" w-[99vw + 2px] h-[100vh] flex flex-col items-center">

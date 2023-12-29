@@ -10,10 +10,10 @@ import { TransshipmentLog, getFormattedDate } from '@/src/util';
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const location_id = Number(searchParams.get('location_id'));
-	const data = await TransshipmentLogController.getTransshipmentLog(
+	const data = await TransshipmentLogController.getTransshipmentLogBranch(
 		location_id
 	);
-	if (!data || !data[0]) {
+	if (!data) {
 		return NextResponse.json({
 			status: 400,
 			data: null,
@@ -42,10 +42,10 @@ const POST = async (request: NextRequest) => {
 };
 const PATCH = async (request: NextRequest) => {
 	const dataRes = await request.json();
-	const { transhipment_id } = dataRes;
+	
+	// console.log('id', transshipment_id, dataRes);
 	const data = await LocationController.verifyPackageTransported(
-		Number(transhipment_id),
-		getFormattedDate(new Date())
+		Number(dataRes)
 	);
 	if (!data) {
 		return NextResponse.json({

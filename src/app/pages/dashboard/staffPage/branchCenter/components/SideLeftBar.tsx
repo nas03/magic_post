@@ -20,7 +20,7 @@ import { updateTableGather } from '../../../../../context/actions/updateTable';
 import { useDispatch } from 'react-redux';
 import { formDataToJson } from '@/src/util';
 
-function SideLeftBar() {
+function SideLeftBar({ staffLocation }) {
 	const [name, setName] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const dispatch = useDispatch();
@@ -57,9 +57,9 @@ function SideLeftBar() {
 			sender_phone: formData.sender_phone,
 			receiver_phone: formData.receiver_phone,
 			type: formData.type,
-			fee: formData.fee,
-			received_location_id: formData.received_location_id,
-			destination_location_id: formData.destination_location_id,
+			fee: 90,
+			received_location_id: staffLocation,
+			destination_location_id: Number(formData.destination_location_id),
 		};
 		const response = await fetch('http://localhost:3000/api/employee/package', {
 			method: 'POST',
@@ -127,77 +127,140 @@ function SideLeftBar() {
 										Create New Order
 									</h1>
 									<form
-										className="space-y-4 md:space-y-6"
+										className="space-y-4 md:space-y-6 h-100 overflow-y-scroll"
 										action="#"
 										onSubmit={(e) => {
 											handleCreatePackage(e);
 											setShowModal(false);
 										}}>
+										<div className="flex flex-row">
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Sender Name
+												</label>
+												<input
+													type="text"
+													name="sender"
+													id="sender"
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													placeholder=""
+													required
+												/>
+											</div>
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Sender Phone Number
+												</label>
+												<input
+													type="text"
+													name="sender_phone"
+													id="sender_phone"
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													placeholder=""
+													required
+												/>
+											</div>
+										</div>
 										<div>
 											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Order Name
+												Sender Location
 											</label>
 											<input
 												type="text"
-												name="order-name"
-												id="order-name"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												name="sender_location"
+												id="sender_location"
 												placeholder=""
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 												required
 											/>
 										</div>
+										<div className="flex flex-row">
+											<div className="flex-grow">
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Receiver Name
+												</label>
+												<input
+													type="text"
+													name="receiver"
+													id="receiver"
+													placeholder=""
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													required
+												/>
+											</div>
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Receiver Phone Number
+												</label>
+												<input
+													type="text"
+													name="receiver_phone"
+													id="receiver_phone"
+													placeholder=""
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													required
+												/>
+											</div>
+										</div>
+										<div>
+											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+												Receiver Location
+											</label>
+											<input
+												type="text"
+												name="receiver_location"
+												id="receiver_location"
+												placeholder=""
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+
 										<div>
 											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
 												Package Type
 											</label>
-											<input
-												type="text"
-												name="package-type"
-												id="package-type"
+											<select
+												name="type"
+												id="type"
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												placeholder=""
-												required
-											/>
+												required>
+												<option value="DOCUMENT">DOCUMENT</option>
+												<option value="GOODS">GOODS</option>
+											</select>
 										</div>
 										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Sender
-											</label>
-											<input
-												type="text"
-												name="sender"
-												id="sender"
-												placeholder=""
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<div className="flex flex-row">
+												<div className="">
+													<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+														Destination
+													</label>
+													<input
+														type="number"
+														name="destination_location_id"
+														id="destination_location_id"
+														placeholder="Destination"
+														className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+														required
+													/>
+												</div>
+												<div className="">
+													<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+														State
+													</label>
+													<input
+														type="text"
+														name="state"
+														id="state"
+														placeholder=""
+														value={'ONGOING'}
+														className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+														required
+													/>
+												</div>
+											</div>
 										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Receiver
-											</label>
-											<input
-												type="text"
-												name="receiver"
-												id="receiver"
-												placeholder=""
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												State
-											</label>
-											<input
-												type="text"
-												name="state"
-												id="state"
-												placeholder=''
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
+
 										<button
 											type="submit"
 											className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

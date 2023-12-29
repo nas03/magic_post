@@ -101,6 +101,7 @@ enum Location_type {
 
 enum Package_status {
   ONGOING
+  SHIP
   RECEIVED
   RETURNED
 }

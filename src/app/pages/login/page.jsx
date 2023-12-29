@@ -18,11 +18,16 @@ function Page() {
 		// Redirect based on the user's role
 		if (role === 'LEADER') {
 			router.push('/pages/dashboard/adminPage');
-		} else if (role === 'BRANCH_CENTER_MANAGER') {
+		} else if (
+			role === 'BRANCH_CENTER_MANAGER' ||
+			role == 'TRANSSHIPMENT_HUB_MANAGER'
+		) {
 			router.push('/pages/dashboard/manager');
-		} else {
+		} else if (role == 'BRANCH_OFFICER') {
 			// Handle other roles or redirect to a default page
-			router.push('/');
+			router.push('/pages/dashboard/staffPage/branchCenter');
+		} else {
+			router.push('/pages/dashboard/staffPage/hubCenter');
 		}
 	}
 
@@ -45,11 +50,15 @@ function Page() {
 			// Redirect based on the user's role
 			if (role === 'LEADER') {
 				router.push('/pages/dashboard/adminPage');
-			} else if (role === 'BRANCH_CENTER_MANAGER') {
-				router.push('/pages/dashboard/userPage');
+			} else if (
+				role === 'BRANCH_CENTER_MANAGER' ||
+				role == 'TRANSSHIPMENT_HUB_MANAGER'
+			) {
+				router.push('/pages/dashboard/manager');
+			} else if (role == 'BRANCH_OFFICER') {
+				router.push('/pages/dashboard/staffPage/branchCenter');
 			} else {
-				// Handle other roles or redirect to a default page
-				router.push('/');
+				router.push('/pages/dashboard/staffPage/hubCenter');
 			}
 		} else {
 			// TODO: @Babybluess Show error on Page

@@ -15,6 +15,31 @@ const getTransshipmentLog = async (location_id: number) => {
 		return null;
 	}
 };
+const getTransshipmentLogBranch = async (location_id: number) => {
+	try {
+		const data = await prisma.transshipmentLog.findMany({
+			where: {
+				AND: {
+					destination_location: {
+						equals: location_id,
+					},
+					verified_timestamp: {
+						equals: null,
+					},
+					request_location: {
+						not: {
+							equals: location_id,
+						},
+					},
+				},
+			},
+		});
+		return data;
+	} catch (error) {
+		console.log('Error fetching transition log data', error);
+		return null;
+	}
+};
 //Create a new transition log
 const createNewTransshipmentLog = async (dataLog: TransshipmentLog) => {
 	try {
@@ -83,4 +108,9 @@ const getPackageLog = async (orderNumber: number) => {
 	const res = loc.flat();
 	return res;
 };
-export { createNewTransshipmentLog, getTransshipmentLog, getPackageLog };
+export {
+	createNewTransshipmentLog,
+	getTransshipmentLog,
+	getPackageLog,
+	getTransshipmentLogBranch,
+};

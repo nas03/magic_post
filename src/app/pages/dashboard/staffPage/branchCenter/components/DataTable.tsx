@@ -9,7 +9,6 @@ import { updateOrderType } from '../../../../../context/actions/updateDataBranch
 import { addSearchParams } from '@/src/util';
 import { Package, TransshipmentLog } from '@/src/util';
 
-
 const initialRows = [
 	{
 		id: 0,
@@ -53,7 +52,7 @@ const fetchPackage = async (location_id: number) => {
 	return data;
 };
 
-const DataTable= () => {
+const DataTable = () => {
 	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
@@ -96,7 +95,6 @@ const DataTable= () => {
 			{ field: 'col3', headerName: 'PackageType', width: 150 },
 			{ field: 'col4', headerName: 'Sender', width: 150 },
 			{ field: 'col5', headerName: 'Receiver', width: 150 },
-			{ field: 'col6', headerName: 'Verify', type: 'boolean', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -144,7 +142,7 @@ const DataTable= () => {
 		fetchData();
 		const intervalId = setInterval(() => {
 			fetchData();
-		}, 3600 * 1000);
+		}, 10 * 1000);
 
 		return () => clearInterval(intervalId);
 	}, [staffLocation]);
