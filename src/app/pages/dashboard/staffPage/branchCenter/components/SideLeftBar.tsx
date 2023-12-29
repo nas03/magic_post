@@ -19,6 +19,8 @@ import { InputLabel } from '@mui/material';
 import { updateTableGather } from '../../../../../context/actions/updateTable';
 import { useDispatch } from 'react-redux';
 import { formDataToJson } from '@/src/util';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
 
 function SideLeftBar({ staffLocation }) {
 	const [name, setName] = useState('');
@@ -51,6 +53,22 @@ function SideLeftBar({ staffLocation }) {
 			icon: <ClipboardDocumentListIcon className="text-[#32989a] w-6 h-6 " />,
 			defaultIcon: (
 				<ClipboardDocumentListIcon className="text-gray-300 w-6 h-6 " />
+			),
+		},
+		{
+			id: '3',
+			name: 'Update Package State',
+			icon: <SettingsIcon className="text-[#32989a] w-6 h-6 " />,
+			defaultIcon: (
+				<SettingsIcon className="text-gray-300 w-6 h-6 " />
+			),
+		},
+		{
+			id: '4',
+			name: 'Create Shipment Order',
+			icon: <AllInboxIcon className="text-[#32989a] w-6 h-6 " />,
+			defaultIcon: (
+				<AllInboxIcon className="text-gray-300 w-6 h-6 " />
 			),
 		},
 	];
@@ -94,7 +112,7 @@ function SideLeftBar({ staffLocation }) {
 						onClick={() => handleClick(item.name)}
 						className={` ${
 							name == item.name ? 'bg-[#F7F8FA] text-[#32989a]' : 'bg-white'
-						} cursor-pointer px-[1%] flex h-[10%] w-full justify-between items-center `}>
+						} cursor-pointer px-1 flex h-[10%] w-full justify-between items-center `}>
 						<div className=" w-full flex gap-[3%] items-center">
 							{name == item.name ? item.icon : item.defaultIcon}
 							<span className=" font-medium">{item.name}</span>

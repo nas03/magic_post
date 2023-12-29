@@ -83,6 +83,7 @@ const DataTable = ({ tableType, managerRole, managerLocation }) => {
 		},
 		[]
 	);
+
 	const handleUpdateLocation = async (e: any) => {
 		e.preventDefault();
 		const formData = formDataToJson(new FormData(e.target));

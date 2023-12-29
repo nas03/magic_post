@@ -8,7 +8,7 @@ const initialState = {
    receiverLocation: '',
    receiverPhone: '',
    orderType: '',
-   customInstruction: ''
+   customInstruction: '',
 }
 
 const dataBranchReducer = (state = initialState, action) => {

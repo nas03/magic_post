@@ -123,8 +123,8 @@ export default function DataAccount({ tableType }) {
 		() => [
 			{ field: 'col1', headerName: 'ID', width: 100 },
 			{ field: 'col2', headerName: 'Name', width: 200 },
-			{ field: 'col3', headerName: 'Email', width: 100 },
-			{ field: 'col4', headerName: 'Role', width: 100 },
+			{ field: 'col3', headerName: 'Email', width: 200 },
+			{ field: 'col4', headerName: 'Role', width: 200 },
 			{ field: 'col5', headerName: 'Location ID', width: 100 },
 			{
 				field: 'actions',

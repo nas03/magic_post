@@ -15,6 +15,8 @@ import {
 } from '../../../../../context/actions/updateOrderList';
 import CreateUserOrder from './CreateUserOrder';
 import DataTransshipment from './DataTransshipment';
+import UpdateOrderState from './UpdateOrderState';
+import SwitchButton from './SwitchButton';
 
 const MainContext = (props) => {
 	console.log(props.tableData);
@@ -34,6 +36,7 @@ const MainContext = (props) => {
 		dispatch(clearOrderType(''));
 		setShowModal(false);
 	};
+
 
 	return (
 		<div className=" w-full h-full p-[2%]">
@@ -235,13 +238,7 @@ const MainContext = (props) => {
 						<DataTable />
 					</div>
 					<div className=" w-full flex justify-end items-center gap-2 h-[10%]">
-						{
-							tableType == 'Gathering Point'
-							?
-							<CreateUserOrder />
-							:
-							''
-						}
+						<SwitchButton tableType={tableType}/>
 						{/* <button
 						onClick={() => openBillHandle()}
 						className=" rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]">

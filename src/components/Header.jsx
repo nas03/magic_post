@@ -32,7 +32,7 @@ const Header = () => {
 
 	const generateQR = async() => {
 		try {
-		  setResponse(await QRCode.toDataURL(orderNumber))
+		  setResponse(await QRCode.toDataURL('http://localhost:3000/pages/detailOrder/' + orderNumber))
 		} catch (err) {
 		  console.error(err)
 		}

@@ -5,13 +5,8 @@ import {
 	TruckIcon,
 	XCircleIcon,
 	ChevronRightIcon,
-	BuildingStorefrontIcon,
-	UserGroupIcon,
-	ChatBubbleLeftRightIcon,
-	BookOpenIcon,
-	BanknotesIcon,
-	Squares2X2Icon,
 	UserIcon,
+	UserGroupIcon
 } from '@heroicons/react/24/solid';
 import { InputContext } from '@/src/components/Header';
 import { InputLabel } from '@mui/material';
@@ -76,8 +71,8 @@ function SideLeftBar() {
 		{
 			id: '1',
 			name: 'Employee Account Management',
-			icon: <UserIcon className="text-[#32989a] w-6 h-6 " />,
-			defaultIcon: <UserIcon className="text-gray-300 w-6 h-6 " />,
+			icon: <UserGroupIcon className="text-[#32989a] w-8 h-8 " />,
+			defaultIcon: <UserGroupIcon className="text-gray-300 w-8 h-8 " />,
 		},
 	];
 
@@ -93,7 +88,7 @@ function SideLeftBar() {
 						onClick={() => handleClick(item.name)}
 						className={` ${
 							name == item.name ? 'bg-[#F7F8FA] text-[#32989a]' : 'bg-white'
-						} cursor-pointer px-[1%] flex h-[10%] w-full justify-between items-center `}>
+						} cursor-pointer px-1 flex h-[10%] w-full justify-between items-center `}>
 						<div className=" w-full flex gap-[3%] items-center">
 							{name == item.name ? item.icon : item.defaultIcon}
 							<span className=" font-medium">{item.name}</span>
