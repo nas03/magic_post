@@ -34,7 +34,7 @@ const fetchTransshipmentLog = async (location_id: number) => {
 			new URL('http://localhost:3000/api/employee/transshipment-log'),
 			{
 				location_id: location_id,
-				role: 'BRANCH_OFFICER',
+				task: 'receive',
 			}
 		)
 	);
@@ -43,23 +43,37 @@ const fetchTransshipmentLog = async (location_id: number) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		next: {
-			revalidate: 3600,
-		},
+
 		cache: 'default',
 	});
 	const { data } = await response.json();
 	console.log('data', data);
 	return data;
 };
-const DataTransshipment = () => {
+const DataTransshipment = ({ tableType }) => {
 	const [rows, setRows] = useState<Row[]>([]);
 	const [isComponentMounted, setComponentMounted] = useState(false);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
-	const [staffLocation, setStaffLocation] = useState<number | undefined>(
-		session?.user?.location_id
+	const [staffLocation, setStaffLocation] = useState(
+		session?.user?.location_id || 0
 	);
+
+	// Update managerRole when the session changes
+	useEffect(() => {
+		const fetchLocationId = async () => {
+			if (status === 'authenticated') {
+				const location_id = session?.user?.location_id;
+				if (location_id && location_id !== 0) {
+					setStaffLocation(location_id);
+				} else {
+					setTimeout(fetchLocationId, 500); // Replace FETCH_DELAY with the delay in milliseconds
+				}
+			}
+		};
+
+		fetchLocationId();
+	}, [session, status]);
 
 	const deletePackage = useCallback(
 		(id: number) => () => {
@@ -89,6 +103,10 @@ const DataTransshipment = () => {
 			if (!getRow) return;
 
 			const transshipment_id = Number(getRow.col1);
+			const data = {
+				transshipment_id: transshipment_id,
+				location_id: staffLocation,
+			};
 			const response = await fetch(
 				'http://localhost:3000/api/employee/transshipment-log',
 				{
@@ -96,7 +114,7 @@ const DataTransshipment = () => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ transshipment_id, staffLocation }),
+					body: JSON.stringify(data),
 				}
 			);
 

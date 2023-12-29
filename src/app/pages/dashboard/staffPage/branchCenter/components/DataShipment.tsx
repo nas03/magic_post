@@ -51,7 +51,7 @@ const fetchPackage = async (location_id: number) => {
 	const url = new URL(
 		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
 			location_id: location_id,
-			role: 'BRANCH_OFFICER',
+			task: 'ship',
 		})
 	);
 	const response = await fetch(url, {
@@ -69,7 +69,7 @@ const fetchPackage = async (location_id: number) => {
 	return data;
 };
 
-const DataTable = ({ tableType }) => {
+const DataShipment = ({ tableType }) => {
 	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
@@ -93,6 +93,7 @@ const DataTable = ({ tableType }) => {
 
 		fetchLocationId();
 	}, [session, status]);
+
 	const deletePackage = useCallback(
 		(id: number) => () => {
 			setRows((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -164,6 +165,7 @@ const DataTable = ({ tableType }) => {
 	const fetchData = async () => {
 		if (staffLocation !== undefined) {
 			const data = await fetchPackage(staffLocation);
+			console.log('data');
 			const tablePackageRow = data.map((pack: Package, index) => ({
 				id: index + 1,
 				col1: pack.id,
@@ -188,12 +190,6 @@ const DataTable = ({ tableType }) => {
 
 		return () => clearInterval(intervalId);
 	}, [staffLocation, tableType]);
-
-	useEffect(() => {
-		if (status === 'authenticated') {
-			setStaffLocation(session?.user?.location_id);
-		}
-	}, [session, status]);
 
 	const getSelectedRowData = (e: any) => {
 		dispatch(updateOrderType(e.col3));
@@ -223,4 +219,4 @@ const DataTable = ({ tableType }) => {
 	);
 };
 
-export default DataTable;
+export default DataShipment;

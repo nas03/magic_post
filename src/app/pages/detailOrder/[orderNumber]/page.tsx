@@ -14,7 +14,7 @@ import api from '@/src/lib/axios';
 import { Package, TransshipmentLog, Location } from '@/src/util/type';
 import { getFormattedDate } from '@/src/util';
 import prisma from '@/src/lib/prisma';
-import  HorizontalLinearAlternativeLabelStepper from './components/HorizontalLinearAlternativeLabelStepper'
+import HorizontalLinearAlternativeLabelStepper from './components/HorizontalLinearAlternativeLabelStepper';
 
 const PackageStatus = ({ location }) => {
 	return (
@@ -34,41 +34,31 @@ const CircleIcon = ({ number }) => {
 	);
 };
 
-
 const Page = ({ params }: { params: { orderNumber: number } }) => {
 	const [transLog, setTransLog] = useState([]);
-	const [transLogName, setTransLogName] = useState([])
+	const [transLogName, setTransLogName] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const name = ['Branch A', 'Hub X'];
 
-
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await fetch(
-				`http://localhost:3000/api/client?package_id=${params.orderNumber}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
-			const { data } = await response.json();
-			console.log('translog', data)
-			setTransLog(data);
-			setLoading(false);
-			return data;
-		};
-		fetchData();
-	}, []);
-	if (loading) {
-		// Render a loading indicator
-		return <div>Loading...</div>;
-	}
-
-	transLog.map((log) => (
-		setTransLogName((pre) => [...pre, log])
-	))
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const response = await fetch(
+	// 			`http://localhost:3000/api/client?package_id=${params.orderNumber}`,
+	// 			{
+	// 				method: 'GET',
+	// 				headers: {
+	// 					'Content-Type': 'application/json',
+	// 				},
+	// 			}
+	// 		);
+	// 		const { data } = await response.json();
+	// 		console.log('translog', data);
+	// 		setTransLog(data);
+	// 		console.log('data UI');
+	// 		return data;
+	// 	};
+	// 	fetchData();
+	// }, []);
 
 	return (
 		<>
@@ -112,7 +102,7 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 							))}
 						</div>
 					</div> */}
-					<HorizontalLinearAlternativeLabelStepper step={transLogName} />
+					<HorizontalLinearAlternativeLabelStepper step={name} />
 					<div className=" w-full h-[10%] my-[1.5%] justify-between flex">
 						<form className=" w-[45%] h-[full] flex-col flex gap-2">
 							<label htmlFor="" className=" text-gray-600 font-medium">

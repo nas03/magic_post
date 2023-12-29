@@ -51,7 +51,7 @@ const fetchPackage = async (location_id: number) => {
 	const url = new URL(
 		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
 			location_id: location_id,
-			role: 'BRANCH_OFFICER',
+			task: 'receive',
 		})
 	);
 	const response = await fetch(url, {
@@ -62,37 +62,21 @@ const fetchPackage = async (location_id: number) => {
 		next: {
 			revalidate: 3600,
 		},
-		cache: 'reload',
+		cache: 'default',
 	});
 	const { data } = await response.json();
 	console.log('data', data);
 	return data;
 };
 
-const DataTable = ({ tableType }) => {
+const DataBranch = ({ tableType }) => {
 	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
-	const [staffLocation, setStaffLocation] = useState(
-		session?.user?.location_id || 0
+	const [staffLocation, setStaffLocation] = useState<number | undefined>(
+		session?.user?.location_id
 	);
 
-	// Update managerRole when the session changes
-	useEffect(() => {
-		const fetchLocationId = async () => {
-			if (status === 'authenticated') {
-				const location_id = session?.user?.location_id;
-				if (location_id && location_id !== 0) {
-					setStaffLocation(location_id);
-				} else {
-					// If location_id is 0 or undefined, fetch it again after a delay
-					setTimeout(fetchLocationId, 500); // Replace FETCH_DELAY with the delay in milliseconds
-				}
-			}
-		};
-
-		fetchLocationId();
-	}, [session, status]);
 	const deletePackage = useCallback(
 		(id: number) => () => {
 			setRows((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -164,7 +148,9 @@ const DataTable = ({ tableType }) => {
 	const fetchData = async () => {
 		if (staffLocation !== undefined) {
 			const data = await fetchPackage(staffLocation);
-			const tablePackageRow = data.map((pack: Package, index) => ({
+			const filteredData = data.filter((record) => record !== null);
+			console.log('branch data', filteredData);
+			const tablePackageRow = filteredData.map((pack: Package, index) => ({
 				id: index + 1,
 				col1: pack.id,
 				col2: pack.state,
@@ -223,4 +209,4 @@ const DataTable = ({ tableType }) => {
 	);
 };
 
-export default DataTable;
+export default DataBranch;

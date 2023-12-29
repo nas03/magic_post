@@ -69,9 +69,10 @@ const fetchPackage = async (location_id: number) => {
 	return data;
 };
 
-const DataTable = ({ tableType }) => {
+const DataPackage = ({ tableType }) => {
 	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
+
 	const { data: session, status } = useSession();
 	const [staffLocation, setStaffLocation] = useState(
 		session?.user?.location_id || 0
@@ -85,7 +86,6 @@ const DataTable = ({ tableType }) => {
 				if (location_id && location_id !== 0) {
 					setStaffLocation(location_id);
 				} else {
-					// If location_id is 0 or undefined, fetch it again after a delay
 					setTimeout(fetchLocationId, 500); // Replace FETCH_DELAY with the delay in milliseconds
 				}
 			}
@@ -93,6 +93,7 @@ const DataTable = ({ tableType }) => {
 
 		fetchLocationId();
 	}, [session, status]);
+
 	const deletePackage = useCallback(
 		(id: number) => () => {
 			setRows((prevRows) => prevRows.filter((row) => row.id !== id));
@@ -189,12 +190,6 @@ const DataTable = ({ tableType }) => {
 		return () => clearInterval(intervalId);
 	}, [staffLocation, tableType]);
 
-	useEffect(() => {
-		if (status === 'authenticated') {
-			setStaffLocation(session?.user?.location_id);
-		}
-	}, [session, status]);
-
 	const getSelectedRowData = (e: any) => {
 		dispatch(updateOrderType(e.col3));
 		dispatch(updateSenderBranch(e.col4));
@@ -223,4 +218,4 @@ const DataTable = ({ tableType }) => {
 	);
 };
 
-export default DataTable;
+export default DataPackage;
