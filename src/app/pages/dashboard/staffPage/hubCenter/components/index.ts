@@ -1,10 +1,10 @@
-import MainContent from "./MainContent"
+import MainContext from './MainContext'
 import SideLeftBar from "./SideLeftBar"
 import DataTable from "./DataTable"
 import DateTimePickerValue from "./DateTime"
 
 export {
-    MainContent,
+    MainContext,
     SideLeftBar,
     DataTable,
     DateTimePickerValue

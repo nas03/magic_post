@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import { updateOrderType } from '../../../../../context/actions/updateDataBranch';
 import { addSearchParams } from '@/src/util';
-import { Package, TransshipmentLog } from '@/src/util';
+import { Package, TransshipmentLog, getFormattedDate } from '@/src/util';
 
 const initialRows = [
 	{
@@ -16,8 +16,7 @@ const initialRows = [
 		col2: '',
 		col3: '',
 		col4: '',
-		col5: 'Package',
-		col6: false,
+		col5: false,
 	},
 ];
 
@@ -27,15 +26,17 @@ type Row = {
 	col2: string;
 	col3: string;
 	col4: string;
-	col5: string;
-	col6: boolean;
+	col5: boolean;
 };
-const fetchPackage = async (location_id: number) => {
+const fetchTransshipmentLog = async (location_id: number) => {
 	const url = new URL(
-		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
-			location_id: location_id,
-			role: 'BRANCH_OFFICER',
-		})
+		addSearchParams(
+			new URL('http://localhost:3000/api/employee/transshipment-log'),
+			{
+				location_id: location_id,
+				role: 'BRANCH_OFFICER',
+			}
+		)
 	);
 	const response = await fetch(url, {
 		method: 'GET',
@@ -45,15 +46,15 @@ const fetchPackage = async (location_id: number) => {
 		next: {
 			revalidate: 3600,
 		},
-		cache: 'reload',
+		cache: 'default',
 	});
 	const { data } = await response.json();
 	console.log('data', data);
 	return data;
 };
-
-const DataTable = () => {
-	const [rows, setRows] = useState<Row[]>(initialRows);
+const DataTransshipment = () => {
+	const [rows, setRows] = useState<Row[]>([]);
+	const [isComponentMounted, setComponentMounted] = useState(false);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
 	const [staffLocation, setStaffLocation] = useState<number | undefined>(
@@ -66,35 +67,65 @@ const DataTable = () => {
 		},
 		[]
 	);
-
-	const verify = useCallback(
-		(id: number) => () => {
-			setRows((prevRows) =>
-				prevRows.map((row) =>
-					row.id === id ? { ...row, col6: !row.col6 } : row
-				)
+	const fetchData = useCallback(async () => {
+		if (staffLocation !== undefined) {
+			const data = await fetchTransshipmentLog(staffLocation);
+			const tableTransshipmentRow = data.map(
+				(pack: TransshipmentLog, index) => ({
+					id: index + 1,
+					col1: pack.id,
+					col2: pack.request_location,
+					col3: getFormattedDate(new Date(pack.request_timestamp)),
+					col4: null,
+				})
 			);
+			setRows(tableTransshipmentRow);
+		}
+	}, [staffLocation]);
+
+	const verifyPackage = useCallback(
+		async (id: number) => {
+			const getRow = rows.find((row) => row.id === id);
+			if (!getRow) return;
+
+			const transshipment_id = Number(getRow.col1);
+			const response = await fetch(
+				'http://localhost:3000/api/employee/transshipment-log',
+				{
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(transshipment_id),
+				}
+			);
+
+			const body = await response.json();
+			await fetchData();
+			console.log('res', body);
 		},
-		[]
+		[rows, fetchData]
 	);
 
 	const duplicatePackage = useCallback(
 		(id: number) => () => {
-			setRows((prevRows) => {
-				const rowToDuplicate = prevRows.find((row) => row.id === id)!;
-				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
-			});
+			const rowToDuplicate = rows.find((row) => row.id === id);
+			if (!rowToDuplicate) return;
+
+			setRows((prevRows) => [
+				...prevRows,
+				{ ...rowToDuplicate, id: Date.now() },
+			]);
 		},
-		[]
+		[rows]
 	);
 
 	const columns = useMemo(
 		() => [
-			{ field: 'col1', headerName: 'ID', width: 100 },
-			{ field: 'col2', headerName: 'State', width: 100 },
-			{ field: 'col3', headerName: 'PackageType', width: 150 },
-			{ field: 'col4', headerName: 'Sender', width: 150 },
-			{ field: 'col5', headerName: 'Receiver', width: 150 },
+			{ field: 'col1', headerName: 'ID', width: 50 },
+			{ field: 'col2', headerName: 'Request Location', width: 150 },
+			{ field: 'col3', headerName: 'Request Timestamp', width: 150 },
+			{ field: 'col4', headerName: 'Verify Timestamp', width: 150 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -108,7 +139,7 @@ const DataTable = () => {
 					<GridActionsCellItem
 						icon={<SecurityIcon />}
 						label="Toggle Admin"
-						onClick={verify(params.id)}
+						onClick={() => verifyPackage(params.id)}
 						showInMenu
 					/>,
 					<GridActionsCellItem
@@ -120,32 +151,20 @@ const DataTable = () => {
 				],
 			},
 		],
-		[deletePackage, verify, duplicatePackage]
+		[deletePackage, verifyPackage, duplicatePackage]
 	);
 
-	const fetchData = async () => {
-		if (staffLocation !== undefined) {
-			const data = await fetchPackage(staffLocation);
-			const tablePackageRow = data.map((pack: Package, index) => ({
-				id: index + 1,
-				col1: pack.id,
-				col2: pack.state,
-				col3: pack.type,
-				col4: pack.sender,
-				col5: pack.receiver,
-			}));
-			setRows(tablePackageRow);
-		}
-	};
-
 	useEffect(() => {
+		if (!isComponentMounted) {
+			setRows(initialRows);
+			setComponentMounted(true);
+		}
+
 		fetchData();
-		const intervalId = setInterval(() => {
-			fetchData();
-		}, 10 * 1000);
+		const intervalId = setInterval(fetchData, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [staffLocation]);
+	}, [staffLocation, isComponentMounted, fetchData]);
 
 	useEffect(() => {
 		if (status === 'authenticated') {
@@ -164,11 +183,11 @@ const DataTable = () => {
 					},
 				}}
 				checkboxSelection
-				onRowClick={(e) => dispatch(updateOrderType(e.row.col3))}
+				onRowClick={(e) => dispatch(updateOrderType(e.row.col5))}
 				disableRowSelectionOnClick
 			/>
 		</div>
 	);
 };
 
-export default DataTable;
+export default DataTransshipment;
