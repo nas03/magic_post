@@ -5,7 +5,7 @@ import CreateShipmentOrder from './CreateShipmentOrder'
 
 const SwitchButton = ({tableType}) => {
     switch(tableType) {
-        case  'Gathering Point':
+        case  'Branch Center':
           return <CreateUserOrder/>
         case 'Update Package State':
           return <UpdateOrderState/>

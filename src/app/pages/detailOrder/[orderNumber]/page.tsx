@@ -14,7 +14,7 @@ import api from '@/src/lib/axios';
 import { Package, TransshipmentLog, Location } from '@/src/util/type';
 import { getFormattedDate } from '@/src/util';
 import prisma from '@/src/lib/prisma';
-import  HorizontalLinearAlternativeLabelStepper from './components/HorizontalLinearAlternativeLabelStepper'
+import HorizontalLinearAlternativeLabelStepper from './components/HorizontalLinearAlternativeLabelStepper';
 
 const PackageStatus = ({ location }) => {
 	return (
@@ -33,7 +33,6 @@ const CircleIcon = ({ number }) => {
 		</>
 	);
 };
-
 
 const Page = ({ params }: { params: { orderNumber: number } }) => {
 	const [transLog, setTransLog] = useState([]);
@@ -108,7 +107,7 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 							))}
 						</div>
 					</div> */}
-					<HorizontalLinearAlternativeLabelStepper step={transLogName} />
+					<HorizontalLinearAlternativeLabelStepper step={name} />
 					<div className=" w-full h-[10%] my-[1.5%] justify-between flex">
 						<form className=" w-[45%] h-[full] flex-col flex gap-2">
 							<label htmlFor="" className=" text-gray-600 font-medium">

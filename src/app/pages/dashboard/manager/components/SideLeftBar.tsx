@@ -6,7 +6,7 @@ import {
 	XCircleIcon,
 	ChevronRightIcon,
 	UserIcon,
-	UserGroupIcon
+	UserGroupIcon,
 } from '@heroicons/react/24/solid';
 import { InputContext } from '@/src/components/Header';
 import { InputLabel } from '@mui/material';
@@ -43,14 +43,17 @@ function SideLeftBar() {
 	};
 	const handleCreateAccount = async (e: any) => {
 		e.preventDefault();
+
 		const formData = formDataToJson(new FormData(e.target));
+		console.log('formData', formData);
 		const data = {
-			fullName: formData.name,
-			email: formData.name,
+			fullName: formData['full-name'],
+			email: formData.email,
 			password: formData.password,
 			role: formData.role,
 			location_id: formData.location_id,
 		};
+
 		const response = await fetch('http://localhost:3000/api/manager/account', {
 			method: 'POST',
 			headers: {
@@ -60,6 +63,10 @@ function SideLeftBar() {
 			cache: 'no-cache',
 		});
 		const body = await response.json();
+		console.log('body', body);
+		if (!body) {
+			console.log('Error');
+		}
 	};
 	const dataDashboard = [
 		{
@@ -113,7 +120,7 @@ function SideLeftBar() {
 							<XCircleIcon
 								onClick={() => setShowModal(false)}
 								color="red"
-								className=" z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain cursor-pointer"
+								className=" z-50 w-5 h-5 absolute right-[5%] top-2 object-contain cursor-pointer"
 							/>
 							<div className="flex justify-center py-5 items-center text-2xl font-semibold text-gray-900 dark:text-white">
 								<img
@@ -129,7 +136,7 @@ function SideLeftBar() {
 										Create Account
 									</h1>
 									<form
-										className="space-y-4 md:space-y-4"
+										className="space-y-4 md:space-y-6"
 										action="#"
 										onSubmit={(e) => {
 											handleCreateAccount(e);

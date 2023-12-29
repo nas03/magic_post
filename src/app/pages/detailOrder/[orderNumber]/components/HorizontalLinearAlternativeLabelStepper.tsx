@@ -5,21 +5,21 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
 const steps = [
-  'Select master blaster campaign settings',
-  'Create an ad group',
-  'Create an ad',
+	'Select master blaster campaign settings',
+	'Create an ad group',
+	'Create an ad',
 ];
 
-export default function HorizontalLinearAlternativeLabelStepper({step}) {
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={2} alternativeLabel>
-        {step.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-    </Box>
-  );
+export default function HorizontalLinearAlternativeLabelStepper({ step }) {
+	return (
+		<Box sx={{ width: '100%' }}>
+			<Stepper activeStep={2} alternativeLabel>
+				{step.map((label) => (
+					<Step key={label}>
+						<StepLabel>{label}</StepLabel>
+					</Step>
+				))}
+			</Stepper>
+		</Box>
+	);
 }

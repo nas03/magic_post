@@ -155,35 +155,18 @@ const updatePackageState = async (
 };
 const getPackageReadyShip = async (location_id: number) => {
 	try {
-		const locationTransLog = await prisma.transshipmentLog.findMany({
+		const packages = await prisma.package.findMany({
 			where: {
-				destination_location: location_id,
-				verified_timestamp: {
-					not: null,
+				destination_location_id: {
+					equals: location_id,
 				},
 			},
-			select: {
-				package_id: true,
-			},
 		});
-		console.log('locTrans', locationTransLog);
-		const data = await Promise.all(
-			locationTransLog.map(async (transLog) => {
-				const package_id = transLog.package_id;
-				return await prisma.package.findUnique({
-					where: {
-						id: package_id,
-					},
-				});
-			})
-		);
 
-		return data;
-	} catch (error) {
-		console.log('Error get package ready ship');
-		return null;
-	}
+		return packages;
+	} catch (error) {}
 };
+
 const getPendingPackage = async (location_id: number) => {
 	try {
 		const transLog = await prisma.transshipmentLog.findMany({

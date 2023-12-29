@@ -55,7 +55,7 @@ const POST = async (request: NextRequest) => {
 const PATCH = async (request: NextRequest) => {
 	const { location_id, transshipment_id } = await request.json();
 
-	// console.log('id', transshipment_id, dataRes);
+	console.log('id', transshipment_id, location_id);
 	const data = await LocationController.verifyPackageTransported(
 		Number(transshipment_id),
 		Number(location_id)

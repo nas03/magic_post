@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateOrderType } from '../../../../../context/actions/updateDataBranch';
 
 function UpdateOrderState() {
-    const [showModal, setShowModal] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const [showModalBill, setShowModalBill] = useState(false);
 	const dataBranch = useSelector((state: any) => state.dataBranch);
     const [packageID, setPackageID] = useState('')
 
-    const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const openBillHandle = () => {
 		setShowModalBill(true);
@@ -51,6 +51,7 @@ function UpdateOrderState() {
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Package ID
+												Package ID
 											</label>
 											<input
 												type="text"
@@ -75,11 +76,11 @@ function UpdateOrderState() {
 											/>
 										</div>
 									</form>
-                                    <button
-														type="submit"
-														onClick={() => setShowModal(false)}
-														className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-														Update Order State
+									<button
+										type="submit"
+										onClick={() => setShowModal(false)}
+										className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+										Update Order State
 									</button>
 								</div>
 							</div>
@@ -92,4 +93,4 @@ function UpdateOrderState() {
 	);
 }
 
-export default UpdateOrderState
+export default UpdateOrderState;

@@ -9,11 +9,16 @@ const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const location_id = Number(searchParams.get('location_id'));
 	const task = searchParams.get('task');
-
-	const data =
-		task == 'received'
-			? await PackageController.getPackageReceivedBranch(location_id)
-			: await PackageController.getPendingPackage(location_id);
+	console.log('task');
+	let data = null;
+	if (task == 'receive') {
+		data = await PackageController.getPackageReceivedBranch(location_id);
+	} else if (task == 'pending') {
+		data = await PackageController.getPendingPackage(location_id);
+	} else {
+		//task ship
+		data = await PackageController.getPackageReadyShip(location_id);
+	}
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

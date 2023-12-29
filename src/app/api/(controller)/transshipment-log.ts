@@ -60,6 +60,7 @@ const createNewTransshipmentLog = async (
 				package_id: package_id,
 			},
 		});
+
 		const updateSent = await prisma.locationStatistics.update({
 			where: {
 				location_id: data.request_location,
@@ -92,11 +93,11 @@ const getPackageLog = async (orderNumber: number) => {
 			destination_location: true,
 		},
 	});
-	
+
 	const loc = await Promise.all(
 		data.map(async (log) => {
 			const des = log.destination_location;
-			
+
 			const location = await prisma.location.findUnique({
 				where: {
 					id: des,
@@ -109,7 +110,7 @@ const getPackageLog = async (orderNumber: number) => {
 		})
 	);
 	const res = loc.flat();
-	
+
 	return res;
 };
 export {
