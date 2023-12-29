@@ -147,6 +147,98 @@ const updatePackageState = async (
 		return null;
 	}
 };
+const getPackageReadyShip = async (location_id: number) => {
+	try {
+		const locationTransLog = await prisma.transshipmentLog.findMany({
+			where: {
+				destination_location: location_id,
+				verified_timestamp: {
+					not: null,
+				},
+			},
+			select: {
+				package_id: true,
+			},
+		});
+		console.log('locTrans', locationTransLog);
+		const data = await Promise.all(
+			locationTransLog.map(async (transLog) => {
+				const package_id = transLog.package_id;
+				return await prisma.package.findUnique({
+					where: {
+						id: package_id,
+					},
+				});
+			})
+		);
+
+		return data;
+	} catch (error) {
+		console.log('Error get package ready ship');
+		return null;
+	}
+};
+const getPackageReceivedBranch = async (location_id: number) => {
+	try {
+		console.log('func', location_id);
+
+		const requestLog = await prisma.transshipmentLog.findMany({
+			where: {
+				request_location: {
+					equals: location_id,
+				},
+			},
+			select: {
+				request_location: true,
+			},
+			distinct: ['request_location'],
+		});
+
+		const transLogs = await Promise.all(
+			requestLog.map(async (log) => {
+				const request_loc = log.request_location;
+
+				const destinationLogs = await prisma.transshipmentLog.findMany({
+					where: {
+						AND: {
+							destination_location: {
+								equals: request_loc,
+							},
+							request_location: {
+								equals: request_loc,
+							},
+						},
+					},
+					select: {
+						package_id: true,
+					},
+				});
+
+				return destinationLogs.map((destLog) => destLog.package_id);
+			})
+		);
+
+		const flatPackageIds = transLogs.flat();
+
+		const data = await Promise.all(
+			flatPackageIds.map(async (package_id) => {
+				const res = await prisma.package.findFirst({
+					where: {
+						id: {
+							equals: package_id,
+						},
+					},
+				});
+				return res;
+			})
+		);
+
+		return data;
+	} catch (error) {
+		console.error('Error getting matching request and destination:', error);
+		return null;
+	}
+};
 
 export {
 	getPackage,
@@ -154,4 +246,6 @@ export {
 	updatePackageState,
 	getPackageTransshipmentLog,
 	getBranchPackage,
+	getPackageReadyShip,
+	getPackageReceivedBranch,
 };

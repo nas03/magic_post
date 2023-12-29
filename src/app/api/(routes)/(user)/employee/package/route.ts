@@ -7,8 +7,10 @@ import { TransshipmentLog, ShipmentLog, Package } from '@/src/util';
 import { Package_status } from '@prisma/client';
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
-	const package_id = searchParams.get('package_id');
-	const data = await PackageController.getPackage(Number(package_id));
+	const location_id = Number(searchParams.get('location_id'));
+	const role = searchParams.get('role');
+	console.log('location id', location_id);
+	const data = await PackageController.getPackageReceivedBranch(location_id);
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

@@ -1,22 +1,19 @@
-import * as React from 'react';
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
-import { useState, useEffect } from 'react';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import api from '@/src/lib/axios';
-import { useSession } from 'next-auth/react';
-import { TransshipmentLog } from '@/src/util';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
-import { useMemo, useCallback } from 'react';
 import SecurityIcon from '@mui/icons-material/Security';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-	updateOrderType,
-	updateOrderQuality,
-} from '../../../../../context/actions/updateDataBranch';
+import { useSession } from 'next-auth/react';
+import { useDispatch } from 'react-redux';
+import { updateOrderType } from '../../../../../context/actions/updateDataBranch';
+import { addSearchParams } from '@/src/util';
+import { Package, TransshipmentLog } from '@/src/util';
 
-let rows = [
+interface DataTableProps {
+	tableData: any; // Replace with the actual type of your tableData
+}
+
+const initialRows = [
 	{
 		id: 0,
 		col1: 0,
@@ -37,34 +34,45 @@ type Row = {
 	col5: string;
 	col6: number;
 };
-
-export default function DataTable({ tableData }) {
-	const [row, setRow] = useState<Row[]>(rows);
-
-	// if (tableData && tableData[0] != null) {
-	// 	rows = tableData.map((log: TransshipmentLog, index) => ({
-	// 		id: index + 1,
-	// 		col1: log.id,
-	// 		col2: log.request_location,
-	// 		col3: log.verified_timestamp ? 'Confirmed' : 'Pending',
-	// 		col4: log.package_id,
-	// 	}));
-	// }
-
+const fetchPackage = async (location_id: number) => {
+	const url = new URL(
+		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
+			location_id: location_id,
+			role: 'BRANCH_OFFICER',
+		})
+	);
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		next: {
+			revalidate: 3600,
+		},
+		cache: 'reload',
+	});
+	const { data } = await response.json();
+	console.log('data', data);
+	return data;
+};
+const DataTable: React.FC<DataTableProps> = ({ tableData }) => {
+	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
+	const { data: session, status } = useSession();
+	const [staffLocation, setStaffLocation] = useState<number | undefined>(
+		session?.user?.location_id
+	);
 
-	const deleteUser = useCallback(
-		(id: GridRowId) => () => {
-			setTimeout(() => {
-				setRow((prevRows) => prevRows.filter((row) => row.id !== id));
-			});
+	const deletePackage = useCallback(
+		(id: number) => () => {
+			setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 		},
 		[]
 	);
 
-	const toggleAdmin = useCallback(
-		(id: GridRowId) => () => {
-			setRow((prevRows) =>
+	const verify = useCallback(
+		(id: number) => () => {
+			setRows((prevRows) =>
 				prevRows.map((row) =>
 					row.id === id ? { ...row, col3: !row.col3 } : row
 				)
@@ -73,9 +81,9 @@ export default function DataTable({ tableData }) {
 		[]
 	);
 
-	const duplicateUser = useCallback(
-		(id: GridRowId) => () => {
-			setRow((prevRows) => {
+	const duplicatePackage = useCallback(
+		(id: number) => () => {
+			setRows((prevRows) => {
 				const rowToDuplicate = prevRows.find((row) => row.id === id)!;
 				return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
 			});
@@ -83,14 +91,14 @@ export default function DataTable({ tableData }) {
 		[]
 	);
 
-	const columns = useMemo<GridColDef<Row>[]>(
+	const columns = useMemo(
 		() => [
 			{ field: 'col1', headerName: 'ID', width: 100 },
-			{ field: 'col2', headerName: 'Request', width: 200 },
-			{ field: 'col3', headerName: 'Verify', type: 'boolean', width: 100 },
-			{ field: 'col4', headerName: 'PackageID', width: 100 },
-			{ field: 'col5', headerName: 'PackageType', width: 150 },
-			{ field: 'col6', headerName: 'PackageQuality', width: 150 },
+			{ field: 'col2', headerName: 'State', width: 100 },
+			{ field: 'col3', headerName: 'PackageType', width: 150 },
+			{ field: 'col4', headerName: 'Sender', width: 150 },
+			{ field: 'col5', headerName: 'Receiver', width: 150 },
+			{ field: 'col6', headerName: 'Verify', type: 'boolean', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -99,35 +107,60 @@ export default function DataTable({ tableData }) {
 					<GridActionsCellItem
 						icon={<DeleteIcon />}
 						label="Delete"
-						onClick={deleteUser(params.id)}
+						onClick={deletePackage(params.id)}
 					/>,
 					<GridActionsCellItem
 						icon={<SecurityIcon />}
 						label="Toggle Admin"
-						onClick={toggleAdmin(params.id)}
+						onClick={verify(params.id)}
 						showInMenu
 					/>,
 					<GridActionsCellItem
 						icon={<FileCopyIcon />}
 						label="Duplicate User"
-						onClick={duplicateUser(params.id)}
+						onClick={duplicatePackage(params.id)}
 						showInMenu
 					/>,
 				],
 			},
 		],
-		[deleteUser, toggleAdmin, duplicateUser]
+		[deletePackage, verify, duplicatePackage]
 	);
 
-	const getOrderTypeAndQuality = (e: any) => {
-		dispatch(updateOrderType(e.col5));
-		dispatch(updateOrderQuality(e.col6));
+	const fetchData = async () => {
+		if (staffLocation !== undefined) {
+			const data = await fetchPackage(staffLocation);
+			const tablePackageRow = data.map((pack: Package, index) => ({
+				id: index + 1,
+				col1: pack.id,
+				col2: pack.state,
+				col3: pack.type,
+				col4: pack.sender,
+				col5: pack.receiver,
+			}));
+			setRows(tablePackageRow);
+		}
 	};
+
+	useEffect(() => {
+		fetchData();
+		const intervalId = setInterval(() => {
+			fetchData();
+		}, 3600 * 1000);
+
+		return () => clearInterval(intervalId);
+	}, [staffLocation]);
+
+	useEffect(() => {
+		if (status === 'authenticated') {
+			setStaffLocation(session?.user?.location_id);
+		}
+	}, [session, status]);
 
 	return (
 		<div style={{ height: 400, width: '100%' }}>
 			<DataGrid
-				rows={row}
+				rows={rows}
 				columns={columns}
 				initialState={{
 					pagination: {
@@ -135,9 +168,11 @@ export default function DataTable({ tableData }) {
 					},
 				}}
 				checkboxSelection
-				onRowClick={(e) => getOrderTypeAndQuality(e.row)}
+				onRowClick={(e) => dispatch(updateOrderType(e.row.col5))}
 				disableRowSelectionOnClick
 			/>
 		</div>
 	);
-}
+};
+
+export default DataTable;

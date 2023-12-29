@@ -10,24 +10,13 @@ import { MainContext, SideLeftBar } from './components';
 import { signOut } from 'next-auth/react';
 import myStore from '../../../../context/store';
 import { Provider } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '@/src/lib/axios';
 
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 function Page() {
-	const [rowsData, setRowsData] = useState(null);
-	const { data: session } = useSession();
-	if (session && session.user.location_id) {
-		const fetchAllData = async () => {
-			// const rows = await fetchRowsData(session.user.location_id);
-			// const package = await fetchPackageData();
 
-			// console.log('rows', rows);
-			// setRowsData(rows);
-		};
-		fetchAllData();
-	}
 
 	return (
 		<Provider store={myStore}>
@@ -97,7 +86,7 @@ function Page() {
 						<SideLeftBar />
 					</div>
 					<div className=" h-full w-[85%] flex justify-center border-l-2 border-gray-300 ">
-						<MainContext tableData={rowsData} />
+						<MainContext />
 					</div>
 				</div>
 			</div>
