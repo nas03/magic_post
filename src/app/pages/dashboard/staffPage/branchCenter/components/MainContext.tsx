@@ -237,7 +237,7 @@ const MainContext = (props) => {
 						</div>
 						<DataTable />
 					</div>
-					<div className=" w-full flex justify-end items-center gap-2 h-[10%]">
+					<div className=" w-full flex justify-end items-center gap-2 h-[25%]">
 						<SwitchButton tableType={tableType}/>
 						{/* <button
 						onClick={() => openBillHandle()}

@@ -36,7 +36,7 @@ function MainContent(props) {
 							<span className=" font-semibold text-[#54555E]">Received</span>
 							<div className=" flex justify-between items-end gap-[30%] w-[80%]">
 								<span className=" text-xl font-bold text-[#0F0D16]">
-									{props.receivedCount}
+									1,400
 								</span>
 								<div className=" text-red-500 flex">
 									<ArrowUpIcon className=" w-4 h-4 " />
@@ -55,7 +55,7 @@ function MainContent(props) {
 							<span className=" font-semibold text-[#54555E]">Shiped</span>
 							<div className=" flex justify-between items-end gap-[30%] w-[80%]">
 								<span className=" text-xl font-bold text-[#0F0D16]">
-									{props.sentCount}
+									1,100
 								</span>
 								<div className=" text-violet-500 flex">
 									<ArrowUpIcon className=" w-4 h-4 " />

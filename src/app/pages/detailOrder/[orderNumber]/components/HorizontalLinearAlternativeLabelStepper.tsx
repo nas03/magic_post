@@ -13,8 +13,8 @@ const steps = [
 export default function HorizontalLinearAlternativeLabelStepper({step}) {
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={1} alternativeLabel>
-        {steps.map((label) => (
+      <Stepper activeStep={2} alternativeLabel>
+        {step.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>

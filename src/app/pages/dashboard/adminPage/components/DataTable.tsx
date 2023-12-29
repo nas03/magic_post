@@ -81,7 +81,7 @@ const DataTable = ({ tableType }) => {
 	);
 
 	const deletePackage = useCallback(
-		(id: number) => () => {
+		(id: GridRowId) => () => {
 			setRow((prevRows) => prevRows.filter((row) => row.id !== id));
 		},
 		[]

@@ -37,9 +37,8 @@ const CircleIcon = ({ number }) => {
 
 const Page = ({ params }: { params: { orderNumber: number } }) => {
 	const [transLog, setTransLog] = useState([]);
-	const [transLogName, setTransLogName] = useState([])
+	const [transLogName, setTransLogName] = useState(['Hub Ha Noi', 'Branch Ha Noi', 'Hub Da Nang', 'Branch Da Nang'])
 	const [loading, setLoading] = useState(true);
-
 
 
 	useEffect(() => {
@@ -66,9 +65,6 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 		return <div>Loading...</div>;
 	}
 
-	transLog.map((log) => (
-		setTransLogName((pre) => [...pre, log])
-	))
 
 	return (
 		<>
