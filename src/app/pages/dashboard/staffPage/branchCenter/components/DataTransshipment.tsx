@@ -96,7 +96,7 @@ const DataTransshipment = () => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(transshipment_id),
+					body: JSON.stringify({ transshipment_id, staffLocation }),
 				}
 			);
 

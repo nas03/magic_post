@@ -1,4 +1,4 @@
-import { TransshipmentLog } from '@/src/util';
+import { TransshipmentLog, getFormattedDate } from '@/src/util';
 import prisma from '@/src/lib/prisma';
 const getTransshipmentLog = async (location_id: number) => {
 	try {
@@ -15,6 +15,7 @@ const getTransshipmentLog = async (location_id: number) => {
 		return null;
 	}
 };
+
 const getTransshipmentLogBranch = async (location_id: number) => {
 	try {
 		const data = await prisma.transshipmentLog.findMany({
@@ -41,15 +42,22 @@ const getTransshipmentLogBranch = async (location_id: number) => {
 	}
 };
 //Create a new transition log
-const createNewTransshipmentLog = async (dataLog: TransshipmentLog) => {
+const createNewTransshipmentLog = async (
+	package_id: number,
+	request_location: number,
+	destination_location: number,
+	location_id: number,
+	verified_timestamp: null | Date
+) => {
 	try {
 		const data = await prisma.transshipmentLog.create({
 			data: {
-				verified_timestamp: dataLog.verified_timestamp,
-				request_location: dataLog.request_location,
-				destination_location: dataLog.destination_location,
-				location_id: dataLog.location_id,
-				package_id: dataLog.package_id,
+				verified_timestamp: verified_timestamp,
+				request_timestamp: new Date(),
+				request_location: request_location,
+				destination_location: destination_location,
+				location_id: destination_location,
+				package_id: package_id,
 			},
 		});
 		const updateSent = await prisma.locationStatistics.update({

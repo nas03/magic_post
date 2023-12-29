@@ -34,16 +34,13 @@ const fetchPackage = async (location_id: number) => {
 	const url = new URL(
 		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
 			location_id: location_id,
-			role: 'BRANCH_OFFICER',
+			task: 'pending',
 		})
 	);
 	const response = await fetch(url, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
-		},
-		next: {
-			revalidate: 3600,
 		},
 		cache: 'reload',
 	});
@@ -128,7 +125,7 @@ const DataTable = () => {
 			const data = await fetchPackage(staffLocation);
 			const tablePackageRow = data.map((pack: Package, index) => ({
 				id: index + 1,
-				col1: pack.id,
+				col1: pack.id ,
 				col2: pack.state,
 				col3: pack.type,
 				col4: pack.sender,

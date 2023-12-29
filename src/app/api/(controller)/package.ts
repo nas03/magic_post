@@ -109,7 +109,13 @@ const createNewPackage = async (data: Package) => {
 			package_id: newPackage.id,
 		};
 		const newTransshipmentLog =
-			await TransshipmentLogController.createNewTransshipmentLog(logData);
+			await TransshipmentLogController.createNewTransshipmentLog(
+				newPackage.id,
+				data.received_location_id,
+				data.received_location_id,
+				data.received_location_id,
+				currentDate
+			);
 		const updateReceived = await prisma.locationStatistics.update({
 			where: {
 				location_id: data.received_location_id,
@@ -176,6 +182,43 @@ const getPackageReadyShip = async (location_id: number) => {
 	} catch (error) {
 		console.log('Error get package ready ship');
 		return null;
+	}
+};
+const getPendingPackage = async (location_id: number) => {
+	try {
+		const transLog = await prisma.transshipmentLog.findMany({
+			where: {
+				location_id: location_id,
+			},
+			select: {
+				package_id: true,
+			},
+			distinct: ['package_id'],
+		});
+		console.log('transLog', transLog);
+		const packages = await Promise.all(
+			transLog.map(async (log) => {
+				const pack_id = log.package_id;
+				const data = await prisma.package.findFirst({
+					where: {
+						AND: {
+							id: {
+								equals: pack_id,
+							},
+							state: {
+								equals: 'ONGOING',
+							},
+						},
+					},
+					distinct: ['id'],
+				});
+				return data;
+			})
+		);
+		const filteredPackages = packages.filter((data) => data !== null);
+		return filteredPackages;
+	} catch (error) {
+		console.log('Error fetching pending package');
 	}
 };
 const getPackageReceivedBranch = async (location_id: number) => {
@@ -248,4 +291,5 @@ export {
 	getBranchPackage,
 	getPackageReadyShip,
 	getPackageReceivedBranch,
+	getPendingPackage,
 };

@@ -34,7 +34,7 @@ const fetchTransshipmentLog = async (location_id: number) => {
 			new URL('http://localhost:3000/api/employee/transshipment-log'),
 			{
 				location_id: location_id,
-				role: 'BRANCH_OFFICER',
+				task: 'receive',
 			}
 		)
 	);
@@ -43,9 +43,7 @@ const fetchTransshipmentLog = async (location_id: number) => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		next: {
-			revalidate: 3600,
-		},
+
 		cache: 'default',
 	});
 	const { data } = await response.json();
@@ -96,7 +94,7 @@ const DataTransshipment = () => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(transshipment_id),
+					body: JSON.stringify({ transshipment_id, staffLocation }),
 				}
 			);
 
@@ -122,8 +120,8 @@ const DataTransshipment = () => {
 
 	const columns = useMemo(
 		() => [
-			{ field: 'col1', headerName: 'ID', width: 50 },
-			{ field: 'col2', headerName: 'Request Location', width: 150 },
+			{ field: 'col1', headerName: 'ID', width: 100 },
+			{ field: 'col2', headerName: 'Request Location', width: 100 },
 			{ field: 'col3', headerName: 'Request Timestamp', width: 150 },
 			{ field: 'col4', headerName: 'Verify Timestamp', width: 150 },
 			{

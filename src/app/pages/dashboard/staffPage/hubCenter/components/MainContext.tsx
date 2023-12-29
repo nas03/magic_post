@@ -15,6 +15,8 @@ import {
 } from '../../../../../context/actions/updateOrderList';
 
 import DataTransshipment from './DataTransshipment';
+import { formDataToJson } from '@/src/util';
+import { compareSync } from 'bcryptjs';
 
 const MainContext = (props) => {
 	console.log(props.tableData);
@@ -24,6 +26,47 @@ const MainContext = (props) => {
 	const orderTypeList = useSelector((state: any) => state.orderList.typeList);
 	const orderList = useSelector((state: any) => state.orderList.orderList);
 	const [showModal, setShowModal] = useState(false);
+	const [update, setUpdate] = useState(true);
+	const [packageId, setPackageID] = useState('');
+	const [destination, setDestination] = useState('');
+
+	const handleCreateOrders = async (e: any) => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const package_id = Number(formData.get('package_id'));
+		const request_location = Number(formData.get('request_location'));
+		const destination_location = Number(formData.get('destination_location'));
+
+		// You can also use event.target.elements to access form elements
+		// const package_id = Number(e.target.elements.package_id.value);
+		// const request_location = Number(e.target.elements.request_location.value);
+		// const destination_location = Number(e.target.elements.destination_location.value);
+
+		const postData = {
+			verified_timestamp: null,
+			location_id: request_location,
+			package_id: package_id,
+			request_location: request_location,
+			destination_location: destination_location,
+		};
+
+		console.log('postData', postData);
+
+		const response = await fetch(
+			'http://localhost:3000/api/employee/transshipment-log',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(postData),
+			}
+		);
+
+		const { data } = await response.json();
+		return data;
+	};
 
 	if (orderList[1] != null) {
 		console.log('name list', orderList[orderList.length - 1].col2);
@@ -128,7 +171,7 @@ const MainContext = (props) => {
 						<button
 							onClick={() => setShowModal(true)}
 							className=" rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]">
-							Create Orders
+							Create Transshipment Order
 						</button>
 						{showModal ? (
 							<>
@@ -150,58 +193,61 @@ const MainContext = (props) => {
 										<div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 											<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 												<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-													Create Shipping Order
+													Create Transshipment Order
 												</h1>
-												<form className="space-y-4 md:space-y-6" action="#">
+												<form
+													className="space-y-4 md:space-y-6"
+													action="#"
+													onSubmit={(e) => {
+														handleCreateOrders(e);
+														createOrderHandle();
+													}}>
 													<div>
 														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-															Order Name
+															Package ID
 														</label>
 														<input
-															id="Order Name"
-															placeholder={orderNameList}
+															id="package_id"
+															type="number"
+															onChange={(e) => setPackageID(e.target.value)}
+															placeholder="Package ID"
 															required
+															name="package_id"
 															className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
 														/>
 													</div>
+
 													<div>
 														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-															Order Type
+															Request Location
 														</label>
 														<input
-															id="Order Name"
-															placeholder={orderTypeList}
+															id="request_location"
+															placeholder="Request Location ID"
+															defaultValue={props.staffLocation}
 															required
-															className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-														/>
-													</div>
-													<div>
-														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-															Come From
-														</label>
-														<input
-															id="come from"
-															placeholder="Empty"
-															required
+															name="request_location"
 															className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "
 														/>
 													</div>
 													<div>
 														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-															Roads to goal
+															Destination Location
 														</label>
 														<input
-															id="Roads"
-															placeholder="Empty"
+															name="destination_location"
+															id="destination_location"
+															type="number"
+															onChange={(e) => setDestination(e.target.value)}
+															placeholder="Destination Location ID"
 															required
 															className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
 														/>
 													</div>
 													<button
 														type="submit"
-														onClick={() => createOrderHandle()}
 														className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-														Confirm Orders Received
+														Confirm Request
 													</button>
 												</form>
 											</div>

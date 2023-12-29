@@ -8,9 +8,12 @@ import { Package_status } from '@prisma/client';
 const GET = async (request: NextRequest) => {
 	const { searchParams } = new URL(request.url);
 	const location_id = Number(searchParams.get('location_id'));
-	const role = searchParams.get('role');
-	console.log('location id', location_id);
-	const data = await PackageController.getPackageReceivedBranch(location_id);
+	const task = searchParams.get('task');
+
+	const data =
+		task == 'received'
+			? await PackageController.getPackageReceivedBranch(location_id)
+			: await PackageController.getPendingPackage(location_id);
 	if (!data) {
 		return NextResponse.json({
 			status: 500,

@@ -93,7 +93,7 @@ function Page() {
 						<SideLeftBar staffLocation={staffLocation} />
 					</div>
 					<div className=" h-full w-[85%] flex justify-center border-l-2 border-gray-300 ">
-						<MainContext />
+						<MainContext staffLocation={staffLocation} />
 					</div>
 				</div>
 			</div>

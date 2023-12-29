@@ -25,10 +25,22 @@ const GET = async (request: NextRequest) => {
 	});
 };
 const POST = async (request: NextRequest) => {
-	const logData = (await request.json()) as TransshipmentLog;
+	const {
+		verified_timestamp,
+		request_location,
+		destination_location,
+		location_id,
+		package_id,
+	} = await request.json();
 	//TODO: check if package sent to branch instead of hub
 	const newTransshipmentLog =
-		await TransshipmentLogController.createNewTransshipmentLog(logData);
+		await TransshipmentLogController.createNewTransshipmentLog(
+			Number(package_id),
+			Number(request_location),
+			Number(destination_location),
+			Number(location_id),
+			verified_timestamp
+		);
 	if (!newTransshipmentLog) {
 		return NextResponse.json({
 			status: 400,
@@ -41,11 +53,12 @@ const POST = async (request: NextRequest) => {
 	});
 };
 const PATCH = async (request: NextRequest) => {
-	const dataRes = await request.json();
-	
+	const { location_id, transshipment_id } = await request.json();
+
 	// console.log('id', transshipment_id, dataRes);
 	const data = await LocationController.verifyPackageTransported(
-		Number(dataRes)
+		Number(transshipment_id),
+		Number(location_id)
 	);
 	if (!data) {
 		return NextResponse.json({

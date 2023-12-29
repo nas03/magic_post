@@ -72,7 +72,7 @@ model TransshipmentLog {
 model ShipmentLog {
   id                Int            @id @default(autoincrement())
   request_timestamp DateTime       @default(now())
-  status            Package_status
+  status            Package_status @default(SHIP)
   location_id       Int
   package_id        Int
   location          Location       @relation(fields: [location_id], references: [id])
