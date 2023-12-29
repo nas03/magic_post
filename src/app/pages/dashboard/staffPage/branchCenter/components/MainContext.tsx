@@ -111,7 +111,7 @@ const MainContext = (props) => {
 
 			{/* table session */}
 
-			{tableType == 'Create Orders' ? (
+			{tableType == 'Packages' ? (
 				<>
 					<div className=" w-full h-[85%] flex flex-col gap-[5%]">
 						<div className=" w-full justify-between flex items-center">
@@ -128,7 +128,7 @@ const MainContext = (props) => {
 						<button
 							onClick={() => setShowModal(true)}
 							className=" rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]">
-							Create Orders
+							Verify Orders
 						</button>
 						{showModal ? (
 							<>
@@ -235,7 +235,13 @@ const MainContext = (props) => {
 						<DataTable />
 					</div>
 					<div className=" w-full flex justify-end items-center gap-2 h-[10%]">
-						<CreateUserOrder />
+						{
+							tableType == 'Gathering Point'
+							?
+							<CreateUserOrder />
+							:
+							''
+						}
 						{/* <button
 						onClick={() => openBillHandle()}
 						className=" rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]">

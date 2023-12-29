@@ -45,6 +45,14 @@ function SideLeftBar({ staffLocation }) {
 				<ClipboardDocumentListIcon className="text-gray-300 w-6 h-6 " />
 			),
 		},
+		{
+			id: '2',
+			name: 'Packages',
+			icon: <ClipboardDocumentListIcon className="text-[#32989a] w-6 h-6 " />,
+			defaultIcon: (
+				<ClipboardDocumentListIcon className="text-gray-300 w-6 h-6 " />
+			),
+		},
 	];
 	const handleCreatePackage = async (e: any) => {
 		e.preventDefault();
@@ -107,12 +115,12 @@ function SideLeftBar({ staffLocation }) {
 			{showModal ? (
 				<>
 					<div className="justify-center items-center flex flex-col overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-						<div className="  w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center relative">
-							<XCircleIcon
-								onClick={() => setShowModal(false)}
-								color="red"
-								className=" z-50 w-5 h-5 absolute right-[5%] top-2 object-contain cursor-pointer"
-							/>
+						<div className="  w-[40vw] py-5 bg-white rounded-md flex flex-col justify-center items-center relative">	
+								<XCircleIcon
+									onClick={() => setShowModal(false)}
+									color="red"
+									className=" z-50 w-5 h-5 absolute right-[5%] top-[5%] object-contain cursor-pointer"
+								/>
 							<div className="flex justify-center py-5 items-center text-2xl font-semibold text-gray-900 dark:text-white">
 								<img
 									className="w-8 h-8 mr-2 rounded-full"
@@ -127,13 +135,12 @@ function SideLeftBar({ staffLocation }) {
 										Create New Order
 									</h1>
 									<form
-										className="space-y-4 md:space-y-6 h-100 overflow-y-scroll"
+										className="space-y-4 md:space-y-6 h-100 grid grid-cols-2 gap-2 justify-center items-end"
 										action="#"
 										onSubmit={(e) => {
 											handleCreatePackage(e);
 											setShowModal(false);
 										}}>
-										<div className="flex flex-row">
 											<div>
 												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
 													Sender Name
@@ -160,21 +167,19 @@ function SideLeftBar({ staffLocation }) {
 													required
 												/>
 											</div>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Sender Location
-											</label>
-											<input
-												type="text"
-												name="sender_location"
-												id="sender_location"
-												placeholder=""
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
-										<div className="flex flex-row">
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Sender Location
+												</label>
+												<input
+													type="text"
+													name="sender_location"
+													id="sender_location"
+													placeholder=""
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													required
+												/>
+											</div>
 											<div className="flex-grow">
 												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
 													Receiver Name
@@ -201,36 +206,33 @@ function SideLeftBar({ staffLocation }) {
 													required
 												/>
 											</div>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Receiver Location
-											</label>
-											<input
-												type="text"
-												name="receiver_location"
-												id="receiver_location"
-												placeholder=""
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Receiver Location
+												</label>
+												<input
+													type="text"
+													name="receiver_location"
+													id="receiver_location"
+													placeholder=""
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													required
+												/>
+											</div>
 
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Package Type
-											</label>
-											<select
-												name="type"
-												id="type"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required>
-												<option value="DOCUMENT">DOCUMENT</option>
-												<option value="GOODS">GOODS</option>
-											</select>
-										</div>
-										<div>
-											<div className="flex flex-row">
+											<div>
+												<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+													Package Type
+												</label>
+												<select
+													name="type"
+													id="type"
+													className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													required>
+													<option value="DOCUMENT">DOCUMENT</option>
+													<option value="GOODS">GOODS</option>
+												</select>
+											</div>
 												<div className="">
 													<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
 														Destination
@@ -258,15 +260,14 @@ function SideLeftBar({ staffLocation }) {
 														required
 													/>
 												</div>
-											</div>
-										</div>
 
+									</form>
 										<button
 											type="submit"
+											onClick={() => setShowModal(false)}
 											className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
 											Create New Order
 										</button>
-									</form>
 								</div>
 							</div>
 						</div>

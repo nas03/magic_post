@@ -34,7 +34,7 @@ const CircleIcon = ({ number }) => {
 };
 
 const Page = ({ params }: { params: { orderNumber: number } }) => {
-	const [transLog, setTransLog] = useState(null);
+	const [transLog, setTransLog] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -92,13 +92,14 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 								alt=""
 							/>
 							<div className=" absolute bg-lineBackground w-full h-full flex justify-between items-center">
-								{transLog.map((index) => (
+								{/* {transLog.map((index) => (
 									<CircleIcon number={index + 1} />
-								))}
+								))} */}
+								<CircleIcon number={'22'}/>
 							</div>
 						</div>
 						<div className=" w-full h-[40%] flex justify-between">
-							<PackageStatus location={transLog.name} />
+							{/* <PackageStatus location={transLog.name} /> */}
 						</div>
 					</div>
 					<div className=" w-full h-[10%] my-[1.5%] justify-between flex">

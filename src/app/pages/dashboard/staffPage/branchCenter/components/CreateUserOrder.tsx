@@ -19,7 +19,6 @@ const CreateUserOrder = () => {
 	const [orderNumber, setOrderNumber] = useState('');
 	const dispatch = useDispatch();
 	const dataBranch = useSelector((state: any) => state.dataBranch);
-	// const router = useRouter()
 
 	const openBillHandle = () => {
 		setShowModalBill(true);
@@ -62,79 +61,49 @@ const CreateUserOrder = () => {
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Sender
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateSenderBranch(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.sender}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Sender Location
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateSenderLocation(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.senderLocation}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Sender Phone Number
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateSenderPhone(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.senderPhone}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Receiver
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateReceiverBranch(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.receiver}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Receiver Location
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateReceiverLocation(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.receiverLocation}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Receiver Phone Number
 											</label>
-											<input
-												type="text"
-												onChange={(e) =>
-													dispatch(updateReceiverPhone(e.target.value))
-												}
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
+											<span className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+												{dataBranch.receiverPhone}
+											</span>
 										</div>
 										<div>
 											<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

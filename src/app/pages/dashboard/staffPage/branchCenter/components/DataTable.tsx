@@ -8,6 +8,15 @@ import { useDispatch } from 'react-redux';
 import { updateOrderType } from '../../../../../context/actions/updateDataBranch';
 import { addSearchParams } from '@/src/util';
 import { Package, TransshipmentLog } from '@/src/util';
+import {
+	updateSenderBranch,
+	updateSenderLocation,
+	updateSenderPhone,
+	updateReceiverBranch,
+	updateReceiverLocation,
+	updateReceiverPhone,
+	updateCustomInstruction
+} from '../../../../../context/actions/updateDataBranch';
 
 const initialRows = [
 	{
@@ -17,7 +26,11 @@ const initialRows = [
 		col3: '',
 		col4: '',
 		col5: 'Package',
-		col6: false,
+		col6: '',
+		col7: '',
+		col8: '',
+		col9: '',
+		col10: false,
 	},
 ];
 
@@ -28,7 +41,11 @@ type Row = {
 	col3: string;
 	col4: string;
 	col5: string;
-	col6: boolean;
+	col6: string;
+	col7: string,
+	col8: string,
+	col9: string,
+	col10: boolean
 };
 const fetchPackage = async (location_id: number) => {
 	const url = new URL(
@@ -71,7 +88,7 @@ const DataTable = () => {
 		(id: number) => () => {
 			setRows((prevRows) =>
 				prevRows.map((row) =>
-					row.id === id ? { ...row, col6: !row.col6 } : row
+					row.id === id ? { ...row, col10: !row.col10 } : row
 				)
 			);
 		},
@@ -90,11 +107,16 @@ const DataTable = () => {
 
 	const columns = useMemo(
 		() => [
-			{ field: 'col1', headerName: 'ID', width: 100 },
+			{ field: 'col1', headerName: 'ID', width: 50 },
 			{ field: 'col2', headerName: 'State', width: 100 },
-			{ field: 'col3', headerName: 'PackageType', width: 150 },
-			{ field: 'col4', headerName: 'Sender', width: 150 },
-			{ field: 'col5', headerName: 'Receiver', width: 150 },
+			{ field: 'col3', headerName: 'PackageType', width: 100 },
+			{ field: 'col4', headerName: 'Sender', width: 100 },
+			{ field: 'col5', headerName: 'Receiver', width: 100 },
+			{ field: 'col6', headerName: 'Sender Location', width: 200 },
+			{ field: 'col7', headerName: 'Receiver Location', width: 200 },
+			{ field: 'col8', headerName: 'Sender Phone', width: 150 },
+			{ field: 'col9', headerName: 'Receiver Phone', width: 150 },
+			{ field: 'col10', headerName: 'Verify', type: 'boolean', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -133,6 +155,10 @@ const DataTable = () => {
 				col3: pack.type,
 				col4: pack.sender,
 				col5: pack.receiver,
+				col6: pack.sender_location,
+				col7: pack.receiver_location,
+				col8: pack.sender_phone,
+				col9: pack.receiver_phone
 			}));
 			setRows(tablePackageRow);
 		}
@@ -153,6 +179,16 @@ const DataTable = () => {
 		}
 	}, [session, status]);
 
+	const getSelectedRowData = (e:any) => {
+		dispatch(updateOrderType(e.col3))
+		dispatch(updateSenderBranch(e.col4))
+		dispatch(updateReceiverBranch(e.col5))
+		dispatch(updateSenderLocation(e.col6))
+		dispatch(updateReceiverLocation(e.col7))
+		dispatch(updateSenderPhone(e.col8))
+		dispatch(updateReceiverPhone(e.col9))
+	}
+
 	return (
 		<div style={{ height: 400, width: '100%' }}>
 			<DataGrid
@@ -164,7 +200,7 @@ const DataTable = () => {
 					},
 				}}
 				checkboxSelection
-				onRowClick={(e) => dispatch(updateOrderType(e.row.col3))}
+				onRowClick={(e) => getSelectedRowData(e.row)}
 				disableRowSelectionOnClick
 			/>
 		</div>
