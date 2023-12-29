@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { formDataToJson } from '@/src/util';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import UpdateOrderState from './UpdateOrderState';
 
 function SideLeftBar({ staffLocation }) {
 	const [name, setName] = useState('');
@@ -55,14 +56,9 @@ function SideLeftBar({ staffLocation }) {
 				<ClipboardDocumentListIcon className="text-gray-300 w-6 h-6 " />
 			),
 		},
+
 		{
 			id: '3',
-			name: 'Update Package State',
-			icon: <SettingsIcon className="text-[#32989a] w-6 h-6 " />,
-			defaultIcon: <SettingsIcon className="text-gray-300 w-6 h-6 " />,
-		},
-		{
-			id: '4',
 			name: 'Create Shipment Order',
 			icon: <AllInboxIcon className="text-[#32989a] w-6 h-6 " />,
 			defaultIcon: <AllInboxIcon className="text-gray-300 w-6 h-6 " />,
@@ -121,6 +117,9 @@ function SideLeftBar({ staffLocation }) {
 						)}
 					</div>
 				))}
+			</div>
+			<div className="p-2">
+				<UpdateOrderState />
 			</div>
 			<button
 				onClick={() => setShowModal(true)}

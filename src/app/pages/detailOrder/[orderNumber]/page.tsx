@@ -38,7 +38,7 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 	const [transLog, setTransLog] = useState([]);
 	const [transLogName, setTransLogName] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const name = ['Branch A', 'Hub X'];
+	const name = ['Branch A', 'Hub X', 'Hub C', 'Branch B'];
 
 	// useEffect(() => {
 	// 	const fetchData = async () => {
