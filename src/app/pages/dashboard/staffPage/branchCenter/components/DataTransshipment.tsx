@@ -9,7 +9,6 @@ import { updateOrderType } from '../../../../../context/actions/updateDataBranch
 import { addSearchParams } from '@/src/util';
 import { Package, TransshipmentLog } from '@/src/util';
 
-
 const initialRows = [
 	{
 		id: 0,
@@ -31,12 +30,16 @@ type Row = {
 	col5: string;
 	col6: number;
 };
-const fetchPackage = async (location_id: number) => {
+
+const fetchTransshipmentLog = async (location_id: number) => {
 	const url = new URL(
-		addSearchParams(new URL('http://localhost:3000/api/employee/package'), {
-			location_id: location_id,
-			role: 'BRANCH_OFFICER',
-		})
+		addSearchParams(
+			new URL('http://localhost:3000/api/employee/transshipment-log'),
+			{
+				location_id: location_id,
+				role: 'BRANCH_OFFICER',
+			}
+		)
 	);
 	const response = await fetch(url, {
 		method: 'GET',
@@ -52,8 +55,7 @@ const fetchPackage = async (location_id: number) => {
 	console.log('data', data);
 	return data;
 };
-
-const DataTable= () => {
+const DataTransshipment = () => {
 	const [rows, setRows] = useState<Row[]>(initialRows);
 	const dispatch = useDispatch();
 	const { data: session, status } = useSession();
@@ -92,11 +94,10 @@ const DataTable= () => {
 	const columns = useMemo(
 		() => [
 			{ field: 'col1', headerName: 'ID', width: 100 },
-			{ field: 'col2', headerName: 'State', width: 100 },
-			{ field: 'col3', headerName: 'PackageType', width: 150 },
-			{ field: 'col4', headerName: 'Sender', width: 150 },
-			{ field: 'col5', headerName: 'Receiver', width: 150 },
-			{ field: 'col6', headerName: 'Verify', type: 'boolean', width: 100 },
+			{ field: 'col2', headerName: 'Request Location', width: 100 },
+			{ field: 'col3', headerName: 'Request Timestamp', width: 150 },
+			{ field: 'col4', headerName: 'Verify Timestamp', width: 150 },
+			{ field: 'col5', headerName: 'Verify', type: 'boolean', width: 100 },
 			{
 				field: 'actions',
 				type: 'actions',
@@ -127,16 +128,17 @@ const DataTable= () => {
 
 	const fetchData = async () => {
 		if (staffLocation !== undefined) {
-			const data = await fetchPackage(staffLocation);
-			const tablePackageRow = data.map((pack: Package, index) => ({
-				id: index + 1,
-				col1: pack.id,
-				col2: pack.state,
-				col3: pack.type,
-				col4: pack.sender,
-				col5: pack.receiver,
-			}));
-			setRows(tablePackageRow);
+			const data = await fetchTransshipmentLog(staffLocation);
+			const tableTransshipmentRow = data.map(
+				(pack: TransshipmentLog, index) => ({
+					id: index + 1,
+					col1: pack.id,
+					col2: pack.request_location,
+					col3: pack.request_timestamp,
+					col4: pack.verified_timestamp,
+				})
+			);
+			setRows(tableTransshipmentRow);
 		}
 	};
 
@@ -173,4 +175,4 @@ const DataTable= () => {
 	);
 };
 
-export default DataTable;
+export default DataTransshipment;

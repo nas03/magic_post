@@ -15,18 +15,14 @@ import {
 } from '../../../../../context/actions/updateOrderList';
 import CreateUserOrder from './CreateUserOrder';
 
-
 const MainContext = (props) => {
-    console.log(props.tableData)
+	console.log(props.tableData);
 	const dispatch = useDispatch();
-	const tableType = useSelector((state:any) => state.tableData.tableData);
-	const orderNameList = useSelector((state:any) => state.orderList.nameList);
-	const orderTypeList = useSelector((state:any) => state.orderList.typeList);
-	const orderList = useSelector((state:any) => state.orderList.orderList);
+	const tableType = useSelector((state: any) => state.tableData.tableData);
+	const orderNameList = useSelector((state: any) => state.orderList.nameList);
+	const orderTypeList = useSelector((state: any) => state.orderList.typeList);
+	const orderList = useSelector((state: any) => state.orderList.orderList);
 	const [showModal, setShowModal] = useState(false);
-
-	
-	
 
 	if (orderList[1] != null) {
 		console.log('name list', orderList[orderList.length - 1].col2);
@@ -37,8 +33,6 @@ const MainContext = (props) => {
 		dispatch(clearOrderType(''));
 		setShowModal(false);
 	};
-
-
 
 	return (
 		<div className=" w-full h-full p-[2%]">
@@ -114,7 +108,7 @@ const MainContext = (props) => {
 				''
 			)}
 
-{/* table session */}
+			{/* table session */}
 
 			<div className=" w-full h-[65%] flex flex-col gap-[5%]">
 				<div className=" w-full justify-between flex items-center">
@@ -123,7 +117,7 @@ const MainContext = (props) => {
 					</span>
 					<DateTimePickerValue />
 				</div>
-				<DataTable tableData={props.tableData} />
+				<DataTable />
 			</div>
 			{tableType == 'Create Orders' ? (
 				<div className=" w-full flex justify-end items-center h-[10%]">
@@ -163,7 +157,8 @@ const MainContext = (props) => {
 														id="Order Name"
 														placeholder={orderNameList}
 														required
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+													/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -173,7 +168,8 @@ const MainContext = (props) => {
 														id="Order Name"
 														placeholder={orderTypeList}
 														required
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+													/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -183,7 +179,8 @@ const MainContext = (props) => {
 														id="come from"
 														placeholder="Empty"
 														required
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "/>
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "
+													/>
 												</div>
 												<div>
 													<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -203,7 +200,8 @@ const MainContext = (props) => {
 														id="Roads"
 														placeholder="Empty"
 														required
-														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"/>
+														className="bg-gray-50 py-5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+													/>
 												</div>
 												<button
 													type="submit"
@@ -222,7 +220,7 @@ const MainContext = (props) => {
 				</div>
 			) : (
 				<div className=" w-full flex justify-end items-center gap-2 h-[10%]">
-					<CreateUserOrder/>
+					<CreateUserOrder />
 					{/* <button
 						onClick={() => openBillHandle()}
 						className=" rounded-md p-2 bg-[#4C9E9C] py-2 text-xs cursor-pointer text-white hover:bg-transparent hover:border-2 hover:border-[#4C9E9C] hover:text-[#4C9E9C]">
@@ -232,6 +230,6 @@ const MainContext = (props) => {
 			)}
 		</div>
 	);
-}
+};
 
 export default MainContext;
