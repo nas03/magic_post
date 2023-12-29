@@ -14,10 +14,9 @@ const initialRows = [
 		id: 0,
 		col1: 0,
 		col2: '',
-		col3: false,
-		col4: 0,
-		col5: 'Package',
-		col6: 2,
+		col3: '',
+		col4: '',
+		col5: false
 	},
 ];
 
@@ -25,10 +24,9 @@ type Row = {
 	id: number;
 	col1: number;
 	col2: string;
-	col3: boolean;
-	col4: number;
-	col5: string;
-	col6: number;
+	col3: string;
+	col4: string;
+	col5: boolean;
 };
 
 const fetchTransshipmentLog = async (location_id: number) => {
@@ -74,7 +72,7 @@ const DataTransshipment = () => {
 		(id: number) => () => {
 			setRows((prevRows) =>
 				prevRows.map((row) =>
-					row.id === id ? { ...row, col3: !row.col3 } : row
+					row.id === id ? { ...row, col5: !row.col5 } : row
 				)
 			);
 		},

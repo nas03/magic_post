@@ -124,7 +124,7 @@ function SideLeftBar() {
 							<div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 								<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
 									<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-										Create Account
+										Create New Order
 									</h1>
 									<form
 										className="space-y-4 md:space-y-6"
@@ -135,78 +135,65 @@ function SideLeftBar() {
 										}}>
 										<div>
 											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Full Name
+												Order Name
 											</label>
 											<input
 												type="text"
-												name="full-name"
-												id="full-name"
+												name="order-name"
+												id="order-name"
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												placeholder="John Doe"
+												placeholder=""
 												required
 											/>
 										</div>
 										<div>
 											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Email
-											</label>
-											<input
-												type="email"
-												name="email"
-												id="email"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												placeholder="name@company.com"
-												required
-											/>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Password
-											</label>
-											<input
-												type="password"
-												name="password"
-												id="password"
-												placeholder="••••••••"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Confirm password
-											</label>
-											<input
-												type="password"
-												name="confirm-password"
-												id="confirm-password"
-												placeholder="••••••••"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-											/>
-										</div>
-										<div>
-											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Role
+												Package Type
 											</label>
 											<input
 												type="text"
-												name="role"
-												id="role"
-												value={''}
+												name="package-type"
+												id="package-type"
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												placeholder=""
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+												Sender
+											</label>
+											<input
+												type="text"
+												name="sender"
+												id="sender"
+												placeholder=""
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 												required
 											/>
 										</div>
 										<div>
 											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
-												Location ID
+												Receiver
 											</label>
 											<input
-												type="number"
-												name="location_id"
-												id="location_id"
-												value={''}
+												type="text"
+												name="receiver"
+												id="receiver"
+												placeholder=""
+												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+												required
+											/>
+										</div>
+										<div>
+											<label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+												State
+											</label>
+											<input
+												type="text"
+												name="state"
+												id="state"
+												placeholder=''
 												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 												required
 											/>
@@ -214,7 +201,7 @@ function SideLeftBar() {
 										<button
 											type="submit"
 											className="w-full hover:bg-transparent hover:text-[#F79132] hover:border-1 hover:border-[#F79132] bg-[#F79132] text-white  hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-											Create an account
+											Create New Order
 										</button>
 									</form>
 								</div>

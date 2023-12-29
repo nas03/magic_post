@@ -113,14 +113,16 @@ const MainContext = (props) => {
 
 			{tableType == 'Create Orders' ? (
 				<>
-					<div className=" w-full h-[65%] flex flex-col gap-[5%]">
+					<div className=" w-full h-[85%] flex flex-col gap-[5%]">
 						<div className=" w-full justify-between flex items-center">
 							<span className=" text-[#54555E] font-semibold">
 								Shipping Reports
 							</span>
 							<DateTimePickerValue />
 						</div>
-						<DataTransshipment />
+						<div>
+							<DataTransshipment />
+						</div>
 					</div>
 					<div className=" w-full flex justify-end items-center h-[10%]">
 						<button
