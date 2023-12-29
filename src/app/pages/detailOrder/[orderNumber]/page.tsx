@@ -14,6 +14,7 @@ import api from '@/src/lib/axios';
 import { Package, TransshipmentLog, Location } from '@/src/util/type';
 import { getFormattedDate } from '@/src/util';
 import prisma from '@/src/lib/prisma';
+import  HorizontalLinearAlternativeLabelStepper from './components/HorizontalLinearAlternativeLabelStepper'
 
 const PackageStatus = ({ location }) => {
 	return (
@@ -33,9 +34,13 @@ const CircleIcon = ({ number }) => {
 	);
 };
 
+
 const Page = ({ params }: { params: { orderNumber: number } }) => {
 	const [transLog, setTransLog] = useState([]);
+	const [transLogName, setTransLogName] = useState([])
 	const [loading, setLoading] = useState(true);
+
+
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -49,6 +54,7 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 				}
 			);
 			const { data } = await response.json();
+			console.log('translog', data)
 			setTransLog(data);
 			setLoading(false);
 			return data;
@@ -59,6 +65,10 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 		// Render a loading indicator
 		return <div>Loading...</div>;
 	}
+
+	transLog.map((log) => (
+		setTransLogName((pre) => [...pre, log])
+	))
 
 	return (
 		<>
@@ -83,7 +93,7 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 						</div>
 						<span className=" text-gray-400 ">Date: 08/02/2023</span>
 					</div>
-					<div className=" w-full h-[20%] my-2 flex-col flex">
+					{/* <div className=" w-full h-[20%] my-2 flex-col flex">
 						<div className=" w-full h-[30%] relative flex items-center justify-between">
 							<img
 								src="/image/substract.png"
@@ -101,7 +111,8 @@ const Page = ({ params }: { params: { orderNumber: number } }) => {
 								<PackageStatus location={log.name} />
 							))}
 						</div>
-					</div>
+					</div> */}
+					<HorizontalLinearAlternativeLabelStepper step={transLogName} />
 					<div className=" w-full h-[10%] my-[1.5%] justify-between flex">
 						<form className=" w-[45%] h-[full] flex-col flex gap-2">
 							<label htmlFor="" className=" text-gray-600 font-medium">

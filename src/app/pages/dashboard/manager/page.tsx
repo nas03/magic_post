@@ -41,7 +41,7 @@ function Page() {
 						</div>
 						<div className=" flex flex-col">
 							<span className="text-xl font-semibold">Magic Post</span>
-							<span className="text-gray-200 text-xs">admin panel</span>
+							<span className="text-gray-200 text-xs">manager panel</span>
 						</div>
 					</div>
 					<form className=" w-[35%] h-[55%] flex justify-center items-center">
